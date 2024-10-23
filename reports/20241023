@@ -1,18 +1,33 @@
 *****************
 First Subsection:
 *****************
-The first subsection is easy. It should be an exact copy of the third section from last week (i.e., goals from a week ago). It is empty for the first week.
+First Weekly Report - Empty
 
 
 ******************
 Second Subsection:
 ******************
-The second subsection reports on progress and issues: what you did, what worked, what you learned, where you had trouble, and where you are stuck.
+For this week, our group worked on the new Assignment 'SoftWare Design', modifying our HuskySwap shared Document.
+For this week's assignment, we had two goals: revising the shared document based on previous feedback on Canvas and adding a new section titled 'Software Design'.
+We had trouble with the Process description part, where we had to specify the possible risks for our assignment (which was considered 'vague' from previous feedback) and provide specific descriptions for each software component.
+During this assignment, we had valuable time to write out the specific progress of our project, listing a specific design and coding map that we can refer to when we start coding this or next week.
 
 
 *****************
 Third Subsection:
 *****************
+
+* Work on the next assignment - Testing and Continuous Integration
+  * Due 10/29 11:59 pm
+  * Work on adding a new section for the Testing and Integration part
+  * Work on revising the shared document based on the feedback given
+  * Will divide team members to work on each part of the assignment
+* Start working on the coding for our project
+  * Frontend: 
+  * Backend: 
+
+
+****************DELETE BELOW WHEN FINISHED******************
 The third subsection should outline your plans and goals for the following week.
 Each bullet point should include a measurable task and a time estimate.
 You may use nested bullet points for parts of a larger task. No bottom-level time estimate should be greater than 3 days.
