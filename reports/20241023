@@ -23,8 +23,14 @@ Third Subsection:
   * Work on revising the shared document based on the feedback given
   * Will divide team members to work on each part of the assignment
 * Start working on the coding for our project
-  * Frontend: 
-  * Backend: 
+  * Frontend: Begin Angular solution
+    * Create login and signup page
+    * Create entities and basic DTOs
+    * Establish services
+  * Backend: Begin .NET solution
+    * Establish entities and basic DTOs
+    * Set up identity controller
+  * Integration: Set up initial identity API requests (POST /login, POST /signup)
 
 
 ****************DELETE BELOW WHEN FINISHED******************
