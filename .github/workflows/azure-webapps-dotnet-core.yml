@@ -62,10 +62,10 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Build with dotnet
-        run: dotnet build ./src/Lightnap.sln --configuration Release
+        run: dotnet build ./src/LightNap.sln --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish ./src/Lightnap.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish ./src/LightNap.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4.3.1
