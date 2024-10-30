@@ -71,7 +71,7 @@ try
 {
     var context = services.GetRequiredService<ApplicationDbContext>();
     var applicationSettings = services.GetRequiredService<IOptions<ApplicationSettings>>();
-    if (applicationSettings.Value.AutomaticallyApplyEfMigrations)
+    if (applicationSettings.Value.AutomaticallyApplyEfMigrations && context.Database.IsRelational())
     {
         await context.Database.MigrateAsync();
     }
@@ -81,7 +81,7 @@ try
 
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
     var administratorSettings = services.GetRequiredService<IOptions<List<AdministratorConfiguration>>>();
-    await Seeder.SeedAdministratorsAsync(userManager, roleManager, administratorSettings, applicationSettings, logger);
+    await Seeder.SeedAdministratorsAsync(userManager, administratorSettings, applicationSettings, logger);
 
     if (app.Environment.IsDevelopment())
     {

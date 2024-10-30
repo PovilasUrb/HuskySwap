@@ -6,7 +6,6 @@ using LightNap.Core.Identity.Dto.Request;
 using LightNap.Core.Identity.Dto.Response;
 using LightNap.Core.Identity.Interfaces;
 using LightNap.Core.Interfaces;
-using LightNap.Core.Profile.Dto.Response;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -46,7 +45,7 @@ namespace LightNap.Core.Identity.Services
                     return ApiResponseDto<LoginResultDto>.CreateSuccess(new LoginResultDto() { TwoFactorRequired = true });
                 }
 
-                await CreateRefreshTokenAsync(user, rememberMe, deviceDetails);
+                await this.CreateRefreshTokenAsync(user, rememberMe, deviceDetails);
                 return ApiResponseDto<LoginResultDto>.CreateSuccess(
                     new LoginResultDto()
                     {
@@ -74,7 +73,7 @@ namespace LightNap.Core.Identity.Services
 
             refreshToken.LastSeen = DateTime.UtcNow;
             refreshToken.IpAddress = userContext.GetIpAddress() ?? Constants.RefreshTokens.NoIpProvided;
-            refreshToken.Expires = DateTime.UtcNow.AddDays(30);
+            refreshToken.Expires = DateTime.UtcNow.AddDays(applicationSettings.Value.LogOutInactiveDeviceDays);
             refreshToken.Token = tokenService.GenerateRefreshToken();
 
             await db.SaveChangesAsync();
@@ -96,7 +95,7 @@ namespace LightNap.Core.Identity.Services
         /// <returns>A task that represents the asynchronous operation.</returns>
         private async Task CreateRefreshTokenAsync(ApplicationUser user, bool rememberMe, string deviceDetails)
         {
-            DateTime expires = DateTime.UtcNow.AddDays(30);
+            DateTime expires = DateTime.UtcNow.AddDays(applicationSettings.Value.LogOutInactiveDeviceDays);
             string refreshToken = tokenService.GenerateRefreshToken();
 
             db.RefreshTokens.Add(
@@ -142,7 +141,7 @@ namespace LightNap.Core.Identity.Services
                 return ApiResponseDto<LoginResultDto>.CreateError("Invalid email/password combination.");
             }
 
-            return await HandleUserLoginAsync(user, requestDto.RememberMe, requestDto.DeviceDetails);
+            return await this.HandleUserLoginAsync(user, requestDto.RememberMe, requestDto.DeviceDetails);
         }
 
         /// <summary>
@@ -174,7 +173,7 @@ namespace LightNap.Core.Identity.Services
 
             logger.LogInformation("New user '{userName}' ('{email}') registered!", user.Email, user.UserName);
 
-            return await HandleUserLoginAsync(user, requestDto.RememberMe, requestDto.DeviceDetails);
+            return await this.HandleUserLoginAsync(user, requestDto.RememberMe, requestDto.DeviceDetails);
         }
 
         /// <summary>
@@ -246,7 +245,7 @@ namespace LightNap.Core.Identity.Services
                 return ApiResponseDto<string>.CreateError("Unable to set new password.");
             }
 
-            await CreateRefreshTokenAsync(user, requestDto.RememberMe, requestDto.DeviceDetails);
+            await this.CreateRefreshTokenAsync(user, requestDto.RememberMe, requestDto.DeviceDetails);
 
             return ApiResponseDto<string>.CreateSuccess(await tokenService.GenerateAccessTokenAsync(user));
         }
@@ -271,18 +270,18 @@ namespace LightNap.Core.Identity.Services
                 await emailService.SendRegistrationEmailAsync(user);
             }
 
-            await CreateRefreshTokenAsync(user, requestDto.RememberMe, requestDto.DeviceDetails);
+            await this.CreateRefreshTokenAsync(user, requestDto.RememberMe, requestDto.DeviceDetails);
 
             return ApiResponseDto<string>.CreateSuccess(await tokenService.GenerateAccessTokenAsync(user));
         }
 
         /// <summary>
-        /// Refreshes the access token using the refresh token.
+        /// Gets a new access token using the refresh token.
         /// </summary>
         /// <returns>The API response containing the new access token.</returns>
-        public async Task<ApiResponseDto<string>> RefreshTokenAsync()
+        public async Task<ApiResponseDto<string>> GetAccessTokenAsync()
         {
-            var user = await ValidateRefreshTokenAsync();
+            var user = await this.ValidateRefreshTokenAsync();
 
             if (user is null) { return ApiResponseDto<string>.CreateError("This account needs to sign in."); }
 

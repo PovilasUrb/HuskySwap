@@ -1,16 +1,22 @@
-export type SupportedRoutes =
+/**
+ * Known route aliases for the app. Add more here and then associate them with routes set up for a given
+ * page using the AppRoute.data.alias property.
+ */
+export type RouteAlias =
     // Public
     | 'landing'
     | 'about'
     | 'terms-and-conditions'
     | 'privacy-policy'
     | 'access-denied'
+    | 'error'
+    | 'not-found'
 
-    // Secure
-    | 'home'
+    // User
+    | 'user-home'
 
     // Admin
-    | 'admin'
+    | 'admin-home'
     | 'admin-users'
     | 'admin-user'
     | 'admin-roles'
@@ -24,7 +30,6 @@ export type SupportedRoutes =
     | 'login'
     | 'reset-password'
     | 'reset-instructions-sent'
-    | 'new-password'
     | 'change-password'
     | 'verify-code'
     | 'register';
