@@ -14,8 +14,16 @@ Requirement:
 # HuskySwap User Documentaiton
 
 ## 1. Getting Started
-### 1.1 What is HuskySwap?
-### 1.2 Why use HuskySwap?
+### 1.1 Why use HuskySwap?
+Ever had a bad day waking up at 5 am for course registration just to know that the classes you wanted were already full?
+Are you never fast enough to get that spot after seeing that “...has seats available” notification pop up on your phone?
+Did you wanted to see if you could get a spot that someone was going to drop, but have NO friends to ask?
+HuskySwap is there to solve your problem!
+
+### 1.2 What is HuskySwap?
+Husky Swap is a public website where people can list and trade classes before and at the beginning of each quarter!
+The platform simplifies the course management by allowing students to communicate and swap seats in a class.
+HuskySwap aims to eliminate the uncertainty and inefficiency of the current course adjustment process by providing a platform for students to find and trade seats with others easily, giving a second chance on course registration process.
 
 ## 2. Does HuskySwap need setup?
 - Since HuskySwap is a website, no additional setup or installation of external software is necessary.
