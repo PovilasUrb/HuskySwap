@@ -29,3 +29,5 @@ Requirement:
 ## 4. Bugs
 ### 4.1 How to Report a Bug?
 ### 4.2 Currently Reported Bugs
+
+## 5. Use Policies
