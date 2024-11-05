@@ -15,7 +15,7 @@ Requirement:
 
 ## 1. Getting Started
 ### 1.1 What is HuskySwap?
-### 1.2 What is HuskySwap?
+### 1.2 Why use HuskySwap?
 
 ## 2. Does HuskySwap need setup?
 (write stuff like installation, setup, or run of external software is not required as HuskySwap is an website)
