@@ -11,21 +11,21 @@ Requirement:
 - How to report a bug
 - Known bugs
 
-### HuskySwap User Documentaiton
+# HuskySwap User Documentaiton
 
 ## 1. Getting Started
-# 1.1 What is HuskySwap?
-# 1.2 What is HuskySwap?
+### 1.1 What is HuskySwap?
+### 1.2 What is HuskySwap?
 
 ## 2. Does HuskySwap need setup?
 (write stuff like installation, setup, or run of external software is not required as HuskySwap is an website)
 
 ## 3. How to use HuskySwap?
-# 3.1 Main Features - Swap courses!
+### 3.1 Main Features - Swap courses!
 (write stuff from major goals)
-# 3.2 Work in Progress Features
+### 3.2 Work in Progress Features
 (write stuff from stretch goals)
 
 ## 4. Bugs
-# 4.1 How to Report a Bug?
-# 4.2 Currently Reported Bugs
+### 4.1 How to Report a Bug?
+### 4.2 Currently Reported Bugs
