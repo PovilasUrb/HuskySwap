@@ -18,7 +18,7 @@ Requirement:
 ### 1.2 Why use HuskySwap?
 
 ## 2. Does HuskySwap need setup?
-(write stuff like installation, setup, or run of external software is not required as HuskySwap is an website)
+- Since HuskySwap is a website, no additional setup or installation of external software is necessary.
 
 ### 3.1 Main Features - Swap courses!
 - Login & Account management
