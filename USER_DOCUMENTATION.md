@@ -28,6 +28,7 @@ HuskySwap aims to eliminate the uncertainty and inefficiency of the current cour
 ## 2. Does HuskySwap need setup?
 - Since HuskySwap is a website, no additional setup or installation of external software is necessary.
 
+## 3. HuskySwap: How to use?
 ### 3.1 Main Features - Swap courses!
 - Login & Account management
 - Swap classes with other people through a single board. Users can offer and ask for classes and other users can take those offers. 
