@@ -37,12 +37,12 @@ Requirement:
 - Notify students of schedule conflicts, including class overlaps and credit threshold changes
 
 ## 4. Bugs
-# 4.1 How to Report a Bug?
+### 4.1 How to Report a Bug?
 Users can report a bug under our GitHub repository using GitHub Issues. 
 1. Users will need to register a GitHub account if they do not already have one.
 2. Click issues at the top of our GitHub repository.
 3. Click "New Issue" to describe the issues they are experiencing. 
-# 4.2 Currently Reported Bugs
+### 4.2 Currently Reported Bugs
 We currently have no known or reported bugs except for missing implementation for our main features.
 
 ## 5. Use Policies
