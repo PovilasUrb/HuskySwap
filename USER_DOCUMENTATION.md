@@ -17,24 +17,16 @@ HuskySwap aims to eliminate the uncertainty and inefficiency of the current cour
 - Since HuskySwap is a website, no additional setup or installation of external software is necessary.
 
 
-## 3. HuskySwap: How to use?
-### 3.1 Main Features - Swap courses!
-- Login & Account management
-- Swap classes with other people through a single board. Users can offer and ask for classes and other users can take those offers. 
-- Perform one-way course transfers with other people.
-- Friend other students
-- Track what classes your friends are taking and hoping to take
-- Search for a specific class, including dropped classes
+## 3. HuskySwap: How to use? (All features currently WIP)
+1. First log in to your account with a valid UW email and password
+2. From here, you will see several options, such as a search bar, view/edit profile, My Trades, My Offers, and My Friends
+3. From the search bar, you can search for listings for specific classes that you want to take.
+4. From the profile page, you can change your username, the courses you're taking, and other personal details.
+5. From the My Trades page, you can view all live trade offers you have made and make new trade offers, both two way and one way.
+6. From the My Offers page, you can view all incoming trade offers from other students, and accept or deny these offers.
+7. From the My Friends page, you can view what classes your friends are taking, as well as add or remove friends.
 
-### 3.2 Work in Progress Features
-- Project future grades in classes based on past data
-- Incentive system to encourage students to one-way drop/offer classes
-- Add a specific Professor/class rating system with user comments
-- Add a reporting system so users can report bad actors on the platform
-- Get easily accessible information about available classes in the website including the class name, the class ID, prerequisites, amount of credits, and time slots. (can use external link)
-- Notify students of schedule conflicts, including class overlaps and credit threshold changes
-
-### 3.3 Use Policies
+### 3.1 Use Policies
 - Account and Authentication Policies:
   1. All users must register using their own official university email.
       - No impersonation of others.
