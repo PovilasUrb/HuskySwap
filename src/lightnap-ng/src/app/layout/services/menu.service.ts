@@ -18,7 +18,10 @@ export class MenuService {
 
   #defaultMenuItems = new Array<MenuItem>({
     label: "Home",
-    items: [{ label: "Home", icon: "pi pi-fw pi-home", routerLink: this.#routeAliasService.getRoute("user-home") }],
+    items: [
+      { label: "Home", icon: "pi pi-fw pi-home", routerLink: this.#routeAliasService.getRoute("user-home") },
+      { label: "My Trades", icon: "pi pi-fw pi-home", routerLink: this.#routeAliasService.getRoute("my-trades") }
+    ],
   });
 
   #loggedInMenuItems = new Array<MenuItem>({
