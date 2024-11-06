@@ -21,7 +21,7 @@ export class MenuService {
     items: [
       { label: "Home", icon: "pi pi-fw pi-home", routerLink: this.#routeAliasService.getRoute("user-home") },
       { label: "My Trades", icon: "pi pi-fw pi-home", routerLink: this.#routeAliasService.getRoute("my-trades") },
-      { label: "My Offers", icon: "pi pi-fw pi-home", routerLink: this.#routeAliasService.getRoute("my-trades") }
+      { label: "My Offers", icon: "pi pi-fw pi-home", routerLink: this.#routeAliasService.getRoute("my-offers") }
     ],
   });
 
