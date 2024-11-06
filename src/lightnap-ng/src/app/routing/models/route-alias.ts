@@ -15,6 +15,7 @@ export type RouteAlias =
     // User
     | 'user-home'
     | 'my-trades'
+    | 'my-offers'
 
     // Admin
     | 'admin-home'
