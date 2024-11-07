@@ -1,0 +1,18 @@
+<p-card header="All">
+  <api-response [apiResponse]="classInfos$" errorMessage="Error loading" loadingMessage="Loading...">
+    <ng-template #success let-classInfos>
+      <div class="flex gap-1 mb-1">
+        <p-button [routerLink]="['create']" severity="success" icon="pi pi-plus" label="Create" />
+      </div>
+      <ul>
+        @for(classInfo of classInfos.data; track $index) {
+        <li>
+          <a [routerLink]="classInfo.id">{{ classInfo | json }}</a>
+        </li>
+        } @empty {
+        <li>There are no items yet</li>
+        }
+      </ul>
+    </ng-template>
+  </api-response>
+</p-card>

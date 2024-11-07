@@ -7,6 +7,7 @@ import { AppLayoutComponent } from "../layout/components/layouts/app-layout/app-
 import { Routes as ProfileRoutes } from "../profile/components/pages/routes";
 import { Routes as PublicRoutes } from "../public/components/pages/routes";
 import { Routes as UserRoutes } from "../user/components/pages/routes";
+import { Routes as ClassInfoRoutes } from "../class-infos/components/pages/routes";
 import { AppRoute } from "./models/app-route";
 
 export const Routes: AppRoute[] = [
@@ -20,6 +21,7 @@ export const Routes: AppRoute[] = [
       { path: "profile", data: { breadcrumb: "Profile" }, children: ProfileRoutes },
     ],
   },
+  { path: "class-infos", children: ClassInfoRoutes },
   {
     path: "admin",
     component: AppLayoutComponent,

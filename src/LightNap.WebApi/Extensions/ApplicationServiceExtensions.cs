@@ -1,5 +1,7 @@
 ﻿using LightNap.Core.Administrator.Interfaces;
 using LightNap.Core.Administrator.Services;
+using LightNap.Core.ClassInfos.Interfaces;
+using LightNap.Core.ClassInfos.Services;
 using LightNap.Core.Data;
 using LightNap.Core.Data.Entities;
 using LightNap.Core.Extensions;
@@ -43,6 +45,7 @@ namespace LightNap.WebApi.Extensions
             services.AddScoped<IAdministratorService, AdministratorService>();
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IPublicService, PublicService>();
+            services.AddScoped<IClassInfoService, ClassInfoService>();
 
             return services;
         }
