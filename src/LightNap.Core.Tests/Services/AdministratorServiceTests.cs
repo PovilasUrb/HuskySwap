@@ -1,15 +1,14 @@
 using LightNap.Core.Administrator.Dto.Request;
 using LightNap.Core.Administrator.Services;
-using LightNap.Core.Api;
 using LightNap.Core.Data;
 using LightNap.Core.Data.Entities;
 using LightNap.Core.Extensions;
+using LightNap.Core.Tests.Utilities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data;
 
-namespace LightNap.Core.Tests
+namespace LightNap.Core.Tests.Services
 {
     [TestClass]
     public class AdministratorServiceTests
@@ -57,10 +56,8 @@ namespace LightNap.Core.Tests
             var result = await this._administratorService.GetUserAsync(userId);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Success, result.Type);
-            Assert.IsNotNull(result.Result);
-            Assert.AreEqual(userId, result.Result.Id);
+            TestHelper.AssertSuccess(result);
+            Assert.AreEqual(userId, result.Result!.Id);
         }
 
         [TestMethod]
@@ -73,9 +70,7 @@ namespace LightNap.Core.Tests
             var result = await this._administratorService.GetUserAsync(userId);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Success, result.Type);
-            Assert.IsNull(result.Result);
+            TestHelper.AssertSuccess(result, true);
         }
 
         [TestMethod]
@@ -90,10 +85,8 @@ namespace LightNap.Core.Tests
             var result = await this._administratorService.UpdateUserAsync(userId, updateDto);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Success, result.Type);
-            Assert.IsNotNull(result.Result);
-            Assert.AreEqual(userId, result.Result.Id);
+            TestHelper.AssertSuccess(result);
+            Assert.AreEqual(userId, result.Result!.Id);
         }
 
         [TestMethod]
@@ -107,9 +100,7 @@ namespace LightNap.Core.Tests
             var result = await this._administratorService.UpdateUserAsync(userId, updateDto);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Error, result.Type);
-            Assert.IsNull(result.Result);
+            TestHelper.AssertError(result);
         }
 
         [TestMethod]
@@ -123,9 +114,7 @@ namespace LightNap.Core.Tests
             var result = await this._administratorService.DeleteUserAsync(userId);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Success, result.Type);
-            Assert.IsTrue(result.Result);
+            TestHelper.AssertSuccess(result);
         }
 
         [TestMethod]
@@ -138,9 +127,7 @@ namespace LightNap.Core.Tests
             var result = await this._administratorService.DeleteUserAsync(userId);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Error, result.Type);
-            Assert.IsFalse(result.Result);
+            TestHelper.AssertError(result);
         }
 
         [TestMethod]
@@ -156,9 +143,7 @@ namespace LightNap.Core.Tests
             var result = await this._administratorService.AddUserToRoleAsync(role, userId);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Success, result.Type);
-            Assert.IsTrue(result.Result);
+            TestHelper.AssertSuccess(result);
         }
 
         [TestMethod]
@@ -172,16 +157,14 @@ namespace LightNap.Core.Tests
             var result = await this._administratorService.AddUserToRoleAsync(role, userId);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Error, result.Type);
-            Assert.IsFalse(result.Result);
+            TestHelper.AssertError(result);
         }
 
         [TestMethod]
         public async Task SearchUsersAsync_ValidRequest_ReturnsPagedResponse()
         {
             // Arrange
-            var requestDto = new SearchUsersRequestDto { Email = "example" };
+            var requestDto = new SearchAdminUsersRequestDto { Email = "example" };
             List<ApplicationUser> users =
             [
                 new("testuser1", "test1@example.com", true) { Id = "test-user-id1" },
@@ -195,10 +178,8 @@ namespace LightNap.Core.Tests
             var result = await this._administratorService.SearchUsersAsync(requestDto);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Success, result.Type);
-            Assert.IsNotNull(result.Result);
-            Assert.AreEqual(2, result.Result.TotalCount);
+            TestHelper.AssertSuccess(result);
+            Assert.AreEqual(2, result.Result!.TotalCount);
         }
 
         [TestMethod]
@@ -211,8 +192,7 @@ namespace LightNap.Core.Tests
             var result = this._administratorService.GetRoles();
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Success, result.Type);
+            TestHelper.AssertSuccess(result);
             Assert.AreEqual(roles.Count, result.Result!.Count);
 
             for (int i = 0; i < roles.Count; i++)
@@ -239,8 +219,7 @@ namespace LightNap.Core.Tests
             var result = await this._administratorService.GetRolesForUserAsync(userId);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Success, result.Type);
+            TestHelper.AssertSuccess(result);
             Assert.AreEqual(2, result.Result!.Count);
         }
 
@@ -259,8 +238,7 @@ namespace LightNap.Core.Tests
             var result = await this._administratorService.GetUsersInRoleAsync(role);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Success, result.Type);
+            TestHelper.AssertSuccess(result);
             Assert.AreEqual(2, result.Result!.Count);
         }
 
@@ -278,9 +256,65 @@ namespace LightNap.Core.Tests
             var result = await this._administratorService.RemoveUserFromRoleAsync(role, userId);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(ApiResponseType.Success, result.Type);
+            TestHelper.AssertSuccess(result);
             Assert.IsTrue(result.Result);
+        }
+
+        [TestMethod]
+        public async Task LockUserAsync_UserExists_LocksUser()
+        {
+            // Arrange
+            var userId = "test-user-id";
+            await TestHelper.CreateTestUserAsync(this._userManager, userId);
+
+            // Act
+            var result = await this._administratorService.LockUserAccountAsync(userId);
+
+            // Assert
+            TestHelper.AssertSuccess(result);
+            Assert.IsTrue(result.Result);
+        }
+
+        [TestMethod]
+        public async Task LockUserAsync_UserDoesNotExist_ReturnsError()
+        {
+            // Arrange
+            var userId = "non-existent-user-id";
+
+            // Act
+            var result = await this._administratorService.LockUserAccountAsync(userId);
+
+            // Assert
+            TestHelper.AssertError(result);
+        }
+
+        [TestMethod]
+        public async Task UnlockUserAsync_UserExists_UnlocksUser()
+        {
+            // Arrange
+            var userId = "test-user-id";
+            await TestHelper.CreateTestUserAsync(this._userManager, userId);
+            await this._administratorService.LockUserAccountAsync(userId);
+
+            // Act
+            var result = await this._administratorService.UnlockUserAccountAsync(userId);
+
+            // Assert
+            TestHelper.AssertSuccess(result);
+            Assert.IsTrue(result.Result);
+        }
+
+        [TestMethod]
+        public async Task UnlockUserAsync_UserDoesNotExist_ReturnsError()
+        {
+            // Arrange
+            var userId = "non-existent-user-id";
+
+            // Act
+            var result = await this._administratorService.UnlockUserAccountAsync(userId);
+
+            // Assert
+            TestHelper.AssertError(result);
         }
 
 
