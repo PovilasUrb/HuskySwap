@@ -21,14 +21,14 @@ namespace LightNap.Core.ClassInfos.Extensions
         public static ClassInfoDto ToDto(this ClassInfo item)
         {
             // TODO: Update these fields to match the DTO.
-            var dto = new ClassInfoDto();
-            dto.Id = item.Id;
-            dto.Title = item.Title;
-			dto.Description = item.Description;
-			dto.Instructor = item.Instructor;
-			dto.ClassCode = item.ClassCode;
-			dto.Notes = item.Notes;
-            return dto;
+            return new ClassInfoDto() {
+                Id = item.Id,
+                Title = item.Title,
+			    Description = item.Description,
+			    Instructor = item.Instructor,
+			    ClassCode = item.ClassCode,
+			    Notes = item.Notes
+            };
         }
 
         public static void UpdateFromDto(this ClassInfo item, UpdateClassInfoDto dto)
