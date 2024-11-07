@@ -4,6 +4,8 @@ The source code can be obtained by cloning the repository hosted at https://gith
 
 To set up the **BACKEND**, you must:
 
+Download .NET if you have not already: https://dotnet.microsoft.com/en-us/download
+
 Navigate to the src directory:
 
     cd src
