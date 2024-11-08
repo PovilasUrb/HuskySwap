@@ -13,6 +13,8 @@ using LightNap.Core.Profile.Services;
 using LightNap.Core.Public.Interfaces;
 using LightNap.Core.Public.Services;
 using LightNap.Core.Services;
+using LightNap.Core.TradeRequests.Interfaces;
+using LightNap.Core.TradeRequests.Services;
 using LightNap.DataProviders.Sqlite.Extensions;
 using LightNap.DataProviders.SqlServer.Extensions;
 using LightNap.WebApi.Configuration;
@@ -46,6 +48,7 @@ namespace LightNap.WebApi.Extensions
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IPublicService, PublicService>();
             services.AddScoped<IClassInfoService, ClassInfoService>();
+            services.AddScoped<ITradeRequestService, TradeRequestService>();
 
             return services;
         }
