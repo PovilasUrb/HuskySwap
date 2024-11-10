@@ -11,7 +11,7 @@ import { AppRoute } from "@routing";
 // { path: "class-infos", children: ClassInfoRoutes }
 //
 export const Routes: AppRoute[] = [
-  { path: "", loadComponent: () => import("./index/index.component").then(m => m.IndexComponent) },
+  { path: "", data: {alias: "class-infos"}, loadComponent: () => import("./index/index.component").then(m => m.IndexComponent) },
   { path: "create", loadComponent: () => import("./create/create.component").then(m => m.CreateComponent) },
   { path: ":id", loadComponent: () => import("./get/get.component").then(m => m.GetComponent) },
   { path: ":id/edit", loadComponent: () => import("./edit/edit.component").then(m => m.EditComponent) },

@@ -5,14 +5,15 @@ import { Component, inject } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
-import { ApiResponseComponent, ConfirmPopupComponent, EmptyPagedResponse, ErrorListComponent, ListItem, SuccessApiResponse } from "@core";
+import { ApiResponseComponent, ConfirmPopupComponent, EmptyPagedResponse, ErrorListComponent, ListItem, SuccessApiResponse, ToastService } from "@core";
 import { RoutePipe } from "@routing";
-import { ConfirmationService, LazyLoadEvent } from "primeng/api";
+import { ConfirmationService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { DropdownModule } from "primeng/dropdown";
 import { InputTextModule } from "primeng/inputtext";
 import { TableLazyLoadEvent, TableModule } from "primeng/table";
+import { TagModule } from "primeng/tag";
 import { debounceTime, startWith, Subject, switchMap } from "rxjs";
 
 @Component({
@@ -31,6 +32,7 @@ import { debounceTime, startWith, Subject, switchMap } from "rxjs";
     ErrorListComponent,
     InputTextModule,
     ConfirmPopupComponent,
+    TagModule
   ],
 })
 export class UsersComponent {
@@ -38,7 +40,7 @@ export class UsersComponent {
 
   #adminService = inject(AdminService);
   #confirmationService = inject(ConfirmationService);
-
+  #toast = inject(ToastService);
   #fb = inject(FormBuilder);
 
   form = this.#fb.group({
@@ -94,6 +96,8 @@ export class UsersComponent {
             this.errors = response.errorMessages;
             return;
           }
+
+          this.#toast.success("User deleted successfully.");
           this.#lazyLoadEventSubject.next({ first: 0 });
         });
       },
