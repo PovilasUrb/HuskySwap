@@ -12,11 +12,15 @@ export type RouteAlias =
     | 'error'
     | 'not-found'
 
+    // Class Info
+    | 'class-infos'
+
     // User
     | 'user-home'
     | 'my-trades'
     | 'my-offers'
     | 'other-offers'
+    | 'trade-requests'
 
     // Admin
     | 'admin-home'

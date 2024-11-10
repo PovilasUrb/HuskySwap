@@ -20,10 +20,10 @@ export const Routes: AppRoute[] = [
     children: [
       { path: "home", data: { breadcrumb: "Home" }, children: UserRoutes },
       { path: "profile", data: { breadcrumb: "Profile" }, children: ProfileRoutes },
+      { path: "class-infos", data: { breadcrumb: "Classes" }, children: ClassInfoRoutes },      
       { path: "trade-requests", children: TradeRequestRoutes },
     ],
   },
-  { path: "class-infos", children: ClassInfoRoutes },
   {
     path: "admin",
     component: AppLayoutComponent,
