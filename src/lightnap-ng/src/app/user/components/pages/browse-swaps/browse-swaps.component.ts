@@ -7,5 +7,5 @@ import { CardModule } from 'primeng/card';
     templateUrl: './browse-swaps.component.html',
     imports: [CardModule]
 })
-export class IndexComponent {
+export class BrowseSwapsComponent {
 }

@@ -1,3 +1,34 @@
 <p-card header="Create Swap">
-    <p> Create a swap request </p>
-</p-card>
+    <p> Choose which class you are offering and which class you are requesting for! </p>
+  
+    <form #swapForm="ngForm">
+      <div class="form-group">
+        <label for="offerClass">Class to Offer: </label>
+        <p-dropdown
+          id="offerClass"
+          placeholder="Select class to offer"
+          [options]="classOptions"
+          [(ngModel)]="offerClass"
+          name="offerClass"
+          required
+        ></p-dropdown>
+      </div>
+  
+      <div class="form-group">
+        <label for="requestClass">Class to Request: </label>
+        <p-dropdown
+          id="requestClass"
+          placeholder="Select class to request"
+          [options]="classOptions"
+          [(ngModel)]="requestClass"
+          name="requestClass"
+          required
+        ></p-dropdown>
+      </div>
+  
+      <div class="form-group">
+        <p-button label="Create Swap" type="submit" [disabled]="!swapForm.valid"></p-button>
+      </div>
+    </form>
+  </p-card>
+  
