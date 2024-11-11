@@ -1,3 +1,4 @@
+
 using LightNap.Core.Api;
 using LightNap.Core.Data;
 using LightNap.Core.Data.Entities;
@@ -22,6 +23,20 @@ namespace LightNap.Core.ClassInfos.Services
             var query = db.ClassInfos.AsQueryable();
 
             // Add filters and sorting
+            if (dto.ClassCode is not null) 
+            {
+                query = query.Where((classInfo) => string.Compare(classInfo.ClassCode, dto.ClassCode) == 0);
+            }
+            if (dto.Title is not null)
+            {
+                query = query.Where((classInfo) => EF.Functions.Like(classInfo.Title!.ToLower(), $"%{dto.Title.ToLower()}%"));
+            }
+            if (dto.Instructor is not null)
+            {
+                query = query.Where((classInfo) => EF.Functions.Like(classInfo.Instructor!.ToLower(), $"%{dto.Instructor.ToLower()}%"));
+            }
+
+            query = query.OrderBy((classInfo) => classInfo.ClassCode);
 
             int totalCount = await query.CountAsync();
 

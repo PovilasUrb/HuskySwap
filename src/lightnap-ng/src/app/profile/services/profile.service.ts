@@ -27,7 +27,7 @@ export class ProfileService {
       inputStyle: "outlined",
       menuMode: "static",
       colorScheme: "light",
-      theme: "lara-light-indigo",
+      theme: "saga-purple",
       scale: 14,
     },
     extended: {},

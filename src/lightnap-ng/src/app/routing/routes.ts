@@ -9,6 +9,7 @@ import { Routes as PublicRoutes } from "../public/components/pages/routes";
 import { Routes as UserRoutes } from "../user/components/pages/routes";
 import { Routes as ClassInfoRoutes } from "../class-infos/components/pages/routes";
 import { Routes as TradeRequestRoutes } from "../trade-requests/components/pages/routes";
+import { Routes as ClassUserRoutes } from "../class-users/components/pages/routes";
 import { AppRoute } from "./models/app-route";
 
 export const Routes: AppRoute[] = [
@@ -22,6 +23,7 @@ export const Routes: AppRoute[] = [
       { path: "profile", data: { breadcrumb: "Profile" }, children: ProfileRoutes },
       { path: "class-infos", data: { breadcrumb: "Classes" }, children: ClassInfoRoutes },      
       { path: "trade-requests", children: TradeRequestRoutes },
+      { path: "class-users", children: ClassUserRoutes }
     ],
   },
   {

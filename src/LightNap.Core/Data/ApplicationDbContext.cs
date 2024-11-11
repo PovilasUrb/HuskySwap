@@ -27,6 +27,11 @@ namespace LightNap.Core.Data
         public DbSet<TradeRequest> TradeRequests { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets the class users DbSet.
+        /// </summary>
+        public DbSet<ClassUser> ClassUsers { get; set; } = null!;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext"/> class.
         /// </summary>
         /// <param name="options">The DbContext options.</param>

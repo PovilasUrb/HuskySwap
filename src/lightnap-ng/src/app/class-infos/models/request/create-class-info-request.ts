@@ -1,3 +1,4 @@
+
 export interface CreateClassInfoRequest {
 	// TODO: Update these fields to match the server's CreateClassInfoDto.
 	title: string;

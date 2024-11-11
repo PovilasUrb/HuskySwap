@@ -1,3 +1,5 @@
+
+import { adminGuard } from "@core/guards/admin.guard";
 import { AppRoute } from "@routing";
 
 // TODO: Add this route list to app/routing/routes.ts.
@@ -12,7 +14,7 @@ import { AppRoute } from "@routing";
 //
 export const Routes: AppRoute[] = [
   { path: "", data: {alias: "class-infos"}, loadComponent: () => import("./index/index.component").then(m => m.IndexComponent) },
-  { path: "create", loadComponent: () => import("./create/create.component").then(m => m.CreateComponent) },
-  { path: ":id", loadComponent: () => import("./get/get.component").then(m => m.GetComponent) },
+  { path: "create", canActivate: [adminGuard], loadComponent: () => import("./create/create.component").then(m => m.CreateComponent) },
+  { path: ":id", data: {alias: "class-info"}, loadComponent: () => import("./get/get.component").then(m => m.GetComponent) },
   { path: ":id/edit", loadComponent: () => import("./edit/edit.component").then(m => m.EditComponent) },
 ];

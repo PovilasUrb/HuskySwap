@@ -1,11 +1,33 @@
+
 <p-card header="Get">
   <api-response [apiResponse]="tradeRequest$" errorMessage="Error loading" loadingMessage="Loading...">
     <ng-template #success let-tradeRequest>
       <div class="flex gap-1 mb-1">
         <p-button [routerLink]="['..']" icon="pi pi-arrow-up" label="Up to all" />
-        <p-button [routerLink]="['..', id, 'edit']" icon="pi pi-pencil" label="Edit" />
+        <p-button [routerLink]="['..', id(), 'edit']" icon="pi pi-pencil" label="Edit" />
       </div>
-      <pre>{{ tradeRequest | json }}</pre>
+      <div class="w-30rem flex flex-column gap-4">
+        <div>
+          <label class="block text-900 font-medium mb-2">Id</label>
+          <div>{{ tradeRequest.id }}</div>
+        </div>
+        <div>
+          <label class="block text-900 font-medium mb-2">RequestingClassUserId</label>
+          <div>{{ tradeRequest.requestingClassUserId }}</div>
+        </div>
+        <div>
+          <label class="block text-900 font-medium mb-2">TargetClassUserId</label>
+          <div>{{ tradeRequest.targetClassUserId }}</div>
+        </div>
+        <div>
+          <label class="block text-900 font-medium mb-2">Status</label>
+          <div>{{ tradeRequest.status }}</div>
+        </div>
+        <div>
+          <label class="block text-900 font-medium mb-2">Notes</label>
+          <div>{{ tradeRequest.notes }}</div>
+        </div>
+      </div>
     </ng-template>
   </api-response>
 </p-card>

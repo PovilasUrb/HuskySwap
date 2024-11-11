@@ -1,3 +1,4 @@
+
 import { inject, Injectable } from "@angular/core";
 import { CreateClassInfoRequest } from "../models/request/create-class-info-request";
 import { SearchClassInfosRequest } from "../models/request/search-class-infos-request";

@@ -1,18 +1,47 @@
+
 <p-card header="All">
-  <api-response [apiResponse]="tradeRequests$" errorMessage="Error loading" loadingMessage="Loading...">
-    <ng-template #success let-tradeRequests>
-      <div class="flex gap-1 mb-1">
-        <p-button [routerLink]="['create']" severity="success" icon="pi pi-plus" label="Create" />
-      </div>
-      <ul>
-        @for(tradeRequest of tradeRequests.data; track $index) {
-        <li>
-          <a [routerLink]="tradeRequest.id">{{ tradeRequest | json }}</a>
-        </li>
-        } @empty {
-        <li>There are no items yet</li>
-        }
-      </ul>
+  <div class="flex gap-1 mb-1">
+    <p-button [routerLink]="['create']" severity="success" icon="pi pi-plus" label="Create" />
+  </div>
+
+  <api-response [apiResponse]="searchResults$" errorMessage="Error loading items" loadingMessage="Loading items...">
+    <ng-template #success let-searchResults>
+      <p-table
+        [value]="searchResults.data"
+        [paginator]="true"
+        [rows]="pageSize"
+        [totalRecords]="searchResults.totalCount"
+        [lazy]="true"
+        (onLazyLoad)="onLazyLoad($event)"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th></th>
+            <th>Id</th>
+            <th>RequestingClassUserId</th>
+            <th>TargetClassUserId</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-tradeRequest>
+          <tr>
+            <td>
+              <p-button [routerLink]="[tradeRequest.id]" icon="pi pi-eye" />
+            </td>
+            <td>{{tradeRequest.id}}</td>
+            <td>{{tradeRequest.requestingClassUserId | number}}</td>
+            <td>{{tradeRequest.targetClassUserId | number}}</td>
+            <td>{{tradeRequest.status}}</td>
+            <td>{{tradeRequest.notes}}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="100%">There are no items.</td>
+          </tr>
+        </ng-template>
+      </p-table>
     </ng-template>
   </api-response>
 </p-card>

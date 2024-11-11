@@ -1,6 +1,9 @@
+
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { API_URL_ROOT, ApiResponse, PagedResponse } from "@core";
+import { tap } from "rxjs";
+import {TradeRequestHelper } from "../helpers/trade-request.helper";
 import { CreateTradeRequestRequest } from "../models/request/create-trade-request-request";
 import { SearchTradeRequestsRequest } from "../models/request/search-trade-requests-request";
 import { UpdateTradeRequestRequest } from "../models/request/update-trade-request-request";
@@ -14,11 +17,23 @@ export class DataService {
   #apiUrlRoot = `${inject(API_URL_ROOT)}TradeRequests/`;
 
   getTradeRequest(id: number) {
-    return this.#http.get<ApiResponse<TradeRequest>>(`${this.#apiUrlRoot}${id}`);
+    return this.#http.get<ApiResponse<TradeRequest>>(`${this.#apiUrlRoot}${id}`).pipe(
+      tap(response => {
+        if (response.result) {
+          TradeRequestHelper.rehydrate(response.result);
+        }
+      })
+    );
   }
 
   searchTradeRequests(request: SearchTradeRequestsRequest) {
-    return this.#http.post<ApiResponse<PagedResponse<TradeRequest>>>(`${this.#apiUrlRoot}search`, request);
+    return this.#http.post<ApiResponse<PagedResponse<TradeRequest>>>(`${this.#apiUrlRoot}search`, request).pipe(
+      tap(response => {
+        if (response.result) {
+          response.result.data.forEach(TradeRequestHelper.rehydrate);
+        }
+      })
+    );
   }
 
   createTradeRequest(request: CreateTradeRequestRequest) {

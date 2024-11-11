@@ -1,0 +1,43 @@
+
+<p-card header="My Classes">
+  <api-response [apiResponse]="classUsers$" errorMessage="Error loading" loadingMessage="Loading...">
+    <ng-template #success let-classUsers>
+      <div class="flex gap-1 mb-1">
+      </div>
+      <p-table
+        [value]="classUsers"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th></th>
+            <th>Id</th>
+            <th>ClassId</th>
+            <th>UserId</th>
+            <th>IsActive</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-classUser>
+          <tr>
+            <td>
+              <div class="flex gap-1">
+                <p-button [routerLink]="'class-info' | route : [classUser.classId]" icon="pi pi-eye" />
+                <p-button (onClick)="removeClassForMe($event, classUser.classId)" severity="danger" icon="pi pi-trash" />
+                <confirm-popup [key]="classUser.classId" confirmStyleClass="p-button-danger" />
+              </div>
+            </td>
+            <td>{{classUser.id}}</td>
+            <td>{{classUser.classId | number}}</td>
+            <td>{{classUser.userId}}</td>
+            <td>{{classUser.isActive}}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="100%">There are no items.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <error-list [errors]="errors"></error-list>
+    </ng-template>
+  </api-response>
+</p-card>
