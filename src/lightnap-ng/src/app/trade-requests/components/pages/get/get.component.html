@@ -1,0 +1,11 @@
+<p-card header="Get">
+  <api-response [apiResponse]="tradeRequest$" errorMessage="Error loading" loadingMessage="Loading...">
+    <ng-template #success let-tradeRequest>
+      <div class="flex gap-1 mb-1">
+        <p-button [routerLink]="['..']" icon="pi pi-arrow-up" label="Up to all" />
+        <p-button [routerLink]="['..', id, 'edit']" icon="pi pi-pencil" label="Edit" />
+      </div>
+      <pre>{{ tradeRequest | json }}</pre>
+    </ng-template>
+  </api-response>
+</p-card>

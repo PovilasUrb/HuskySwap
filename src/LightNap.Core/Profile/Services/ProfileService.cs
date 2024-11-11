@@ -42,7 +42,7 @@ namespace LightNap.Core.Profile.Services
         /// Retrieves the profile of the specified user.
         /// </summary>
         /// <returns>An <see cref="ApiResponseDto{T}"/> containing the user's profile.</returns>
-        public async Task<ApiResponseDto<ProfileDto>> GetProfile()
+        public async Task<ApiResponseDto<ProfileDto>> GetProfileAsync()
         {
             var user = await db.Users.FindAsync(userContext.GetUserId());
             return ApiResponseDto<ProfileDto>.CreateSuccess(user?.ToLoggedInUserDto());
@@ -56,7 +56,7 @@ namespace LightNap.Core.Profile.Services
         public async Task<ApiResponseDto<ProfileDto>> UpdateProfileAsync(UpdateProfileDto requestDto)
         {
             var user = await db.Users.FindAsync(userContext.GetUserId());
-            if (user is null) { return ApiResponseDto<ProfileDto>.CreateError("Unable to change password."); }
+            if (user is null) { return ApiResponseDto<ProfileDto>.CreateError("Unable to update profile."); }
 
             user.UpdateLoggedInUser(requestDto);
 

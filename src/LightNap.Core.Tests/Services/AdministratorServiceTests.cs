@@ -1,6 +1,5 @@
 using LightNap.Core.Administrator.Dto.Request;
 using LightNap.Core.Administrator.Services;
-using LightNap.Core.Api;
 using LightNap.Core.Data;
 using LightNap.Core.Data.Entities;
 using LightNap.Core.Extensions;
@@ -9,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data;
 
-namespace LightNap.Core.Tests
+namespace LightNap.Core.Tests.Services
 {
     [TestClass]
     public class AdministratorServiceTests
@@ -165,7 +164,7 @@ namespace LightNap.Core.Tests
         public async Task SearchUsersAsync_ValidRequest_ReturnsPagedResponse()
         {
             // Arrange
-            var requestDto = new SearchUsersRequestDto { Email = "example" };
+            var requestDto = new SearchAdminUsersRequestDto { Email = "example" };
             List<ApplicationUser> users =
             [
                 new("testuser1", "test1@example.com", true) { Id = "test-user-id1" },
@@ -260,5 +259,64 @@ namespace LightNap.Core.Tests
             TestHelper.AssertSuccess(result);
             Assert.IsTrue(result.Result);
         }
+
+        [TestMethod]
+        public async Task LockUserAsync_UserExists_LocksUser()
+        {
+            // Arrange
+            var userId = "test-user-id";
+            await TestHelper.CreateTestUserAsync(this._userManager, userId);
+
+            // Act
+            var result = await this._administratorService.LockUserAccountAsync(userId);
+
+            // Assert
+            TestHelper.AssertSuccess(result);
+            Assert.IsTrue(result.Result);
+        }
+
+        [TestMethod]
+        public async Task LockUserAsync_UserDoesNotExist_ReturnsError()
+        {
+            // Arrange
+            var userId = "non-existent-user-id";
+
+            // Act
+            var result = await this._administratorService.LockUserAccountAsync(userId);
+
+            // Assert
+            TestHelper.AssertError(result);
+        }
+
+        [TestMethod]
+        public async Task UnlockUserAsync_UserExists_UnlocksUser()
+        {
+            // Arrange
+            var userId = "test-user-id";
+            await TestHelper.CreateTestUserAsync(this._userManager, userId);
+            await this._administratorService.LockUserAccountAsync(userId);
+
+            // Act
+            var result = await this._administratorService.UnlockUserAccountAsync(userId);
+
+            // Assert
+            TestHelper.AssertSuccess(result);
+            Assert.IsTrue(result.Result);
+        }
+
+        [TestMethod]
+        public async Task UnlockUserAsync_UserDoesNotExist_ReturnsError()
+        {
+            // Arrange
+            var userId = "non-existent-user-id";
+
+            // Act
+            var result = await this._administratorService.UnlockUserAccountAsync(userId);
+
+            // Assert
+            TestHelper.AssertError(result);
+        }
+
+
     }
 }
