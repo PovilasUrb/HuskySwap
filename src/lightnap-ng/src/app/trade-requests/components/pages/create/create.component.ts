@@ -1,18 +1,33 @@
+
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { InputTextareaModule } from "primeng/inputtextarea";
+import { ErrorListComponent } from "@core";
 import { ButtonModule } from "primeng/button";
+import { CalendarModule } from "primeng/calendar";
 import { CardModule } from "primeng/card";
+import { CheckboxModule } from "primeng/checkbox";
+import { InputNumberModule } from "primeng/inputnumber";
+import { InputTextModule } from "primeng/inputtext";
 import { CreateTradeRequestRequest } from "src/app/trade-requests/models/request/create-trade-request-request";
 import { TradeRequestService } from "src/app/trade-requests/services/trade-request.service";
-import { ErrorListComponent } from "@core";
 
 @Component({
   standalone: true,
   templateUrl: "./create.component.html",
-  imports: [CommonModule, CardModule, ReactiveFormsModule, RouterLink, ButtonModule, InputTextareaModule, ErrorListComponent],
+  imports: [
+    CommonModule,
+    CardModule,
+    ReactiveFormsModule,
+    RouterLink,
+    CalendarModule,
+    ButtonModule,
+    InputTextModule,
+    InputNumberModule,
+    CheckboxModule,
+    ErrorListComponent,
+  ],
 })
 export class CreateComponent {
   #tradeRequestService = inject(TradeRequestService);
@@ -23,24 +38,17 @@ export class CreateComponent {
   errors = new Array<string>();
 
   form = this.#fb.group({
-    json: this.#fb.control(
-      JSON.stringify(<CreateTradeRequestRequest>{
-        // TODO: Initialize this with some default values for testing.
-      }, undefined, 4),
-      [Validators.required]
-    ),
+	// TODO: Update these fields to match the right parameters.
+	requestingClassUserId: this.#fb.control(0, [Validators.required]),
+	targetClassUserId: this.#fb.control(0, [Validators.required]),
+	status: this.#fb.control("string", [Validators.required]),
+	notes: this.#fb.control("string", [Validators.required]),
   });
 
   createClicked() {
     this.errors = [];
 
-    let request: CreateTradeRequestRequest;
-    try {
-      request = <CreateTradeRequestRequest>JSON.parse(this.form.value.json);
-    } catch (e) {
-      this.errors = ["The JSON is invalid."];
-      return;
-    }
+    const request = <CreateTradeRequestRequest>this.form.value;
 
     this.#tradeRequestService.createTradeRequest(request).subscribe(response => {
       if (!response.result) {

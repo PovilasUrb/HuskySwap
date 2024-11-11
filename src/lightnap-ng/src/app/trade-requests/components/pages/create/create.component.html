@@ -1,14 +1,30 @@
+
 <p-card header="Create">
   <div class="flex gap-1 mb-1">
     <p-button [routerLink]="['..']" icon="pi pi-arrow-up" label="Up to all" />
   </div>
 
   <form [formGroup]="form" (ngSubmit)="createClicked()" autocomplete="off">
-    <div class="flex flex-column gap-1">
-      <textarea rows="10" cols="30" pInputTextarea formControlName="json"></textarea>
+    <div class="w-30rem flex flex-column gap-4">
+      <div>
+          <label for="requestingClassUserId" class="block text-900 font-medium mb-2">RequestingClassUserId</label>
+          <p-inputNumber id="requestingClassUserId" formControlName="requestingClassUserId" styleClass="w-full" />
+      </div>
+      <div>
+          <label for="targetClassUserId" class="block text-900 font-medium mb-2">TargetClassUserId</label>
+          <p-inputNumber id="targetClassUserId" formControlName="targetClassUserId" styleClass="w-full" />
+      </div>
+      <div>
+          <label for="status" class="block text-900 font-medium mb-2">Status</label>
+          <input pInputText id="status" formControlName="status" class="w-full" />
+      </div>
+      <div>
+          <label for="notes" class="block text-900 font-medium mb-2">Notes</label>
+          <input pInputText id="notes" formControlName="notes" class="w-full" />
+      </div>
 
       <error-list [errors]="errors" />
-      <p-button type="submit" label="Create" icon="pi pi-plus" severity="success" [disabled]="!form.valid" />
+      <p-button type="submit" label="Create" icon="pi pi-save" severity="success" [disabled]="!form.valid" />
     </div>
   </form>
 </p-card>

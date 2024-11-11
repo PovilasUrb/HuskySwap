@@ -19,7 +19,8 @@ export class MenuService {
   #defaultMenuItems = new Array<MenuItem>({
     label: "Home",
     items: [{ label: "Home", icon: "pi pi-fw pi-home", routerLink: this.#routeAlias.getRoute("user-home") },
-            { label: "Classes", icon: "pi pi-fw pi-book", routerLink: this.#routeAlias.getRoute("class-infos") },
+            { label: "All Classes", icon: "pi pi-fw pi-book", routerLink: this.#routeAlias.getRoute("class-infos") },
+            { label: "My Classes", icon: "pi pi-fw pi-book", routerLink: this.#routeAlias.getRoute("my-classes") },
             { label: "My Trades", icon: "pi pi-fw pi-home", routerLink: this.#routeAlias.getRoute("my-trades") },
             { label: "My Offers", icon: "pi pi-fw pi-home", routerLink: this.#routeAlias.getRoute("my-offers") },
             { label: "Other Offers", icon: "pi pi-fw pi-home", routerLink: this.#routeAlias.getRoute("other-offers") }]

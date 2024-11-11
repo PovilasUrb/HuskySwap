@@ -1,18 +1,33 @@
+
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { InputTextareaModule } from "primeng/inputtextarea";
+import { ErrorListComponent } from "@core";
 import { ButtonModule } from "primeng/button";
+import { CalendarModule } from "primeng/calendar";
 import { CardModule } from "primeng/card";
+import { CheckboxModule } from "primeng/checkbox";
+import { InputNumberModule } from "primeng/inputnumber";
+import { InputTextModule } from "primeng/inputtext";
 import { CreateClassInfoRequest } from "src/app/class-infos/models/request/create-class-info-request";
 import { ClassInfoService } from "src/app/class-infos/services/class-info.service";
-import { ErrorListComponent } from "@core";
 
 @Component({
   standalone: true,
   templateUrl: "./create.component.html",
-  imports: [CommonModule, CardModule, ReactiveFormsModule, RouterLink, ButtonModule, InputTextareaModule, ErrorListComponent],
+  imports: [
+    CommonModule,
+    CardModule,
+    ReactiveFormsModule,
+    RouterLink,
+    CalendarModule,
+    ButtonModule,
+    InputTextModule,
+    InputNumberModule,
+    CheckboxModule,
+    ErrorListComponent,
+  ],
 })
 export class CreateComponent {
   #classInfoService = inject(ClassInfoService);
@@ -23,24 +38,18 @@ export class CreateComponent {
   errors = new Array<string>();
 
   form = this.#fb.group({
-    json: this.#fb.control(
-      JSON.stringify(<CreateClassInfoRequest>{
-        // TODO: Initialize this with some default values for testing.
-      }, undefined, 4),
-      [Validators.required]
-    ),
+	// TODO: Update these fields to match the right parameters.
+	title: this.#fb.control("string", [Validators.required]),
+	description: this.#fb.control("string", [Validators.required]),
+	instructor: this.#fb.control("string", [Validators.required]),
+	classCode: this.#fb.control("string", [Validators.required]),
+	notes: this.#fb.control("string", [Validators.required]),
   });
 
   createClicked() {
     this.errors = [];
 
-    let request: CreateClassInfoRequest;
-    try {
-      request = <CreateClassInfoRequest>JSON.parse(this.form.value.json);
-    } catch (e) {
-      this.errors = ["The JSON is invalid."];
-      return;
-    }
+    const request = <CreateClassInfoRequest>this.form.value;
 
     this.#classInfoService.createClassInfo(request).subscribe(response => {
       if (!response.result) {

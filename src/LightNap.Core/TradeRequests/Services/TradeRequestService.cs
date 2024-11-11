@@ -1,3 +1,4 @@
+
 using LightNap.Core.Api;
 using LightNap.Core.Data;
 using LightNap.Core.Data.Entities;
@@ -38,26 +39,7 @@ namespace LightNap.Core.TradeRequests.Services
 
         public async Task<ApiResponseDto<TradeRequestDto>> CreateTradeRequestAsync(CreateTradeRequestDto dto)
         {
-            ClassInfo? requestedClass = await db.ClassInfos.FindAsync(dto.RequestedClassId);
-            if (requestedClass is null) { return ApiResponseDto<TradeRequestDto>.CreateError("The specified RequestedClass was not found."); }
-            ClassInfo? offeredClass = await db.ClassInfos.FindAsync(dto.OfferedClassId);
-            if (offeredClass is null) { return ApiResponseDto<TradeRequestDto>.CreateError("The specified OfferedClass was not found."); }
-            ApplicationUser? requestingUser = await db.Users.FindAsync(dto.RequestingUserId);
-            if (requestingUser is null) { return ApiResponseDto<TradeRequestDto>.CreateError("The specified RequestingUser was not found."); }
-            ApplicationUser? targetUser = await db.Users.FindAsync(dto.TargetUserId);
-            if (targetUser is null) { return ApiResponseDto<TradeRequestDto>.CreateError("The specified TargetUser was not found."); }
-            var item = new TradeRequest() {
-                RequestedClass = requestedClass,
-                RequestedClassId = requestedClass.Id,
-                OfferedClass = offeredClass,
-                OfferedClassId = offeredClass.Id,
-                RequestingUser = requestingUser,
-                RequestingUserId = requestingUser.Id,
-                TargetUser = targetUser,
-                TargetUserId = targetUser.Id,
-                Status = dto.Status,
-                Notes = dto.Notes
-            };
+            TradeRequest item = dto.ToCreate();
             db.TradeRequests.Add(item);
             await db.SaveChangesAsync();
             return ApiResponseDto<TradeRequestDto>.CreateSuccess(item.ToDto());

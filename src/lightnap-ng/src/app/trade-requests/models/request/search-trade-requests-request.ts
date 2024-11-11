@@ -1,9 +1,9 @@
+
 import { PaginationRequest } from "@core";
 export interface SearchTradeRequestsRequest extends PaginationRequest {
-  requestedClassId?: number;
-	offeredClassId?: number;
-	requestingUserId?: string;
-	targetUserId?: string;
+	// TODO: Update these fields to match the server's SearchTradeRequestDto.
+	requestingClassUserId?: number;
+	targetClassUserId?: number;
 	status?: string;
 	notes?: string;
 }

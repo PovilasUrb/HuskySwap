@@ -1,7 +1,10 @@
+
 using LightNap.Core.Api;
 using LightNap.Core.ClassInfos.Interfaces;
 using LightNap.Core.ClassInfos.Request.Dto;
 using LightNap.Core.ClassInfos.Response.Dto;
+using LightNap.WebApi.Configuration;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LightNap.WebApi.Controllers
@@ -29,6 +32,7 @@ namespace LightNap.WebApi.Controllers
             return await classInfosService.SearchClassInfosAsync(dto);
         }
 
+        [Authorize(Policy = Policies.RequireAdministratorRole)]
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponseDto<ClassInfoDto>), 201)]
         public async Task<ActionResult<ApiResponseDto<ClassInfoDto>>> CreateClassInfo([FromBody] CreateClassInfoDto dto)
@@ -36,6 +40,7 @@ namespace LightNap.WebApi.Controllers
             return await classInfosService.CreateClassInfoAsync(dto);
         }
 
+        [Authorize(Policy = Policies.RequireAdministratorRole)]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ApiResponseDto<ClassInfoDto>), 200)]
         public async Task<ActionResult<ApiResponseDto<ClassInfoDto>>> UpdateClassInfo(int id, [FromBody] UpdateClassInfoDto dto)
@@ -43,6 +48,7 @@ namespace LightNap.WebApi.Controllers
             return await classInfosService.UpdateClassInfoAsync(id, dto);
         }
 
+        [Authorize(Policy = Policies.RequireAdministratorRole)]
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponseDto<bool>), 200)]
         public async Task<ActionResult<ApiResponseDto<bool>>> DeleteClassInfo(int id)
