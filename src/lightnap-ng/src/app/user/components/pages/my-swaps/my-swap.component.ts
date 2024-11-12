@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CardModule } from 'primeng/card';
 
 @Component({
-    selector: 'app-my-offers',
+    selector: 'app-my-swap',
     standalone: true,
-    templateUrl: './my-offers.component.html',
+    templateUrl: './my-swap.component.html',
     imports: [CardModule]
 })
-export class IndexComponent {
+export class MySwapsComponent {
 }

@@ -1,0 +1,16 @@
+form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem; /* Adds space between each form group */
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  p-dropdown {
+    width: 100%;
+  }

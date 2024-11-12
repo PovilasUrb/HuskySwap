@@ -13,12 +13,14 @@ import { environment } from "src/environments/environment";
 import { AppComponent } from "./app.component";
 import { RouterModule } from "@angular/router";
 import { RouteConfig, Routes } from "@routing/routes";
+import { CreateSwapComponent } from './user/components/pages/create-swap/create-swap.component'; // Import CreateSwapComponent
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     RouterModule.forRoot(Routes, RouteConfig),
-    BrowserModule, ToastModule, BlockUIModule],
+    BrowserModule, ToastModule, BlockUIModule,
+    CreateSwapComponent],
   providers: [
     provideAnimations(),
     { provide: API_URL_ROOT, useValue: environment.apiUrlRoot },

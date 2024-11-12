@@ -21,10 +21,9 @@ export type RouteAlias =
 
     // User
     | 'user-home'
-    | 'my-trades'
-    | 'my-offers'
-    | 'other-offers'
-    | 'trade-requests'
+    | 'browse-swaps'
+    | 'create-swap'
+    | 'my-swaps'
 
     // Admin
     | 'admin-home'
