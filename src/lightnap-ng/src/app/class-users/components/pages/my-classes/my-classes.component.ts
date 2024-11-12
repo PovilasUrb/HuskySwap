@@ -10,21 +10,22 @@ import { TableModule } from "primeng/table";
 import { ClassUserService } from "src/app/class-users/services/class-user.service";
 import { ConfirmPopupComponent } from "../../../../core/components/controls/confirm-popup/confirm-popup.component";
 import { ConfirmationService } from "primeng/api";
+import { ClassInfoComponent } from "../../../../class-infos/components/controls/class-info/class-info.component";
 
 @Component({
   standalone: true,
   templateUrl: "./my-classes.component.html",
-  imports: [CommonModule, CardModule, RouterLink, ApiResponseComponent, ButtonModule, TableModule, RoutePipe, ErrorListComponent, ConfirmPopupComponent],
+  imports: [CommonModule, CardModule, RouterLink, ApiResponseComponent, ButtonModule, TableModule, RoutePipe, ErrorListComponent, ConfirmPopupComponent, ClassInfoComponent],
 })
 export class MyClassesComponent {
   #classUserService = inject(ClassUserService);
-  classUsers$ = this.#classUserService.getMyClasses();
+  classInfos$ = this.#classUserService.getMyClasses();
   #toast = inject(ToastService);
   errors = new Array<string>();
   #confirmationService = inject(ConfirmationService);
 
   #loadClasses() {
-    this.classUsers$ = this.#classUserService.getMyClasses();
+    this.classInfos$ = this.#classUserService.getMyClasses();
   }
 
   removeClassForMe(event: any, classId: number) {

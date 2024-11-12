@@ -1,5 +1,7 @@
 ﻿using LightNap.Core.Administrator.Interfaces;
 using LightNap.Core.Administrator.Services;
+using LightNap.Core.ClassDesires.Interfaces;
+using LightNap.Core.ClassDesires.Services;
 using LightNap.Core.ClassInfos.Interfaces;
 using LightNap.Core.ClassInfos.Services;
 using LightNap.Core.ClassUsers.Interfaces;
@@ -52,6 +54,7 @@ namespace LightNap.WebApi.Extensions
             services.AddScoped<IClassInfoService, ClassInfoService>();
             services.AddScoped<ITradeRequestService, TradeRequestService>();
             services.AddScoped<IClassUserService, ClassUserService>();
+            services.AddScoped<IClassDesireService, ClassDesireService>();
 
             return services;
         }

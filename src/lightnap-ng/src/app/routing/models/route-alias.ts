@@ -19,6 +19,9 @@ export type RouteAlias =
     // Class User
     | 'my-classes'
 
+    // Wishlist
+    | 'wishlist'
+
     // User
     | 'user-home'
     | 'browse-swaps'

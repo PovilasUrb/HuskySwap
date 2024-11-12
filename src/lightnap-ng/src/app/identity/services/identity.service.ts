@@ -29,6 +29,17 @@ export class IdentityService {
     return !!this.#token;
   }
 
+  #redirectUrl?: string;
+  get redirectUrl() {
+    const url = this.#redirectUrl;
+    this.#redirectUrl = undefined;
+    return url;
+  }
+  set redirectUrl(value: string | undefined) {
+    this.#redirectUrl = value;
+  }
+
+
   constructor() {
     this.#timer
       .watchTimer$(IdentityService.TokenRefreshCheckMillis)

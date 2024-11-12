@@ -45,6 +45,7 @@ namespace LightNap.WebApi.Controllers
         }
 
         [HttpPost("my-classes/{classId}")]
+        [ProducesResponseType(typeof(ApiResponseDto<ClassUserDto>), 200)]
         public async Task<ActionResult<ApiResponseDto<ClassUserDto>>> AddMeToClass(int classId)
         {
             return await classUsersService.AddMeToClassAsync(classId);

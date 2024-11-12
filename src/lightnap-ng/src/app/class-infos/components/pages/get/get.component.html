@@ -1,41 +1,47 @@
 
-<p-card header="Get">
+<p-card header="Viewing Class">
   <api-response [apiResponse]="classInfo$" errorMessage="Error loading" loadingMessage="Loading...">
     <ng-template #success let-classInfo>
       <div class="flex gap-1 mb-1">
         <p-button [routerLink]="['..']" icon="pi pi-arrow-up" label="Up to all" />
-        <p-button [routerLink]="['..', id(), 'edit']" icon="pi pi-pencil" label="Edit" />
+        <p-button showByRoles roles="Administrator" [routerLink]="['..', id(), 'edit']" icon="pi pi-pencil" label="Edit" />
         @if (inClass$ | async; as inClass) {
           <p-button (onClick)="removeClassForMe()" icon="pi pi-trash" severity="danger" label="Remove this for me!" />
         } @else {
           <p-button (onClick)="addClassForMe()" icon="pi pi-pencil" severity="success" label="Add this for me!" />
+          @if (wishingClass$ | async; as wishingClass) {
+            <p-button (onClick)="removeClassFromWishlist()" icon="pi pi-trash" severity="danger" label="Remove this from my wishlist!" />
+          } @else {
+            <p-button (onClick)="addClassToWishlist()" icon="pi pi-pencil" severity="success" label="Add this to my wishlist!" />
+          }
         }
-        
       </div>
-      <div class="w-30rem flex flex-column gap-4">
-        <div>
-          <label class="block text-900 font-medium mb-2">Id</label>
-          <div>{{ classInfo.id }}</div>
-        </div>
-        <div>
-          <label class="block text-900 font-medium mb-2">Title</label>
-          <div>{{ classInfo.title }}</div>
-        </div>
-        <div>
-          <label class="block text-900 font-medium mb-2">Description</label>
-          <div>{{ classInfo.description }}</div>
-        </div>
-        <div>
-          <label class="block text-900 font-medium mb-2">Instructor</label>
-          <div>{{ classInfo.instructor }}</div>
-        </div>
-        <div>
-          <label class="block text-900 font-medium mb-2">ClassCode</label>
-          <div>{{ classInfo.classCode }}</div>
-        </div>
-        <div>
-          <label class="block text-900 font-medium mb-2">Notes</label>
-          <div>{{ classInfo.notes }}</div>
+      <div class="flex flex-column">
+        <div class="w-30rem flex flex-column gap-4">
+          <div>
+            <label class="block text-900 font-medium mb-2">Id</label>
+            <div>{{ classInfo.id }}</div>
+          </div>
+          <div>
+            <label class="block text-900 font-medium mb-2">Title</label>
+            <div>{{ classInfo.title }}</div>
+          </div>
+          <div>
+            <label class="block text-900 font-medium mb-2">Description</label>
+            <div>{{ classInfo.description }}</div>
+          </div>
+          <div>
+            <label class="block text-900 font-medium mb-2">Instructor</label>
+            <div>{{ classInfo.instructor }}</div>
+          </div>
+          <div>
+            <label class="block text-900 font-medium mb-2">ClassCode</label>
+            <div>{{ classInfo.classCode }}</div>
+          </div>
+          <div>
+            <label class="block text-900 font-medium mb-2">Notes</label>
+            <div>{{ classInfo.notes }}</div>
+          </div>
         </div>
       </div>
     </ng-template>
