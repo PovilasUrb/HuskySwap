@@ -1,9 +1,7 @@
-<p-card header="Browse Swaps">
-  <p>List of student swap requests</p>
+<p-card header="Incoming Offers">
 
 
   <div class="offers-list">
-    <h2>Incoming Offers</h2>
     <div class="offer-item" *ngFor="let offer of offers" [ngStyle]="{ 'margin-bottom': '10px' }">
       <p-card header="Offer From: {{ offer.offerer }}">
         <p><strong>Wanted Class:</strong> {{ offer.wantedClass }}</p>
