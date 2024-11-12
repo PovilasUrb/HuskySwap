@@ -2,6 +2,7 @@
 using LightNap.Core.Api;
 using LightNap.Core.ClassUsers.Request.Dto;
 using LightNap.Core.ClassUsers.Response.Dto;
+using LightNap.Core.Data.Entities;
 
 namespace LightNap.Core.ClassUsers.Interfaces
 {

@@ -31,7 +31,7 @@ import { ClassInfoService } from "src/app/class-infos/services/class-info.servic
     InputTextModule,
     InputNumberModule,
     CheckboxModule,
-    ErrorListComponent,
+    ErrorListComponent
   ],
 })
 export class EditComponent implements OnInit {

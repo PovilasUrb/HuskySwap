@@ -32,6 +32,11 @@ namespace LightNap.Core.Data
         public DbSet<ClassUser> ClassUsers { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets the class desires DbSet.
+        /// <summary>
+        public DbSet<ClassDesire> ClassDesires { get; set; } = null!;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext"/> class.
         /// </summary>
         /// <param name="options">The DbContext options.</param>
@@ -86,6 +91,16 @@ namespace LightNap.Core.Data
 
             // Storing this as a JSON string.
             configurationBuilder.Properties<BrowserSettingsDto>().HaveConversion(typeof(BrowserSettingsConverter));
+        }
+
+        public async Task<ClassUser?> GetUserInActiveClassAsync(int classId, string userId)
+        {
+            return await this.ClassUsers.FirstOrDefaultAsync((classUser) => classUser.UserId == userId && classUser.ClassId == classId && classUser.IsActive);
+        }
+
+        public async Task<ClassDesire?> GetClassOnActiveUserWishlistAsync(int classId, string userId)
+        {
+            return await this.ClassDesires.FirstOrDefaultAsync((classDesire) => classDesire.UserId == userId && classDesire.ClassId == classId && classDesire.IsActive);
         }
     }
 }

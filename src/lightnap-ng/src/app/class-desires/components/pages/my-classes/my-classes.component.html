@@ -1,0 +1,14 @@
+
+<p-card header="My Wishlist">
+  <api-response [apiResponse]="classInfos$" errorMessage="Error loading" loadingMessage="Loading...">
+    <ng-template #success let-classInfos>
+      @for(classInfo of classInfos; track $index) {
+        <class-info [classInfo]="classInfo"></class-info>
+      }
+      @empty {
+        <p>No classes in your wishlist</p>
+      }
+      <error-list [errors]="errors"></error-list>
+    </ng-template>
+  </api-response>
+</p-card>

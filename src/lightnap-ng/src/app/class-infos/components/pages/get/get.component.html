@@ -1,16 +1,20 @@
 
-<p-card header="Get">
+<p-card header="Viewing Class">
   <api-response [apiResponse]="classInfo$" errorMessage="Error loading" loadingMessage="Loading...">
     <ng-template #success let-classInfo>
       <div class="flex gap-1 mb-1">
         <p-button [routerLink]="['..']" icon="pi pi-arrow-up" label="Up to all" />
-        <p-button [routerLink]="['..', id(), 'edit']" icon="pi pi-pencil" label="Edit" />
+        <p-button showByRoles roles="Administrator" [routerLink]="['..', id(), 'edit']" icon="pi pi-pencil" label="Edit" />
         @if (inClass$ | async; as inClass) {
           <p-button (onClick)="removeClassForMe()" icon="pi pi-trash" severity="danger" label="Remove this for me!" />
         } @else {
           <p-button (onClick)="addClassForMe()" icon="pi pi-pencil" severity="success" label="Add this for me!" />
+          @if (wishingClass$ | async; as wishingClass) {
+            <p-button (onClick)="removeClassFromWishlist()" icon="pi pi-trash" severity="danger" label="Remove this from my wishlist!" />
+          } @else {
+            <p-button (onClick)="addClassToWishlist()" icon="pi pi-pencil" severity="success" label="Add this to my wishlist!" />
+          }
         }
-        
       </div>
       <div class="w-30rem flex flex-column gap-4">
         <div>

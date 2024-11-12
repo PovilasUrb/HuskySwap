@@ -10,10 +10,12 @@ using Microsoft.EntityFrameworkCore;
 using LightNap.Core.Interfaces;
 using static LightNap.Core.Configuration.Constants;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using LightNap.Core.ClassDesires.Interfaces;
+using LightNap.Core.ClassDesires.Services;
 
 namespace LightNap.Core.ClassUsers.Services
 {
-    public class ClassUserService(ApplicationDbContext db, IUserContext userContext) : IClassUserService
+    public class ClassUserService(ApplicationDbContext db, IUserContext userContext, IClassDesireService classDesireService) : IClassUserService
     {
         public async Task<ApiResponseDto<ClassUserDto>> GetClassUserAsync(int id)
         {
@@ -60,7 +62,7 @@ namespace LightNap.Core.ClassUsers.Services
 
         public async Task<ApiResponseDto<bool>> RemoveMeFromClassAsync(int classId)
         {
-            var item = await this.GetUserInActiveClassAsync(classId, userContext.GetUserId());
+            var item = await db.GetUserInActiveClassAsync(classId, userContext.GetUserId());
             if (item is null) { return ApiResponseDto<bool>.CreateError("You are not in this class."); }
             item.IsActive = false;
             await db.SaveChangesAsync();
@@ -69,7 +71,7 @@ namespace LightNap.Core.ClassUsers.Services
 
         public async Task<ApiResponseDto<ClassUserDto>> CreateClassUserAsync(CreateClassUserDto dto)
         {
-            var item = await this.GetUserInActiveClassAsync(dto.ClassId, dto.UserId);
+            var item = await db.GetUserInActiveClassAsync(dto.ClassId, dto.UserId);
             if (item is not null) { return ApiResponseDto<ClassUserDto>.CreateError("User is already in this class."); }
             item = dto.ToCreate(userContext.GetUserId());
             db.ClassUsers.Add(item);
@@ -77,16 +79,16 @@ namespace LightNap.Core.ClassUsers.Services
             return ApiResponseDto<ClassUserDto>.CreateSuccess(item.ToDto());
         }
 
-        private async Task<ClassUser?> GetUserInActiveClassAsync(int classId, string userId)
-        {
-            return await db.ClassUsers.FirstOrDefaultAsync((classUser) => classUser.UserId == userId && classUser.ClassId == classId && classUser.IsActive);
-        }
-
         public async Task<ApiResponseDto<ClassUserDto>> AddMeToClassAsync(int classId)
         {
-            var item = await this.GetUserInActiveClassAsync(classId, userContext.GetUserId());
+            var item = await db.GetUserInActiveClassAsync(classId, userContext.GetUserId());
             if (item is not null) { return ApiResponseDto<ClassUserDto>.CreateError("You are already in this class."); }
-            return await this.CreateClassUserAsync(new CreateClassUserDto() { ClassId = classId, UserId = userContext.GetUserId() });
+            var createClass = await this.CreateClassUserAsync(new CreateClassUserDto() { ClassId = classId, UserId = userContext.GetUserId() });
+            if (createClass is null) { return ApiResponseDto<ClassUserDto>.CreateError("Failed to create class."); }
+            var classDesire = await db.GetClassOnActiveUserWishlistAsync(classId, userContext.GetUserId());
+            if (classDesire is not null) { await classDesireService.RemoveMeFromClassAsync(classId); }
+            await db.SaveChangesAsync();
+            return createClass;
         }
 
         public async Task<ApiResponseDto<ClassUserDto>> UpdateClassUserAsync(int id, UpdateClassUserDto dto)

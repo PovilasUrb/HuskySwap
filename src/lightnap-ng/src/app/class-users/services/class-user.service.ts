@@ -4,12 +4,17 @@ import { CreateClassUserRequest } from "../models/request/create-class-user-requ
 import { SearchClassUsersRequest } from "../models/request/search-class-users-request";
 import { UpdateClassUserRequest } from "../models/request/update-class-user-request";
 import { DataService } from "./data.service";
+import { of, switchMap } from "rxjs";
+import { ApiResponse } from "@core";
+import { ClassInfo } from "src/app/class-infos/models/response/class-info";
+import { ClassInfoService } from "src/app/class-infos/services/class-info.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ClassUserService {
-  #dataService = inject(DataService);
+    #dataService = inject(DataService);
+    #classInfoService = inject(ClassInfoService);
 
     getClassUser(id: number) {
         return this.#dataService.getClassUser(id);
@@ -28,7 +33,15 @@ export class ClassUserService {
     }
 
     getMyClasses() {
-        return this.#dataService.getMyClasses();
+        return this.#dataService.getMyClasses().pipe(
+            switchMap(response => {
+                if (!response.result) {
+                    return of(response as any as ApiResponse<ClassInfo[]>);
+                }
+                const classIds = response.result.map(classUser => classUser.classId);
+                return this.#classInfoService.getClassInfos(classIds);
+            })
+        );
     }
     
     removeMeFromClass(classId: number) {
