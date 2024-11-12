@@ -17,7 +17,7 @@ export class BrowseSwapsComponent {
     offers: ClassOffer[] = [
         { offeredClass: 'CSE 442', wantedClass: 'CSE 403' , offerer: "Yuki Kawamura"},
         { offeredClass: 'CSE 331', wantedClass: 'CSE 333' , offerer: "Lebron James"},
-        { offeredClass: 'CSE 123', wantedClass: 'CSE 421' , offerer: "The Rizzler"}
+        { offeredClass: 'CSE 123', wantedClass: 'CSE 421' , offerer: "Ja Morant"}
       ];
    
       acceptOffer(offer: ClassOffer) {
