@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button'; // Import p-button module
 interface ClassOffer {
     offeredClass: string;
     wantedClass: string;
@@ -10,7 +11,7 @@ interface ClassOffer {
     selector: 'app-browse-swaps',
     standalone: true,
     templateUrl: './browse-swaps.component.html',
-    imports: [CardModule, CommonModule]
+    imports: [CardModule, CommonModule, ButtonModule]
 })
 export class BrowseSwapsComponent {
     offers: ClassOffer[] = [
