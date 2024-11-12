@@ -2,6 +2,8 @@
 using LightNap.Core.Administrator.Services;
 using LightNap.Core.ClassInfos.Interfaces;
 using LightNap.Core.ClassInfos.Services;
+using LightNap.Core.ClassUsers.Interfaces;
+using LightNap.Core.ClassUsers.Services;
 using LightNap.Core.Data;
 using LightNap.Core.Data.Entities;
 using LightNap.Core.Extensions;
@@ -49,6 +51,7 @@ namespace LightNap.WebApi.Extensions
             services.AddScoped<IPublicService, PublicService>();
             services.AddScoped<IClassInfoService, ClassInfoService>();
             services.AddScoped<ITradeRequestService, TradeRequestService>();
+            services.AddScoped<IClassUserService, ClassUserService>();
 
             return services;
         }

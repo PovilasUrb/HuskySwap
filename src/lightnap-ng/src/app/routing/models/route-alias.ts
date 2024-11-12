@@ -14,6 +14,10 @@ export type RouteAlias =
 
     // Class Info
     | 'class-infos'
+    | 'class-info'
+
+    // Class User
+    | 'my-classes'
 
     // User
     | 'user-home'
