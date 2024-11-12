@@ -22,10 +22,9 @@ export class MenuService {
             { label: "All Classes", icon: "pi pi-fw pi-book", routerLink: this.#routeAlias.getRoute("class-infos") },
             { label: "My Classes", icon: "pi pi-fw pi-book", routerLink: this.#routeAlias.getRoute("my-classes") },
             { label: "My Wishlist", icon: "pi pi-fw pi-gift", routerLink: this.#routeAlias.getRoute("wishlist") },
-            { label: "My Trades", icon: "pi pi-fw pi-home", routerLink: this.#routeAlias.getRoute("my-trades") },
-            { label: "My Offers", icon: "pi pi-fw pi-home", routerLink: this.#routeAlias.getRoute("my-offers") },
-            { label: "Other Offers", icon: "pi pi-fw pi-home", routerLink: this.#routeAlias.getRoute("other-offers") }]
-
+            { label: "Browse Swaps", icon: "pi pi-fw pi-search", routerLink: this.#routeAlias.getRoute("browse-swaps") },
+            { label: "Create Swap", icon: "pi pi-fw pi-plus", routerLink: this.#routeAlias.getRoute("create-swap") },
+            { label: "My Swaps", icon: "pi pi-fw pi-sync", routerLink: this.#routeAlias.getRoute("my-swaps") }]
   });
 
   #loggedInMenuItems = new Array<MenuItem>({
