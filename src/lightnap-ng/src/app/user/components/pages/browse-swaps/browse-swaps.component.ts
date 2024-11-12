@@ -15,9 +15,9 @@ interface ClassOffer {
 })
 export class BrowseSwapsComponent {
     offers: ClassOffer[] = [
-        { offeredClass: 'CSE 442', wantedClass: 'CSE 403' , offerer: "Chicken Bake"},
-        { offeredClass: 'CSE 331', wantedClass: 'CSE 333' , offerer: "Rizzler"},
-        { offeredClass: 'CSE 123', wantedClass: 'CSE 421' , offerer: "Costco Guy"}
+        { offeredClass: 'CSE 442', wantedClass: 'CSE 403' , offerer: "Yuki Kawamura"},
+        { offeredClass: 'CSE 331', wantedClass: 'CSE 333' , offerer: "Lebron James"},
+        { offeredClass: 'CSE 123', wantedClass: 'CSE 421' , offerer: "The Rizzler"}
       ];
    
       acceptOffer(offer: ClassOffer) {
