@@ -7,6 +7,7 @@ import { ShowByRolesDirective } from "@identity";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { map, Observable, of, tap } from "rxjs";
+import { UserWishlist } from "src/app/class-desires/models/user-wishlist";
 import { ClassDesireService } from "src/app/class-desires/services/class-desire.service";
 import { ClassInfo } from "src/app/class-infos/models/response/class-info";
 import { ClassInfoService } from "src/app/class-infos/services/class-info.service";
@@ -26,11 +27,19 @@ export class GetComponent implements OnInit {
 
   readonly id = input<number>(undefined);
   classInfo$?: Observable<ApiResponse<ClassInfo>>;
+  userWishlists$?: Observable<ApiResponse<UserWishlist[]>>;
   inClass$?: Observable<boolean>;
   wishingClass$?: Observable<boolean>;
 
   ngOnInit() {
     this.classInfo$ = this.#classInfoService.getClassInfo(this.id());
+    this.#classUserService.getUsersInClasses(this.id()).subscribe(
+      {
+        next: (response) => {
+          console.log(response);
+      }
+    }
+    );
     this.#refreshClassStatus();
   }
 

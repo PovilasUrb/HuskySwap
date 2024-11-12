@@ -3,5 +3,5 @@ export interface ClassDesire {
   id: number;
   classId: number;
 	userId: string;
-	isActive: string;
+	isActive: boolean;
 }
