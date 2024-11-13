@@ -80,7 +80,7 @@ namespace LightNap.Core.TradeRequests.Services
                     "placeholder@email.com",
                     targetClassUser.User!.Email!,
                     "HuskySwap Trade Request",
-                    $"You've received a trade request! Check it out <a href=\"{applicationSettings.Value.SiteUrlRootForEmails}\"here</a>."));
+                    $"You've received a trade request! Check it out <a href=\"{applicationSettings.Value.SiteUrlRootForEmails}#/trade-requests/{item.Result!.Id}/respond\">here</a>."));
             }
             return item;
         }
