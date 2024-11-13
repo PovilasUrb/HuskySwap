@@ -14,7 +14,7 @@ namespace LightNap.Core.TradeRequests.Extensions
             {
                 RequestingClassUserId = dto.RequestingClassUserId,
                 TargetClassUserId = dto.TargetClassUserId,
-                Status = dto.Status,
+                Status = TradeRequestStatus.Pending,
                 Notes = dto.Notes
             };
             return item;
@@ -23,21 +23,20 @@ namespace LightNap.Core.TradeRequests.Extensions
         public static TradeRequestDto ToDto(this TradeRequest item)
         {
             // TODO: Update these fields to match the DTO.
-            var dto = new TradeRequestDto();
-            dto.Id = item.Id;
-            dto.RequestingClassUserId = item.RequestingClassUserId;
-            dto.TargetClassUserId = item.TargetClassUserId;
-            dto.Status = item.Status;
-            dto.Notes = item.Notes;
+            var dto = new TradeRequestDto
+            {
+                Id = item.Id,
+                RequestingClassUserId = item.RequestingClassUserId,
+                TargetClassUserId = item.TargetClassUserId,
+                Status = item.Status,
+                Notes = item.Notes
+            };
             return dto;
         }
 
         public static void UpdateFromDto(this TradeRequest item, UpdateTradeRequestDto dto)
         {
             // TODO: Update these fields to match the DTO.
-            item.RequestingClassUserId = dto.RequestingClassUserId;
-            item.TargetClassUserId = dto.TargetClassUserId;
-            item.Status = dto.Status;
             item.Notes = dto.Notes;
         }
     }

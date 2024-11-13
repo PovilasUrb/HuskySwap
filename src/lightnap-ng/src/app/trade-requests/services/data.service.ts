@@ -40,6 +40,10 @@ export class DataService {
     return this.#http.post<ApiResponse<TradeRequest>>(`${this.#apiUrlRoot}`, request);
   }
 
+  makeATradeRequest(request: CreateTradeRequestRequest) {
+    return this.#http.post<ApiResponse<TradeRequest>>(`${this.#apiUrlRoot}my-trades`, request);
+  }
+
   updateTradeRequest(id: number, request: UpdateTradeRequestRequest) {
     return this.#http.put<ApiResponse<TradeRequest>>(`${this.#apiUrlRoot}${id}`, request);
   }

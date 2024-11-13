@@ -1,4 +1,3 @@
-
 <p-card header="Viewing Class">
   <api-response [apiResponse]="classInfo$" errorMessage="Error loading" loadingMessage="Loading...">
     <ng-template #success let-classInfo>
@@ -6,15 +5,14 @@
         <p-button [routerLink]="['..']" icon="pi pi-arrow-up" label="Up to all" />
         <p-button showByRoles roles="Administrator" [routerLink]="['..', id(), 'edit']" icon="pi pi-pencil" label="Edit" />
         @if (inClass$ | async; as inClass) {
-          <p-button (onClick)="removeClassForMe()" icon="pi pi-trash" severity="danger" label="Remove this for me!" />
+        <p-button (onClick)="removeClassForMe()" icon="pi pi-trash" severity="danger" label="Remove this for me!" />
         } @else {
-          <p-button (onClick)="addClassForMe()" icon="pi pi-pencil" severity="success" label="Add this for me!" />
-          @if (wishingClass$ | async; as wishingClass) {
-            <p-button (onClick)="removeClassFromWishlist()" icon="pi pi-trash" severity="danger" label="Remove this from my wishlist!" />
-          } @else {
-            <p-button (onClick)="addClassToWishlist()" icon="pi pi-pencil" severity="success" label="Add this to my wishlist!" />
-          }
-        }
+        <p-button (onClick)="addClassForMe()" icon="pi pi-pencil" severity="success" label="Add this for me!" />
+        @if (wishingClass$ | async; as wishingClass) {
+        <p-button (onClick)="removeClassFromWishlist()" icon="pi pi-trash" severity="danger" label="Remove this from my wishlist!" />
+        } @else {
+        <p-button (onClick)="addClassToWishlist()" icon="pi pi-pencil" severity="success" label="Add this to my wishlist!" />
+        } }
       </div>
       <div class="flex flex-column">
         <div class="w-30rem flex flex-column gap-4">
@@ -47,3 +45,23 @@
     </ng-template>
   </api-response>
 </p-card>
+<div class="mt-4">
+<p-card>
+  @if (inClass$ | async; as inClass) {
+  <api-response [apiResponse]="userWishlists$" errorMessage="Error loading" loadingMessage="Loading...">
+    <ng-template #success let-userWishlists>
+      @for (userWishlist of userWishlists; track $index) {
+      <div>
+        @for (classUserInfo of userWishlist.classUserInfos; track $index) {
+        <class-info [classInfo]="classUserInfo.classInfo" />
+        <p-button [routerLink]="'offer-swap' | route : [myClassUserId, classUserInfo.classUser.id]" label="Offer Swap" />
+        }
+      </div>
+      }
+    </ng-template>
+  </api-response>
+  } @else {
+    <div>You are not in this class currently, so you cannot offer it.</div>
+  }
+</p-card>
+</div>

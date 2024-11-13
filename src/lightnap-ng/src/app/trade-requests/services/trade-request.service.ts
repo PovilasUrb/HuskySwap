@@ -23,6 +23,10 @@ export class TradeRequestService {
         return this.#dataService.createTradeRequest(request);
     }
 
+    makeATradeRequest(request: CreateTradeRequestRequest) {
+        return this.#dataService.makeATradeRequest(request);
+    }
+
     updateTradeRequest(id: number, request: UpdateTradeRequestRequest) {
         return this.#dataService.updateTradeRequest(id, request);
     }

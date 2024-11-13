@@ -10,6 +10,7 @@ namespace LightNap.Core.TradeRequests.Interfaces
         Task<ApiResponseDto<TradeRequestDto>> GetTradeRequestAsync(int id);
         Task<ApiResponseDto<PagedResponse<TradeRequestDto>>> SearchTradeRequestsAsync(SearchTradeRequestsDto dto);
         Task<ApiResponseDto<TradeRequestDto>> CreateTradeRequestAsync(CreateTradeRequestDto dto);
+        Task<ApiResponseDto<TradeRequestDto>> MakeATradeRequestAsync(CreateTradeRequestDto dto);
         Task<ApiResponseDto<TradeRequestDto>> UpdateTradeRequestAsync(int id, UpdateTradeRequestDto dto);
         Task<ApiResponseDto<bool>> DeleteTradeRequestAsync(int id);
     }

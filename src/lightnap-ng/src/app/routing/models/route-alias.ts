@@ -19,6 +19,9 @@ export type RouteAlias =
     // Class User
     | 'my-classes'
 
+    // Offer Swap
+    | 'offer-swap'
+
     // Wishlist
     | 'wishlist'
 
