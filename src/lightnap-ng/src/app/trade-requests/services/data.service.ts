@@ -57,11 +57,11 @@ export class DataService {
   }
 
   acceptMyTradeRequest(id: number) {
-    return this.#http.put<ApiResponse<boolean>>(`${this.#apiUrlRoot}${id}/accept`, null);
+    return this.#http.post<ApiResponse<boolean>>(`${this.#apiUrlRoot}${id}/accept`, null);
   }
 
   rejectMyTradeRequest(id: number) {
-    return this.#http.put<ApiResponse<boolean>>(`${this.#apiUrlRoot}${id}/reject`, null);
+    return this.#http.post<ApiResponse<boolean>>(`${this.#apiUrlRoot}${id}/reject`, null);
   }
 
   getMyTradeRequestsReceived() {

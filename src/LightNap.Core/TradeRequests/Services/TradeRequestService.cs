@@ -50,6 +50,8 @@ namespace LightNap.Core.TradeRequests.Services
 
         public async Task<ApiResponseDto<TradeRequestDto>> CreateTradeRequestAsync(CreateTradeRequestDto dto)
         {
+            var tradeRequest = await db.TradeRequests.FirstOrDefaultAsync(tradeRequest => tradeRequest.TargetClassUserId == dto.TargetClassUserId && tradeRequest.RequestingClassUserId == dto.RequestingClassUserId && tradeRequest.Status == TradeRequestStatus.Pending);
+            if (tradeRequest is not null) { return ApiResponseDto<TradeRequestDto>.CreateError("This trade request already exists."); }
             var requestingClassUser = await db.ClassUsers.FirstOrDefaultAsync(classUser => classUser.Id == dto.RequestingClassUserId && classUser.IsActive);
             if (requestingClassUser is null) { return ApiResponseDto<TradeRequestDto>.CreateError("You are not in this class."); }
             var targetClassUser = await db.ClassUsers.FirstOrDefaultAsync(classUser => classUser.Id == dto.TargetClassUserId && classUser.IsActive);
@@ -90,7 +92,7 @@ namespace LightNap.Core.TradeRequests.Services
             {
                 return ApiResponseDto<bool>.CreateError("This trade request is not valid.");
             }
-            if (tradeRequest.TargetClassUser!.UserId == userContext.GetUserId())
+            if (tradeRequest.TargetClassUser!.UserId != userContext.GetUserId())
             {
                 return ApiResponseDto<bool>.CreateError("You cannot accept this trade request.");
             }
