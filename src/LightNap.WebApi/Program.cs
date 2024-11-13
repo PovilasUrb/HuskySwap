@@ -83,10 +83,12 @@ try
     var administratorSettings = services.GetRequiredService<IOptions<List<AdministratorConfiguration>>>();
     await Seeder.SeedAdministratorsAsync(userManager, administratorSettings, applicationSettings, logger);
 
-    if (app.Environment.IsDevelopment())
-    {
+    //if (app.Environment.IsDevelopment())
+    //{
+
+    // Purely for demo purposes.
         await Seeder.SeedDevelopmentContentAsync(services);
-    }
+    //}
 }
 catch (Exception ex)
 {

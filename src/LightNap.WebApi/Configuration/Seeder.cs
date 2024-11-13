@@ -37,14 +37,14 @@ namespace LightNap.WebApi.Configuration
             var classUserService = services.GetRequiredService<IClassUserService>();
             var classDesireService = services.GetRequiredService<IClassDesireService>();
 
-            var user1 = await Seeder.GetOrCreateUserAsync(userManager, "user1", "user1@user.com", "P@ssw0rd", false, logger);
-            var user2 = await Seeder.GetOrCreateUserAsync(userManager, "user2", "user2@user.com", "P@ssw0rd", false, logger);
-            var user3 = await Seeder.GetOrCreateUserAsync(userManager, "user3", "user3@user.com", "P@ssw0rd", false, logger);
-            var user4 = await Seeder.GetOrCreateUserAsync(userManager, "user4", "user4@user.com", "P@ssw0rd", false, logger);
-            var class403 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { ClassCode = "123", Title = "CSE 403", Description = "ASD", Instructor = "Teacher", Notes = "asd" });
-            var class473 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { ClassCode = "312", Title = "CSE 473", Description = "SAD", Instructor = "Professor", Notes = "asd" });
-            var class333 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { ClassCode = "123", Title = "CSE 333", Description = "AASDSD", Instructor = "Teacher", Notes = "asd" });
-            var class413 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { ClassCode = "312", Title = "CSE 413", Description = "AD", Instructor = "Professor", Notes = "asd" });
+            var user1 = await Seeder.GetOrCreateUserAsync(userManager, "jdkaim", "jdkaim+test1@uw.edu", "P@ssw0rd", false, logger);
+            var user2 = await Seeder.GetOrCreateUserAsync(userManager, "otherJDKaim", "jdkaim@hotmail.com", "P@ssw0rd", false, logger);
+            var user3 = await Seeder.GetOrCreateUserAsync(userManager, "user3", "jdkaim+test3@uw.edu", "P@ssw0rd", false, logger);
+            var user4 = await Seeder.GetOrCreateUserAsync(userManager, "user4", "jdkaim+test4@uw.edu", "P@ssw0rd", false, logger);
+            var class403 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { ClassCode = "13477", Title = "CSE 403", Description = "Software Engineering", Instructor = "Michael Ernst", Notes = "brick by brick" });
+            var class473 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { ClassCode = "13563", Title = "CSE 473", Description = "Introduction to Artificial Intelligence", Instructor = "Steve Tanimoto", Notes = "very ai!" });
+            var class333 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { ClassCode = "13400", Title = "CSE 333", Description = "Systems Programming", Instructor = "Hannah C. Tang", Notes = "C-tier class" });
+            var class442 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { ClassCode = "13500", Title = "CSE 442", Description = "Data Visualization", Instructor = "Jeffrey Heer", Notes = "asd" });
             var user1class403 = await classUserService.CreateClassUserAsync(new CreateClassUserDto() { ClassId = class403.Result!.Id, UserId = user1.Id });
             var user2class473 = await classUserService.CreateClassUserAsync(new CreateClassUserDto() { ClassId = class473.Result!.Id, UserId = user2.Id });
             await classDesireService.CreateClassDesireAsync(new CreateClassDesireDto() { ClassId = class473.Result!.Id, UserId = user1.Id });

@@ -54,6 +54,34 @@ namespace LightNap.WebApi.Controllers
             return await tradeRequestsService.UpdateTradeRequestAsync(id, dto);
         }
 
+        [HttpPost("{id}/accept")]
+        [ProducesResponseType(typeof(ApiResponseDto<bool>), 200)]
+        public async Task<ActionResult<ApiResponseDto<bool>>> AcceptMyTradeRequest(int id)
+        {
+            return await tradeRequestsService.RespondToMyTradeRequestAsync(id, true);
+        }
+
+        [HttpPost("{id}/reject")]
+        [ProducesResponseType(typeof(ApiResponseDto<bool>), 200)]
+        public async Task<ActionResult<ApiResponseDto<bool>>> RejectMyTradeRequest(int id)
+        {
+            return await tradeRequestsService.RespondToMyTradeRequestAsync(id, false);
+        }
+
+        [HttpGet("sent")]
+        [ProducesResponseType(typeof(ApiResponseDto<IList<TradeRequestDto>>), 200)]
+        public async Task<ActionResult<ApiResponseDto<IList<TradeRequestDto>>>> GetMyTradeRequestsSent()
+        {
+            return await tradeRequestsService.GetMyTradeRequestsSentAsync();
+        }
+
+        [HttpGet("received")]
+        [ProducesResponseType(typeof(ApiResponseDto<IList<TradeRequestDto>>), 200)]
+        public async Task<ActionResult<ApiResponseDto<IList<TradeRequestDto>>>> GetMyTradeRequestsReceived()
+        {
+            return await tradeRequestsService.GetMyTradeRequestsReceivedAsync();
+        }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponseDto<bool>), 200)]
         public async Task<ActionResult<ApiResponseDto<bool>>> DeleteTradeRequest(int id)

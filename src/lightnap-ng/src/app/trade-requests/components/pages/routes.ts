@@ -14,7 +14,10 @@ import { AppRoute } from "@routing";
 export const Routes: AppRoute[] = [
   { path: "", loadComponent: () => import("./index/index.component").then(m => m.IndexComponent) },
   { path: "create", loadComponent: () => import("./create/create.component").then(m => m.CreateComponent) },
+  { path: "incoming-swaps", data: {alias: "incoming-swaps"}, loadComponent: () => import("./incoming-swaps/incoming-swaps.component").then(m => m.IncomingSwapsComponent) },
+  { path: "outgoing-swaps", data: {alias: "outgoing-swaps"}, loadComponent: () => import("./outgoing-swaps/outgoing-swaps.component").then(m => m.OutgoingSwapsComponent) },
   { path: "offer-swap/:requestingClassUserId/:targetClassUserId", data: {alias: 'offer-swap'}, loadComponent: () => import("./offer-swap/offer-swap.component").then(m => m.OfferSwapComponent) },
+  { path: ":id/respond", data: {alias: "respond"}, loadComponent: () => import("./respond/respond.component").then(m => m.RespondComponent) },
   { path: ":id", loadComponent: () => import("./get/get.component").then(m => m.GetComponent) },
   { path: ":id/edit", loadComponent: () => import("./edit/edit.component").then(m => m.EditComponent) },
 ];

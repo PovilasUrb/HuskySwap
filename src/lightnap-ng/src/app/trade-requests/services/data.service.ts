@@ -1,7 +1,7 @@
 
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
-import { API_URL_ROOT, ApiResponse, PagedResponse } from "@core";
+import { API_URL_ROOT, ApiResponse, PagedResponse, throwIfApiError } from "@core";
 import { tap } from "rxjs";
 import {TradeRequestHelper } from "../helpers/trade-request.helper";
 import { CreateTradeRequestRequest } from "../models/request/create-trade-request-request";
@@ -50,5 +50,21 @@ export class DataService {
 
   deleteTradeRequest(id: number) {
     return this.#http.delete<ApiResponse<boolean>>(`${this.#apiUrlRoot}${id}`);
+  }
+
+  getMyTradeRequestsSent() {
+    return this.#http.get<ApiResponse<TradeRequest[]>>(`${this.#apiUrlRoot}sent`);
+  }
+
+  acceptMyTradeRequest(id: number) {
+    return this.#http.put<ApiResponse<boolean>>(`${this.#apiUrlRoot}${id}/accept`, null);
+  }
+
+  rejectMyTradeRequest(id: number) {
+    return this.#http.put<ApiResponse<boolean>>(`${this.#apiUrlRoot}${id}/reject`, null);
+  }
+
+  getMyTradeRequestsReceived() {
+    return this.#http.get<ApiResponse<TradeRequest[]>>(`${this.#apiUrlRoot}received`);
   }
 }

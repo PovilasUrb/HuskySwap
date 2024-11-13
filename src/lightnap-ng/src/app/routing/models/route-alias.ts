@@ -22,6 +22,11 @@ export type RouteAlias =
     // Offer Swap
     | 'offer-swap'
 
+    // Swaps
+    | 'incoming-swaps'
+    | 'outgoing-swaps'
+    | 'respond'
+
     // Wishlist
     | 'wishlist'
 

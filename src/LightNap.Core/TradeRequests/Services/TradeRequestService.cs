@@ -1,18 +1,27 @@
 
 using LightNap.Core.Api;
+using LightNap.Core.ClassInfos.Response.Dto;
+using LightNap.Core.ClassUsers.Extensions;
+using LightNap.Core.ClassUsers.Interfaces;
+using LightNap.Core.ClassUsers.Request.Dto;
+using LightNap.Core.ClassUsers.Response.Dto;
+using LightNap.Core.Configuration;
 using LightNap.Core.Data;
 using LightNap.Core.Data.Entities;
 using LightNap.Core.Interfaces;
+using LightNap.Core.Profile.Dto.Response;
 using LightNap.Core.TradeRequests.Extensions;
 using LightNap.Core.TradeRequests.Interfaces;
 using LightNap.Core.TradeRequests.Request.Dto;
 using LightNap.Core.TradeRequests.Response.Dto;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using static LightNap.Core.Configuration.Constants;
 
 namespace LightNap.Core.TradeRequests.Services
 {
-    public class TradeRequestService(ApplicationDbContext db, IUserContext userContext, IEmailService emailService) : ITradeRequestService
+    public class TradeRequestService(ApplicationDbContext db, IUserContext userContext, IEmailService emailService, IOptions<ApplicationSettings> applicationSettings) : ITradeRequestService
     {
         public async Task<ApiResponseDto<TradeRequestDto>> GetTradeRequestAsync(int id)
         {
@@ -65,9 +74,76 @@ namespace LightNap.Core.TradeRequests.Services
                 // TODO:
                 var requestingClassUser = await db.ClassUsers.Include((classUsers) => classUsers.User).FirstAsync((classUser) => classUser.Id == dto.RequestingClassUserId);
                 var targetClassUser = await db.ClassUsers.Include((classUsers) => classUsers.User).FirstAsync((classUser) => classUser.Id == dto.TargetClassUserId);
-                await emailService.SendEmailAsync(new System.Net.Mail.MailMessage(requestingClassUser.User!.Email!, targetClassUser.User!.Email!, "HuskySwap Trade Request", "Hey, I've sent you a trade request via HuskySwap! Check it out!"));
+                await emailService.SendEmailAsync(new System.Net.Mail.MailMessage(
+                    "placeholder@email.com",
+                    targetClassUser.User!.Email!,
+                    "HuskySwap Trade Request",
+                    $"You've received a trade request! Check it out <a href=\"{applicationSettings.Value.SiteUrlRootForEmails}\"here</a>."));
             }
             return item;
+        }
+
+        public async Task<ApiResponseDto<bool>> RespondToMyTradeRequestAsync(int id, bool accept)
+        {
+            var tradeRequest = await db.TradeRequests.Include(tradeRequest => tradeRequest.TargetClassUser).FirstAsync(tradeRequest => tradeRequest.Id == id);
+            if (tradeRequest is null || tradeRequest.TargetClassUser is null)
+            {
+                return ApiResponseDto<bool>.CreateError("This trade request is not valid.");
+            }
+            if (tradeRequest.TargetClassUser!.UserId == userContext.GetUserId())
+            {
+                return ApiResponseDto<bool>.CreateError("You cannot accept this trade request.");
+            }
+            return await this.RespondToTradeRequestAsync(id, accept);
+        }
+
+        public async Task<ApiResponseDto<bool>> RespondToTradeRequestAsync(int id, bool accept)
+        {
+            var tradeRequest = await db.TradeRequests.FirstAsync(tradeRequest => tradeRequest.Id == id);
+            if (tradeRequest is null)
+            {
+                return ApiResponseDto<bool>.CreateError("This trade request is not valid.");
+            }
+            if (tradeRequest.Status != TradeRequestStatus.Pending)
+            {
+                return ApiResponseDto<bool>.CreateError("This trade request has already been responded to.");
+            }
+            var requestingClassUser = await db.ClassUsers.Include((classUser) => classUser.User).FirstAsync((classUser) => classUser.Id == tradeRequest.RequestingClassUserId && classUser.IsActive == true);
+            if (requestingClassUser is null || requestingClassUser.User is null)
+            {
+                return ApiResponseDto<bool>.CreateError("The requesting user does not have this class.");
+            }
+            var targetClassUser = await db.ClassUsers.Include((classUser) => classUser.User).FirstAsync((classUser) => classUser.Id == tradeRequest.TargetClassUserId && classUser.IsActive == true);
+            if (targetClassUser is null || targetClassUser.User is null)
+            {
+                return ApiResponseDto<bool>.CreateError("The target user does not have this class.");
+            }
+            if (accept)
+            {
+                tradeRequest.Status = TradeRequestStatus.Accepted;
+                await db.SaveChangesAsync();
+                await emailService.SendEmailAsync(new System.Net.Mail.MailMessage(
+                    "placeholder@email.com", 
+                    $"{requestingClassUser.User!.Email!},{targetClassUser.User!.Email!}",
+                    "HuskySwap Trade Request Response",
+                    "Hey! You guys just completed a successful trade request!"));
+                return ApiResponseDto<bool>.CreateSuccess(true);
+            }
+            tradeRequest.Status = TradeRequestStatus.Rejected;
+            await db.SaveChangesAsync();
+            return ApiResponseDto<bool>.CreateSuccess(true);
+        }
+
+        public async Task<ApiResponseDto<IList<TradeRequestDto>>> GetMyTradeRequestsReceivedAsync()
+        {
+            var items = await db.TradeRequests.Where((tradeRequest) => tradeRequest.TargetClassUser!.UserId == userContext.GetUserId()).Select(tradeRequest => tradeRequest.ToDto()).ToListAsync();
+            return ApiResponseDto<IList<TradeRequestDto>>.CreateSuccess(items);
+        }
+
+        public async Task<ApiResponseDto<IList<TradeRequestDto>>> GetMyTradeRequestsSentAsync()
+        {
+            var items = await db.TradeRequests.Where((tradeRequest) => tradeRequest.RequestingClassUser!.UserId == userContext.GetUserId()).Select(tradeRequest => tradeRequest.ToDto()).ToListAsync();
+            return ApiResponseDto<IList<TradeRequestDto>>.CreateSuccess(items);
         }
 
         public async Task<ApiResponseDto<TradeRequestDto>> UpdateTradeRequestAsync(int id, UpdateTradeRequestDto dto)

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button'; // Import p-button module
+import { PanelModule } from 'primeng/panel';
 interface ClassOffer {
     offeredClass: string;
     wantedClass: string;
@@ -11,7 +12,7 @@ interface ClassOffer {
     selector: 'app-browse-swaps',
     standalone: true,
     templateUrl: './browse-swaps.component.html',
-    imports: [CardModule, CommonModule, ButtonModule]
+    imports: [CardModule, CommonModule, ButtonModule, PanelModule]
 })
 export class BrowseSwapsComponent {
     offers: ClassOffer[] = [

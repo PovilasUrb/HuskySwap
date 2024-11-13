@@ -17,11 +17,10 @@
         <ng-template pTemplate="header">
           <tr>
             <th></th>
-            <th>Id</th>
             <th>Title</th>
             <th>Description</th>
             <th>Instructor</th>
-            <th>ClassCode</th>
+            <th>SLN</th>
             <th>Notes</th>
           </tr>
         </ng-template>
@@ -30,8 +29,7 @@
             <td>
               <p-button [routerLink]="[classInfo.id]" icon="pi pi-eye" />
             </td>
-            <td>{{classInfo.id}}</td>
-            <td>{{classInfo.title}}</td>
+            <td style="font-weight: bold;">{{classInfo.title}}</td>
             <td>{{classInfo.description}}</td>
             <td>{{classInfo.instructor}}</td>
             <td>{{classInfo.classCode}}</td>

@@ -1,11 +1,17 @@
 
-<p-card header="Create">
+<p-card header="Offer Swap">
   <api-response [apiResponse]="classUserInfos$" errorMessage="Error loading" loadingMessage="Loading...">
     <ng-template #success let-classUserInfos>
-      <label>Class You're Offering</label>
-      <class-info [classInfo]="classUserInfos.requestingClassUser.classInfo"/>
-      <label>Class You're Requesting</label>
-      <class-info [classInfo]="classUserInfos.targetClassUser.classInfo"/>
+      <div class="flex gap-4 mb-4">
+        <div class="flex flex-column">
+          <h4 class="font-semibold">You Give</h4>
+          <class-info [classInfo]="classUserInfos.requestingClassUser.classInfo"/>
+        </div>
+        <div class="flex flex-column">
+          <h4 class="font-semibold">You Get</h4>
+          <class-info [classInfo]="classUserInfos.targetClassUser.classInfo"/>
+        </div>
+      </div>
     </ng-template>
   </api-response>
 
