@@ -1,7 +1,7 @@
-<div class="flex flex-column border-solid border-primary border-round-sm w-25rem p-2">
-  <span class="text-900 font-semibold">{{ classInfo().classCode }}</span>
-  <span class="text-900 font-semibold">{{ classInfo().title }}</span>
+<div class="flex flex-column border-solid border-primary border-round-sm w-25rem p-2 shadow-8 flip animation-duration-500">
+  <p class="font-semibold"><strong>{{ classInfo().title }}</strong></p>
+  <span class="text-900 font-semibold">{{ classInfo().description }}</span>
   <span class="text-900 font-medium">{{ classInfo().instructor }}</span>
-  <span class="text-900">{{ classInfo().description }}</span>
+  <span class="text-900">{{ classInfo().classCode }}</span>
   <span class="text-900">{{ classInfo().notes }}</span>
 </div>

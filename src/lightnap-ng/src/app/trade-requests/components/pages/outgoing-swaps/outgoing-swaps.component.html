@@ -1,0 +1,16 @@
+<p-card header="Outgoing Swaps">
+  <api-response [apiResponse]="tradeClassUserInfos$" errorMessage="Error loading" loadingMessage="Loading...">
+    <ng-template #success let-tradeClassUserInfos>
+      <div class="flex flex-wrap gap-3">
+        @for(tradeClassUserInfo of tradeClassUserInfos; track $index) {
+        <a [routerLink]="'respond' | route : [tradeClassUserInfo.id]">
+          <trade-class-user-infos [tradeClassUserInfos]="tradeClassUserInfo" />
+        </a>
+        } @empty {
+        <p>You don't have any outgoing swaps!</p>
+        }
+        <error-list [errors]="errors"></error-list>
+      </div>
+    </ng-template>
+  </api-response>
+</p-card>
