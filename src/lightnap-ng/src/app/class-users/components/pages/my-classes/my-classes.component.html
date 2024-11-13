@@ -1,9 +1,9 @@
 <p-card header="My Classes">
   <api-response [apiResponse]="classInfos$" errorMessage="Error loading" loadingMessage="Loading...">
     <ng-template #success let-classInfos>
-      @for(classInfo of classInfos; track $index) {
-      <a [routerLink]="'class-info' | route: classInfo.id">
-        <class-info [classInfo]="classInfo"/>
+      @for(classUserInfo of classInfos; track $index) {
+      <a [routerLink]="'class-info' | route: classUserInfo.classInfo.id">
+        <class-info [classInfo]="classUserInfo.classInfo"/>
       </a>
       } @empty {
       <p>You don't have any classes!</p>

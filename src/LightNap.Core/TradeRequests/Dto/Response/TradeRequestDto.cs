@@ -10,6 +10,6 @@ namespace LightNap.Core.TradeRequests.Response.Dto
         public int RequestingClassUserId { get; set; }
         public int TargetClassUserId { get; set; }
         public TradeRequestStatus Status { get; set; }
-        public string Notes { get; set; }
+        public required string Notes { get; set; }
     }
 }

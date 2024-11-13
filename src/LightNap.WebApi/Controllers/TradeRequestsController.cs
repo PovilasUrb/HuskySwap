@@ -3,6 +3,8 @@ using LightNap.Core.Api;
 using LightNap.Core.TradeRequests.Interfaces;
 using LightNap.Core.TradeRequests.Request.Dto;
 using LightNap.Core.TradeRequests.Response.Dto;
+using LightNap.WebApi.Configuration;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LightNap.WebApi.Controllers
@@ -30,11 +32,19 @@ namespace LightNap.WebApi.Controllers
             return await tradeRequestsService.SearchTradeRequestsAsync(dto);
         }
 
+        [Authorize(Policy = Policies.RequireAdministratorRole)]
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponseDto<TradeRequestDto>), 201)]
         public async Task<ActionResult<ApiResponseDto<TradeRequestDto>>> CreateTradeRequest([FromBody] CreateTradeRequestDto dto)
         {
             return await tradeRequestsService.CreateTradeRequestAsync(dto);
+        }
+
+        [HttpPost("my-trades")]
+        [ProducesResponseType(typeof(ApiResponseDto<TradeRequestDto>), 201)]
+        public async Task<ActionResult<ApiResponseDto<TradeRequestDto>>> MakeATradeRequest([FromBody] CreateTradeRequestDto dto)
+        {
+            return await tradeRequestsService.MakeATradeRequestAsync(dto);
         }
 
         [HttpPut("{id}")]

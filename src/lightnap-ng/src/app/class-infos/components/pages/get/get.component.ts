@@ -12,11 +12,13 @@ import { ClassDesireService } from "src/app/class-desires/services/class-desire.
 import { ClassInfo } from "src/app/class-infos/models/response/class-info";
 import { ClassInfoService } from "src/app/class-infos/services/class-info.service";
 import { ClassUserService } from "src/app/class-users/services/class-user.service";
+import { ClassInfoComponent } from "../../controls/class-info/class-info.component";
+import { RoutePipe } from "../../../../routing/pipes/route.pipe";
 
 @Component({
   standalone: true,
   templateUrl: "./get.component.html",
-  imports: [CommonModule, CardModule, RouterLink, ApiResponseComponent, ButtonModule, ShowByRolesDirective],
+  imports: [CommonModule, CardModule, RouterLink, ApiResponseComponent, ButtonModule, ShowByRolesDirective, ClassInfoComponent, RoutePipe],
 })
 export class GetComponent implements OnInit {
   #classInfoService = inject(ClassInfoService);
@@ -30,16 +32,11 @@ export class GetComponent implements OnInit {
   userWishlists$?: Observable<ApiResponse<UserWishlist[]>>;
   inClass$?: Observable<boolean>;
   wishingClass$?: Observable<boolean>;
+  myClassUserId?: number;
 
   ngOnInit() {
     this.classInfo$ = this.#classInfoService.getClassInfo(this.id());
-    this.#classUserService.getUsersInClasses(this.id()).subscribe(
-      {
-        next: (response) => {
-          console.log(response);
-      }
-    }
-    );
+    this.userWishlists$ = this.#classDesireService.getUsersInClasses(this.id());
     this.#refreshClassStatus();
   }
 
@@ -50,7 +47,8 @@ export class GetComponent implements OnInit {
           this.errors = response.errorMessages;
           return false;
         }
-        return response.result.some(classUser => classUser.id == this.id());
+        this.myClassUserId = response.result.find(classUser => classUser.classInfo.id == this.id())?.classUser.id;
+        return this.myClassUserId != null;
       })
     );
     this.wishingClass$ = this.#classDesireService.getMyWishlist().pipe(

@@ -1,7 +1,7 @@
-import { ClassInfo } from "src/app/class-infos/models/response/class-info";
+import { ClassUserInfo } from "src/app/class-users/models/class-user-info";
 
 export interface UserWishlist {
 	// TODO: Update these fields to match the server's ClassUserDto.
-    classInfos: Array<ClassInfo>;
+    classUserInfos: Array<ClassUserInfo>;
     userId: string;
 }
