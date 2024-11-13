@@ -1,8 +1,15 @@
-﻿using LightNap.Core.Configuration;
+﻿using LightNap.Core.ClassDesires.Interfaces;
+using LightNap.Core.ClassDesires.Request.Dto;
+using LightNap.Core.ClassInfos.Interfaces;
+using LightNap.Core.ClassInfos.Request.Dto;
+using LightNap.Core.ClassUsers.Interfaces;
+using LightNap.Core.ClassUsers.Request.Dto;
+using LightNap.Core.Configuration;
 using LightNap.Core.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace LightNap.WebApi.Configuration
 {
@@ -16,14 +23,33 @@ namespace LightNap.WebApi.Configuration
         /// </summary>
         /// <param name="services">The service provider.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        public static Task SeedDevelopmentContentAsync(
+        public static async Task SeedDevelopmentContentAsync(
         // Suppress IDE0060 warning for unused parameter 'services'. Remove this when actually using the parameter.
 #pragma warning disable IDE0060
         IServiceProvider services
 #pragma warning restore IDE0060
             )
         {
-            return Task.CompletedTask;
+
+            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+            var logger = services.GetRequiredService<ILogger<string>>();
+            var classService = services.GetRequiredService<IClassInfoService>();
+            var classUserService = services.GetRequiredService<IClassUserService>();
+            var classDesireService = services.GetRequiredService<IClassDesireService>();
+
+            var user1 = await Seeder.GetOrCreateUserAsync(userManager, "user1", "user1@user.com", "P@ssw0rd", false, logger);
+            var user2 = await Seeder.GetOrCreateUserAsync(userManager, "user2", "user2@user.com", "P@ssw0rd", false, logger);
+            var user3 = await Seeder.GetOrCreateUserAsync(userManager, "user3", "user3@user.com", "P@ssw0rd", false, logger);
+            var user4 = await Seeder.GetOrCreateUserAsync(userManager, "user4", "user4@user.com", "P@ssw0rd", false, logger);
+            var class403 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { ClassCode = "123", Title = "CSE 403", Description = "ASD", Instructor = "Teacher", Notes = "asd" });
+            var class473 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { ClassCode = "312", Title = "CSE 473", Description = "SAD", Instructor = "Professor", Notes = "asd" });
+            var class333 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { ClassCode = "123", Title = "CSE 333", Description = "AASDSD", Instructor = "Teacher", Notes = "asd" });
+            var class413 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { ClassCode = "312", Title = "CSE 413", Description = "AD", Instructor = "Professor", Notes = "asd" });
+            var user1class403 = await classUserService.CreateClassUserAsync(new CreateClassUserDto() { ClassId = class403.Result!.Id, UserId = user1.Id });
+            var user2class473 = await classUserService.CreateClassUserAsync(new CreateClassUserDto() { ClassId = class473.Result!.Id, UserId = user2.Id });
+            await classDesireService.CreateClassDesireAsync(new CreateClassDesireDto() { ClassId = class473.Result!.Id, UserId = user1.Id });
+            await classDesireService.CreateClassDesireAsync(new CreateClassDesireDto() { ClassId = class403.Result!.Id, UserId = user2.Id });
+
         }
 
         /// <summary>

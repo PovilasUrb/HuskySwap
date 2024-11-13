@@ -6,13 +6,13 @@ namespace LightNap.Core.ClassDesires.Extensions
 {
     public static class ClassDesireExtensions
     {
-        public static ClassDesire ToCreate(this CreateClassDesireDto dto, string userId)
+        public static ClassDesire ToCreate(this CreateClassDesireDto dto)
         {
             // TODO: Update these fields to match the DTO.
             var item = new ClassDesire
             {
                 ClassId = dto.ClassId,
-                UserId = userId,
+                UserId = dto.UserId,
                 IsActive = true
             };
             return item;

@@ -70,7 +70,7 @@ namespace LightNap.Core.ClassDesires.Services
         {
             var item = await db.GetClassOnActiveUserWishlistAsync(dto.ClassId, dto.UserId);
             if (item is not null) { return ApiResponseDto<ClassDesireDto>.CreateError("User already has this class on their wishlist."); }
-            item = dto.ToCreate(userContext.GetUserId());
+            item = dto.ToCreate();
             db.ClassDesires.Add(item);
             await db.SaveChangesAsync();
             return ApiResponseDto<ClassDesireDto>.CreateSuccess(item.ToDto());

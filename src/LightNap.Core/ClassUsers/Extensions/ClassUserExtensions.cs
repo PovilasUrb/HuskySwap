@@ -7,13 +7,13 @@ namespace LightNap.Core.ClassUsers.Extensions
 {
     public static class ClassUserExtensions
     {
-        public static ClassUser ToCreate(this CreateClassUserDto dto, string userId)
+        public static ClassUser ToCreate(this CreateClassUserDto dto)
         {
             // TODO: Update these fields to match the DTO.
             var item = new ClassUser
             {
                 ClassId = dto.ClassId,
-                UserId = userId,
+                UserId = dto.UserId,
                 IsActive = true
             };
             return item;

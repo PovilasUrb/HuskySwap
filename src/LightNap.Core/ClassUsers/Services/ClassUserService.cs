@@ -73,7 +73,7 @@ namespace LightNap.Core.ClassUsers.Services
         {
             var item = await db.GetUserInActiveClassAsync(dto.ClassId, dto.UserId);
             if (item is not null) { return ApiResponseDto<ClassUserDto>.CreateError("User is already in this class."); }
-            item = dto.ToCreate(userContext.GetUserId());
+            item = dto.ToCreate();
             db.ClassUsers.Add(item);
             await db.SaveChangesAsync();
             return ApiResponseDto<ClassUserDto>.CreateSuccess(item.ToDto());
