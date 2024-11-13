@@ -41,25 +41,27 @@
             <div>{{ classInfo.notes }}</div>
           </div>
         </div>
-        <p-card>
-          @if (inClass$ | async; as inClass) {
-          <api-response [apiResponse]="userWishlists$" errorMessage="Error loading" loadingMessage="Loading...">
-            <ng-template #success let-userWishlists>
-              @for (userWishlist of userWishlists; track $index) {
-              <div>
-                @for (classUserInfo of userWishlist.classUserInfos; track $index) {
-                <class-info [classInfo]="classUserInfo.classInfo" />
-                <p-button [routerLink]="'offer-swap' | route : [myClassUserId, classUserInfo.classUser.id]" label="Offer Swap" />
-                }
-              </div>
-              }
-            </ng-template>
-          </api-response>
-          } @else {
-            <div>You are not in this class currently, so you cannot offer it.</div>
-          }
-        </p-card>
       </div>
     </ng-template>
   </api-response>
 </p-card>
+<div class="mt-4">
+<p-card>
+  @if (inClass$ | async; as inClass) {
+  <api-response [apiResponse]="userWishlists$" errorMessage="Error loading" loadingMessage="Loading...">
+    <ng-template #success let-userWishlists>
+      @for (userWishlist of userWishlists; track $index) {
+      <div>
+        @for (classUserInfo of userWishlist.classUserInfos; track $index) {
+        <class-info [classInfo]="classUserInfo.classInfo" />
+        <p-button [routerLink]="'offer-swap' | route : [myClassUserId, classUserInfo.classUser.id]" label="Offer Swap" />
+        }
+      </div>
+      }
+    </ng-template>
+  </api-response>
+  } @else {
+    <div>You are not in this class currently, so you cannot offer it.</div>
+  }
+</p-card>
+</div>
