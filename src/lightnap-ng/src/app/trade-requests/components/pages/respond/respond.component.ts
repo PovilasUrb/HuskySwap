@@ -1,20 +1,17 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, input, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { ApiResponse, ApiResponseComponent, ErrorListComponent, throwIfApiError, ToastService } from "@core";
+import { ApiResponse, ApiResponseComponent, ErrorListComponent, ToastService } from "@core";
 import { RoutePipe } from "@routing";
 import { ConfirmationService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { TableModule } from "primeng/table";
+import { Observable } from "rxjs";
+import { TradeClassUserInfos } from "src/app/trade-requests/models/trade-class-user-infos";
 import { TradeRequestService } from "src/app/trade-requests/services/trade-request.service";
 import { ClassInfoComponent } from "../../../../class-infos/components/controls/class-info/class-info.component";
 import { ConfirmPopupComponent } from "../../../../core/components/controls/confirm-popup/confirm-popup.component";
-import { TradeClassUserInfosComponent } from "../../controls/trade-class-user-infos/trade-class-user-infos.component";
-import { forkJoin, Observable } from "rxjs";
-import { ClassUserService } from "src/app/class-users/services/class-user.service";
-import { ClassUserInfo } from "src/app/class-users/models/class-user-info";
-import { TradeClassUserInfos } from "src/app/trade-requests/models/trade-class-user-infos";
 
 @Component({
   standalone: true,
@@ -30,7 +27,6 @@ import { TradeClassUserInfos } from "src/app/trade-requests/models/trade-class-u
     ErrorListComponent,
     ConfirmPopupComponent,
     ClassInfoComponent,
-    TradeClassUserInfosComponent
 ],
 })
 export class RespondComponent implements OnInit {
