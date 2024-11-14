@@ -1,0 +1,14 @@
+@if (tradeClassUserInfosDisplay().flip) {
+  <div class="flex align-items-center p-2 gap-2 flip animation-duration-500">
+    <class-info [classInfo]="tradeClassUserInfosDisplay().tradeClassUserInfos.targetClassUser.classInfo"></class-info>
+    <div><span class="font-semibold">for</span></div>
+    <class-info [classInfo]="tradeClassUserInfosDisplay().tradeClassUserInfos.requestingClassUser.classInfo"></class-info>
+  </div>
+}
+@else {
+  <div class="flex align-items-center p-2 gap-2 flip animation-duration-500">
+    <class-info [classInfo]="tradeClassUserInfosDisplay().tradeClassUserInfos.requestingClassUser.classInfo"></class-info>
+    <div><span class="font-semibold">for</span></div>
+    <class-info [classInfo]="tradeClassUserInfosDisplay().tradeClassUserInfos.targetClassUser.classInfo"></class-info>
+  </div>
+}

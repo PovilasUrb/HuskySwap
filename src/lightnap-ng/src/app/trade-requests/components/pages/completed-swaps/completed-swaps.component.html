@@ -1,11 +1,11 @@
-<p-card header="Outgoing Swaps">
-  <api-response [apiResponse]="tradeClassUserInfos$" errorMessage="Error loading" loadingMessage="Loading...">
+<p-card header="Completed Swaps">
+  <api-response [apiResponse]="tradeClassUserInfos$"  errorMessage="Error loading" loadingMessage="Loading...">
     <ng-template #success let-tradeClassUserInfos>
       <div class="flex flex-wrap gap-3">
         @for(tradeClassUserInfo of tradeClassUserInfos; track $index) {
           <trade-class-user-infos-display [tradeClassUserInfosDisplay]="tradeClassUserInfo" />
         } @empty {
-        <p>You don't have any outgoing swaps!</p>
+        <p>You haven't complete any swaps!</p>
         }
         <error-list [errors]="errors"></error-list>
       </div>

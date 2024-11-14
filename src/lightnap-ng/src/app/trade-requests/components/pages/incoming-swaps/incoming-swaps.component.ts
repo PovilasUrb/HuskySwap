@@ -6,11 +6,12 @@ import { RoutePipe } from "@routing";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { TableModule } from "primeng/table";
+import { map } from "rxjs";
+import { TradeClassUserInfosDisplay } from "src/app/trade-requests/models/trade-class-user-infos-display";
 import { TradeRequestService } from "src/app/trade-requests/services/trade-request.service";
 import { ClassInfoComponent } from "../../../../class-infos/components/controls/class-info/class-info.component";
 import { ConfirmPopupComponent } from "../../../../core/components/controls/confirm-popup/confirm-popup.component";
-import { TradeClassUserInfosComponent } from "../../controls/trade-class-user-infos/trade-class-user-infos.component";
-import { filter, map, switchMap, tap } from "rxjs";
+import { TradeClassUserInfosDisplayComponent } from "../../controls/trade-class-user-infos-display/trade-class-user-infos-display.component";
 
 @Component({
   standalone: true,
@@ -26,15 +27,15 @@ import { filter, map, switchMap, tap } from "rxjs";
     ErrorListComponent,
     ConfirmPopupComponent,
     ClassInfoComponent,
-    TradeClassUserInfosComponent,
-  ],
+    TradeClassUserInfosDisplayComponent
+],
 })
 export class IncomingSwapsComponent {
   #tradeRequestService = inject(TradeRequestService);
   tradeClassUserInfos$ = this.#tradeRequestService.getMyTradeRequestsReceived().pipe(
     throwIfApiError(),
     map((response) => {
-      return new SuccessApiResponse(response.result.filter((tradeRequest) => tradeRequest.status === "Pending"));
+      return new SuccessApiResponse(response.result.filter(tradeRequest => tradeRequest.status === "Pending").map(tradeRequest => <TradeClassUserInfosDisplay> { tradeClassUserInfos: tradeRequest, flip: true }));
     }),
     catchApiError()
   );

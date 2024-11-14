@@ -17,6 +17,7 @@ using LightNap.Core.TradeRequests.Response.Dto;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.Net.Mail;
 using static LightNap.Core.Configuration.Constants;
 
 namespace LightNap.Core.TradeRequests.Services
@@ -76,11 +77,13 @@ namespace LightNap.Core.TradeRequests.Services
                 // TODO:
                 var requestingClassUser = await db.ClassUsers.Include((classUsers) => classUsers.User).FirstAsync((classUser) => classUser.Id == dto.RequestingClassUserId);
                 var targetClassUser = await db.ClassUsers.Include((classUsers) => classUsers.User).FirstAsync((classUser) => classUser.Id == dto.TargetClassUserId);
-                await emailService.SendEmailAsync(new System.Net.Mail.MailMessage(
+                var msg = new MailMessage(
                     "placeholder@email.com",
                     targetClassUser.User!.Email!,
                     "HuskySwap Trade Request",
-                    $"You've received a trade request! Check it out <a href=\"{applicationSettings.Value.SiteUrlRootForEmails}#/trade-requests/{item.Result!.Id}/respond\">here</a>."));
+                    $"You've received a trade request! Check it out <a href=\"{applicationSettings.Value.SiteUrlRootForEmails}#/trade-requests/{item.Result!.Id}/respond\">here</a>.");
+                msg.IsBodyHtml = true;
+                await emailService.SendEmailAsync(msg);
             }
             return item;
         }
