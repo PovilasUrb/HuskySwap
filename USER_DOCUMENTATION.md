@@ -19,12 +19,15 @@ HuskySwap aims to eliminate the uncertainty and inefficiency of the current cour
 
 ## 3. HuskySwap: How to use? (All features currently WIP)
 1. First log in to your account with a valid UW email and password
-2. From here, you will see several options, such as a search bar, view/edit profile, My Trades, My Offers, and My Friends
-3. From the search bar, you can search for listings for specific classes that you want to take.
-4. From the profile page, you can change your username, the courses you're taking, and other personal details.
-5. From the My Trades page, you can view all live trade offers you have made and make new trade offers, both two way and one way.
-6. From the My Offers page, you can view all incoming trade offers from other students, and accept or deny these offers.
-7. From the My Friends page, you can view what classes your friends are taking, as well as add or remove friends.
+2. From here, you will see several options, such as All Classes, My Classes, etc.
+3. From the All Classes page, you can see all available classes, and you can add an available class to your current classes or to your wishlist. 
+4. From the My Classes page, you can see all your currently enrolled classes, and from here you have the option to either remove a class, or
+   offer up a class to trade for a class you currently have on your wishlist. 
+6. From the My Wishlist page, you can see all classes you aren't currently enrolled in but would like to be. These are the classes you
+   can offer swaps for in the My Classes page. 
+8. From the Incoming Swaps page, you can see active swaps that others have offered, and you can choose to accept or deny. 
+9. From the Outgoing Swaps page, you can see all swaps that you have created.
+10. From the Completed Swaps page, you can see all the successful swaps you've done. 
 
 ### 3.1 Use Policies
 - Account and Authentication Policies:
