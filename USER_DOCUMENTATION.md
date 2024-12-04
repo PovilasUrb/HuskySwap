@@ -27,7 +27,8 @@ HuskySwap aims to eliminate the uncertainty and inefficiency of the current cour
    can offer swaps for in the My Classes page. 
 8. From the Incoming Swaps page, you can see active swaps that others have offered, and you can choose to accept or deny. 
 9. From the Outgoing Swaps page, you can see all swaps that you have created.
-10. From the Completed Swaps page, you can see all the successful swaps you've done. 
+10. From the Completed Swaps page, you can see all the successful swaps you've done.
+11. Additional features include the profile section, where you can edit your username, email, and password.
 
 ### 3.1 Use Policies
 - Account and Authentication Policies:
