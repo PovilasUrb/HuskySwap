@@ -1,29 +1,88 @@
-<p-card header="Manage Your Profile">
-  <api-response [apiResponse]="profile$" errorMessage="Error loading profile" loadingMessage="Loading profile...">
-    <ng-template #success let-profile>
-      <div class="flex flex-column gap-2">
-        <div class="flex flex-column gap-1">
-          <label for="userName" class="font-semibold">User Name</label>
-          <span id="userName">{{ profile.userName }}</span>
-        </div>
+<p-card header="Manage Your Profile and Password">
+  <div class="combined-profile-page">
+    <div class="profile-section">
+      <h3>Profile Information</h3>
+      <api-response [apiResponse]="profile$" errorMessage="Error loading profile" loadingMessage="Loading profile...">
+        <ng-template #success let-profile>
+          <div class="flex flex-column gap-2">
+            <div class="flex flex-column gap-1">
+              <label for="userName" class="font-semibold">User Name</label>
+              <span id="userName">{{ profile.userName }}</span>
+            </div>
 
-        <div class="flex flex-column gap-1">
-          <label for="email" class="font-semibold">Email</label>
-          <span id="email">{{ profile.email }}</span>
-        </div>
+            <div class="flex flex-column gap-1">
+              <label for="email" class="font-semibold">Email</label>
+              <span id="email">{{ profile.email }}</span>
+            </div>
 
-        <form [formGroup]="form" (ngSubmit)="updateProfile()" autocomplete="off">
-          <div class="flex flex-column w-20rem">
+            <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" autocomplete="off">
+              <div class="flex flex-column w-20rem">
+                <error-list [errors]="profileErrors" />
+                <p-button
+                  type="submit"
+                  label="Update Profile"
+                  styleClass="w-full"
+                  [disabled]="!profileForm.valid || !profileForm.dirty"
+                />
+              </div>
+            </form>
 
-            <error-list [errors]="errors" />
-            <p-button type="submit" label="Update Profile" styleClass="w-full" [disabled]="!form.valid || !form.dirty" />
+            <div class="mt-1">
+              <p-button (onClick)="logOut()" label="Log Out" />
+            </div>
           </div>
-        </form>
+        </ng-template>
+      </api-response>
+    </div>
 
-        <div class="mt-1">
-          <p-button (onClick)="logOut()" label="Log Out" />
+    <hr class="card-divider" />
+
+    <div class="change-password-section">
+      <h3>Change Password</h3>
+      <form [formGroup]="changePasswordForm" (ngSubmit)="changePassword()" autocomplete="off">
+        <div class="flex flex-column w-20rem">
+          <span class="p-input-icon-left w-full mb-4">
+            <i class="pi pi-lock z-2"></i>
+            <p-password
+              formControlName="currentPassword"
+              placeholder="Current Password"
+              styleClass="w-full"
+              [inputStyle]="{ paddingLeft: '2.5rem' }"
+              inputStyleClass="w-full md:w-25rem"
+              [toggleMask]="true"
+              [feedback]="false"
+            />
+          </span>
+
+          <span class="p-input-icon-left w-full mb-4">
+            <i class="pi pi-lock z-2"></i>
+            <p-password
+              formControlName="newPassword"
+              placeholder="New Password"
+              styleClass="w-full"
+              [inputStyle]="{ paddingLeft: '2.5rem' }"
+              inputStyleClass="w-full md:w-25rem"
+              [toggleMask]="true"
+            />
+          </span>
+
+          <span class="p-input-icon-left w-full mb-4">
+            <i class="pi pi-lock z-2"></i>
+            <p-password
+              formControlName="confirmNewPassword"
+              placeholder="Confirm New Password"
+              styleClass="w-full"
+              [inputStyle]="{ paddingLeft: '2.5rem' }"
+              inputStyleClass="w-full md:w-25rem"
+              [toggleMask]="true"
+              [feedback]="false"
+            />
+          </span>
+
+          <error-list [errors]="changePasswordErrors" />
+          <p-button type="submit" label="Change Password" styleClass="w-full" [disabled]="!changePasswordForm.valid" />
         </div>
-      </div>
-    </ng-template>
-  </api-response>
+      </form>
+    </div>
+  </div>
 </p-card>

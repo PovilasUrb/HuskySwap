@@ -17,7 +17,7 @@ export class MenuService {
   menuSource$ = this.#menuSource.asObservable();
 
   #defaultMenuItems = new Array<MenuItem>({
-    label: "Home",
+    label: "Dashboard",
     items: [{ label: "Home", icon: "pi pi-fw pi-home", routerLink: this.#routeAlias.getRoute("user-home") },
             { label: "All Classes", icon: "pi pi-fw pi-book", routerLink: this.#routeAlias.getRoute("class-infos") },
             { label: "My Classes", icon: "pi pi-fw pi-book", routerLink: this.#routeAlias.getRoute("my-classes") },
@@ -25,14 +25,6 @@ export class MenuService {
             { label: "Incoming Swaps", icon: "pi pi-fw pi-search", routerLink: this.#routeAlias.getRoute("incoming-swaps") },
             { label: "Outgoing Swaps", icon: "pi pi-fw pi-sync", routerLink: this.#routeAlias.getRoute("outgoing-swaps") },
             { label: "Completed Swaps", icon: "pi pi-fw pi-verified", routerLink: this.#routeAlias.getRoute("completed-swaps") }]
-  });
-
-  #loggedInMenuItems = new Array<MenuItem>({
-    label: "Profile",
-    items: [
-      { label: "Profile", icon: "pi pi-fw pi-user", routerLink: this.#routeAlias.getRoute("profile") },
-      { label: "Change Password", icon: "pi pi-fw pi-lock", routerLink: this.#routeAlias.getRoute("change-password") },
-    ],
   });
 
   #adminMenuItems = new Array<MenuItem>({
@@ -64,10 +56,6 @@ export class MenuService {
 
   #refreshMenuItems() {
     var menuItems = [...this.#defaultMenuItems];
-
-    if (this.#isLoggedIn) {
-      menuItems.push(...this.#loggedInMenuItems);
-    }
 
     if (this.#isAdminLoggedIn) {
       menuItems.push(...this.#adminMenuItems);
