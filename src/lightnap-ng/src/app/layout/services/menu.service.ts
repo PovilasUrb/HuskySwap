@@ -27,14 +27,6 @@ export class MenuService {
             { label: "Completed Swaps", icon: "pi pi-fw pi-verified", routerLink: this.#routeAlias.getRoute("completed-swaps") }]
   });
 
-  #loggedInMenuItems = new Array<MenuItem>({
-    label: "Profile",
-    items: [
-      { label: "Profile", icon: "pi pi-fw pi-user", routerLink: this.#routeAlias.getRoute("profile") },
-      { label: "Change Password", icon: "pi pi-fw pi-lock", routerLink: this.#routeAlias.getRoute("change-password") },
-    ],
-  });
-
   #adminMenuItems = new Array<MenuItem>({
     label: "Admin",
     items: [
@@ -64,10 +56,6 @@ export class MenuService {
 
   #refreshMenuItems() {
     var menuItems = [...this.#defaultMenuItems];
-
-    if (this.#isLoggedIn) {
-      menuItems.push(...this.#loggedInMenuItems);
-    }
 
     if (this.#isAdminLoggedIn) {
       menuItems.push(...this.#adminMenuItems);

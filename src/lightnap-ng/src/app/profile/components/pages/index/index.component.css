@@ -1,0 +1,11 @@
+.combined-profile-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Adds space between cards */
+}
+  
+.profile-card,
+.change-password-card {
+width: 10%; /* Optional: Adjust width */
+}
+  
