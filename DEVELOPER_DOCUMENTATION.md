@@ -34,6 +34,8 @@ Run the Angular app
 
 The website will be hosted locally on http://localhost:4200
 
+* You must run **both** Frontend and Backend based on the instruction above to host a local server! *
+
 ----------------------------------------------------------------------------------
 
 *Directory Structure*
@@ -73,7 +75,9 @@ Run testing
 
     dotnet test
 
-Tests can be added in LightNap.Core.Tests. Tests should be put in a new folder under LightNap.Core.Tests if they don't fall under a preexisting folder's category. There are no naming conventions for new tests, if they are under the folder please name them with sanity. Standard .NET testing structures should be used, and one can model existing tests to do so.
+Tests can be added in LightNap.Core.Tests. Tests should be put in a new folder under LightNap.Core.Tests if they don't fall under a preexisting folder's category.
+
+There are no naming conventions for new tests, if they are under the folder please name them with sanity. Standard .NET testing structures should be used, and one can model existing tests to do so.
 
 To test the **FRONTEND**, you must:
 
@@ -95,4 +99,6 @@ Tests can be added in lightnap-ng in the same folders as the code that they inte
 
 *Building*
 
-When a commit is merged to the main branch, it will automatically kick off a completely automated CI/CD pipeline that will build the project and deploy it to https://husky-swap.azurewebsites.net. If the build does not pass CI, it will not automatically deploy and errors can be inspected in the GitHub Actions part of the HuskySwap repo.
+When a commit is merged to the main branch, it will automatically kick off a completely automated CI/CD pipeline that will build the project and deploy it to https://husky-swap.azurewebsites.net.
+
+If the build does not pass CI, it will not automatically deploy and errors can be inspected in the GitHub Actions part of the HuskySwap repo.
