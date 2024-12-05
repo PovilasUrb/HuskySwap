@@ -64,6 +64,10 @@ export class DataService {
     return this.#http.post<ApiResponse<boolean>>(`${this.#apiUrlRoot}${id}/reject`, null);
   }
 
+  cancelMyTradeRequest(id: number) {
+    return this.#http.post<ApiResponse<boolean>>(`${this.#apiUrlRoot}${id}/cancel`, null);
+  }
+
   getMyTradeRequestsReceived() {
     return this.#http.get<ApiResponse<TradeRequest[]>>(`${this.#apiUrlRoot}received`);
   }

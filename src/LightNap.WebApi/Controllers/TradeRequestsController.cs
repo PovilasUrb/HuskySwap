@@ -54,6 +54,13 @@ namespace LightNap.WebApi.Controllers
             return await tradeRequestsService.UpdateTradeRequestAsync(id, dto);
         }
 
+        [HttpPost("{id}/cancel")]
+        [ProducesResponseType(typeof(ApiResponseDto<bool>), 200)]
+        public async Task<ActionResult<ApiResponseDto<bool>>> CancelMyTradeRequest(int id)
+        {
+            return await tradeRequestsService.CancelMyTradeRequestAsync(id);
+        }
+
         [HttpPost("{id}/accept")]
         [ProducesResponseType(typeof(ApiResponseDto<bool>), 200)]
         public async Task<ActionResult<ApiResponseDto<bool>>> AcceptMyTradeRequest(int id)

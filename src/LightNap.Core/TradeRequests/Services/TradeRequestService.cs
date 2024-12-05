@@ -88,6 +88,36 @@ namespace LightNap.Core.TradeRequests.Services
             return item;
         }
 
+        public async Task<ApiResponseDto<bool>> CancelMyTradeRequestAsync(int id)
+        {
+            var tradeRequest = await db.TradeRequests.Include(tradeRequest => tradeRequest.RequestingClassUser).FirstAsync(tradeRequest => tradeRequest.Id == id);
+            if (tradeRequest is null || tradeRequest.RequestingClassUser is null)
+            {
+                return ApiResponseDto<bool>.CreateError("This trade request is not valid.");
+            }
+            if (tradeRequest.RequestingClassUser!.UserId != userContext.GetUserId())
+            {
+                return ApiResponseDto<bool>.CreateError("You cannot accept this trade request.");
+            }
+            return await this.CancelTradeRequestAsync(id);
+        }
+
+        public async Task<ApiResponseDto<bool>> CancelTradeRequestAsync(int id)
+        {
+            var tradeRequest = await db.TradeRequests.FirstAsync(tradeRequest => tradeRequest.Id == id);
+            if (tradeRequest is null)
+            {
+                return ApiResponseDto<bool>.CreateError("This trade request is not valid.");
+            }
+            if (tradeRequest.Status != TradeRequestStatus.Pending)
+            {
+                return ApiResponseDto<bool>.CreateError("This trade request cannot be canceled.");
+            }
+            tradeRequest.Status = TradeRequestStatus.Canceled;
+            await db.SaveChangesAsync();
+            return ApiResponseDto<bool>.CreateSuccess(true);
+        }
+
         public async Task<ApiResponseDto<bool>> RespondToMyTradeRequestAsync(int id, bool accept)
         {
             var tradeRequest = await db.TradeRequests.Include(tradeRequest => tradeRequest.TargetClassUser).FirstAsync(tradeRequest => tradeRequest.Id == id);
@@ -111,7 +141,7 @@ namespace LightNap.Core.TradeRequests.Services
             }
             if (tradeRequest.Status != TradeRequestStatus.Pending)
             {
-                return ApiResponseDto<bool>.CreateError("This trade request has already been responded to.");
+                return ApiResponseDto<bool>.CreateError("This trade request is no longer pending.");
             }
             var requestingClassUser = await db.ClassUsers.Include((classUser) => classUser.User).FirstAsync((classUser) => classUser.Id == tradeRequest.RequestingClassUserId && classUser.IsActive == true);
             if (requestingClassUser is null || requestingClassUser.User is null)

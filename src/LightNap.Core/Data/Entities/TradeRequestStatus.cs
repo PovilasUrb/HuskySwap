@@ -4,6 +4,7 @@ namespace LightNap.Core.Data.Entities
     {
         Pending,
         Accepted,
-        Rejected
+        Rejected,
+        Canceled
     }
 }
