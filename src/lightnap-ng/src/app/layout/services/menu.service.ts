@@ -17,7 +17,7 @@ export class MenuService {
   menuSource$ = this.#menuSource.asObservable();
 
   #defaultMenuItems = new Array<MenuItem>({
-    label: "Home",
+    label: "Dashboard",
     items: [{ label: "Home", icon: "pi pi-fw pi-home", routerLink: this.#routeAlias.getRoute("user-home") },
             { label: "All Classes", icon: "pi pi-fw pi-book", routerLink: this.#routeAlias.getRoute("class-infos") },
             { label: "My Classes", icon: "pi pi-fw pi-book", routerLink: this.#routeAlias.getRoute("my-classes") },
