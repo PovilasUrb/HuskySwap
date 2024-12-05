@@ -33,17 +33,14 @@ export class IndexComponent {
   #toast = inject(ToastService);
   #fb = inject(FormBuilder);
 
-  // Profile Form
   profileForm = this.#fb.group({});
   profileErrors = new Array<string>();
   profile$ = this.#profileService.getProfile().pipe(
     tap(response => {
       if (!response.result) return;
-      // Initialize form with values if needed.
     })
   );
 
-  // Change Password Form
   changePasswordForm = this.#fb.nonNullable.group(
     {
       currentPassword: this.#fb.control("", [Validators.required]),
@@ -54,7 +51,6 @@ export class IndexComponent {
   );
   changePasswordErrors = new Array<string>();
 
-  // Methods
   updateProfile() {
     this.#blockUi.show({ message: "Updating profile..." });
     this.#profileService.updateProfile({}).subscribe({
