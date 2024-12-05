@@ -34,7 +34,7 @@ Run the Angular app
 
 The website will be hosted locally on http://localhost:4200
 
-* You must run **both** Frontend and Backend based on the instruction above to host a local server! *
+* You must run **both** Frontend and Backend based on the instruction above to host a local server!
 
 ----------------------------------------------------------------------------------
 
