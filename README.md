@@ -1,14 +1,14 @@
 # HuskySwap
 
-[https://husky-swap.azurewebsites.net/](HuskySwap Project)
+[HuskySwap Project](https://husky-swap.azurewebsites.net/)
 
-[https://docs.google.com/document/d/1b-036ETsawjpZUHPB2AdQ41adTJuzHHXcQ2e1PDJsd4/edit?usp=sharing](Project Documentation/Proposal)
+[Project Documentation/Proposal](https://docs.google.com/document/d/1b-036ETsawjpZUHPB2AdQ41adTJuzHHXcQ2e1PDJsd4/edit?usp=sharing)
 
-[https://docs.google.com/presentation/d/117dGuEK98-TwAPGUBijfTXKM1hCZNRdOGHY__NDKyi0/edit?usp=sharing](Demo Presentation Slides)
+[Demo Presentation Slides](https://docs.google.com/presentation/d/117dGuEK98-TwAPGUBijfTXKM1hCZNRdOGHY__NDKyi0/edit?usp=sharing)
 
-[https://github.com/JDKaim/HuskySwap/blob/main/DEVELOPER_DOCUMENTATION.md](Developer Documentation)
+[Developer Documentation](https://github.com/JDKaim/HuskySwap/blob/main/DEVELOPER_DOCUMENTATION.md)
 
-**Setting Up and Running Source Code**
+## **Setting Up and Running Source Code**
 
 The source code can be obtained by cloning the repository hosted at https://github.com/jdkaim/HuskySwap.
 
@@ -48,7 +48,7 @@ The website will be hosted locally on http://localhost:4200
 
 ----------------------------------------------------------------------------------
 
-**Testing**
+## **Testing**
 
 To test the **BACKEND**, you must:
 
@@ -86,6 +86,6 @@ Tests can be added in lightnap-ng in the same folders as the code that they inte
 
 ----------------------------------------------------------------------------------
 
-**Building**
+## **Building**
 
 When a commit is merged to the main branch, it will automatically kick off a completely automated CI/CD pipeline that will build the project and deploy it to https://husky-swap.azurewebsites.net.
