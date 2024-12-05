@@ -58,7 +58,7 @@ namespace LightNap.Core.TradeRequests.Services
             var targetClassUser = await db.ClassUsers.FirstOrDefaultAsync(classUser => classUser.Id == dto.TargetClassUserId && classUser.IsActive);
             if (targetClassUser is null) { return ApiResponseDto<TradeRequestDto>.CreateError("The target classUser does not exist."); }
             if (targetClassUser.UserId == requestingClassUser.UserId) { return ApiResponseDto<TradeRequestDto>.CreateError("You cannot trade with yourself."); }
-            if (targetClassUser.ClassId == requestingClassUser.ClassId) { return ApiResponseDto<TradeRequestDto>.CreateError("You cannot trade the same class for itself."); }
+            if (targetClassUser.ClassInfoId == requestingClassUser.ClassInfoId) { return ApiResponseDto<TradeRequestDto>.CreateError("You cannot trade the same class for itself."); }
             TradeRequest item = dto.ToCreate();
             db.TradeRequests.Add(item);
             await db.SaveChangesAsync();

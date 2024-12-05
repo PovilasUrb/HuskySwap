@@ -25,9 +25,9 @@ namespace LightNap.Core.ClassDesires.Services
             var query = db.ClassDesires.AsQueryable();
 
             // Add filters and sorting
-            if (dto.ClassId is not null)
+            if (dto.ClassInfoId is not null)
             {
-                query = query.Where((classDesire) => classDesire.ClassId == dto.ClassId);
+                query = query.Where((classDesire) => classDesire.ClassInfoId == dto.ClassInfoId);
             }
             if (dto.UserId is not null)
             {
@@ -57,7 +57,7 @@ namespace LightNap.Core.ClassDesires.Services
             return ApiResponseDto<IList<ClassDesireDto>>.CreateSuccess(items);
         }
 
-        public async Task<ApiResponseDto<bool>> RemoveMeFromClassAsync(int classId)
+        public async Task<ApiResponseDto<bool>> RemoveMeFromClassAsync(string classId)
         {
             var item = await db.GetClassOnActiveUserWishlistAsync(classId, userContext.GetUserId());
             if (item is null) { return ApiResponseDto<bool>.CreateError("You don't have this class on your wishlist."); }
@@ -68,20 +68,20 @@ namespace LightNap.Core.ClassDesires.Services
 
         public async Task<ApiResponseDto<ClassDesireDto>> CreateClassDesireAsync(CreateClassDesireDto dto)
         {
-            var item = await db.GetClassOnActiveUserWishlistAsync(dto.ClassId, dto.UserId);
+            var item = await db.GetClassOnActiveUserWishlistAsync(dto.ClassInfoId, dto.UserId);
             if (item is not null) { return ApiResponseDto<ClassDesireDto>.CreateError("User already has this class on their wishlist."); }
             item = dto.ToCreate();
             db.ClassDesires.Add(item);
             await db.SaveChangesAsync();
             return ApiResponseDto<ClassDesireDto>.CreateSuccess(item.ToDto());
         }
-        public async Task<ApiResponseDto<ClassDesireDto>> AddMeToClassAsync(int classId)
+        public async Task<ApiResponseDto<ClassDesireDto>> AddMeToClassAsync(string classId)
         {
             var classUser = await db.GetUserInActiveClassAsync(classId, userContext.GetUserId());
             if (classUser is not null) { return ApiResponseDto<ClassDesireDto>.CreateError("You are already in this class."); }
             var item = await db.GetClassOnActiveUserWishlistAsync(classId, userContext.GetUserId());
             if (item is not null) { return ApiResponseDto<ClassDesireDto>.CreateError("You already have this class on your wishlist."); }
-            return await this.CreateClassDesireAsync(new CreateClassDesireDto() { ClassId = classId, UserId = userContext.GetUserId() });
+            return await this.CreateClassDesireAsync(new CreateClassDesireDto() { ClassInfoId = classId, UserId = userContext.GetUserId() });
         }
 
         public async Task<ApiResponseDto<ClassDesireDto>> UpdateClassDesireAsync(int id, UpdateClassDesireDto dto)

@@ -12,7 +12,7 @@ namespace LightNap.Core.ClassInfos.Services
 {
     public class ClassInfoService(ApplicationDbContext db) : IClassInfoService
     {
-        public async Task<ApiResponseDto<ClassInfoDto>> GetClassInfoAsync(int id)
+        public async Task<ApiResponseDto<ClassInfoDto>> GetClassInfoAsync(string id)
         {
             var item = await db.ClassInfos.FindAsync(id);
             return ApiResponseDto<ClassInfoDto>.CreateSuccess(item?.ToDto());
@@ -23,9 +23,9 @@ namespace LightNap.Core.ClassInfos.Services
             var query = db.ClassInfos.AsQueryable();
 
             // Add filters and sorting
-            if (dto.ClassCode is not null) 
+            if (dto.Id is not null) 
             {
-                query = query.Where((classInfo) => string.Compare(classInfo.ClassCode, dto.ClassCode) == 0);
+                query = query.Where((classInfo) => string.Compare(classInfo.Id, dto.Id) == 0);
             }
             if (dto.Title is not null)
             {
@@ -36,7 +36,7 @@ namespace LightNap.Core.ClassInfos.Services
                 query = query.Where((classInfo) => EF.Functions.Like(classInfo.Instructor!.ToLower(), $"%{dto.Instructor.ToLower()}%"));
             }
 
-            query = query.OrderBy((classInfo) => classInfo.ClassCode);
+            query = query.OrderBy((classInfo) => classInfo.Id);
 
             int totalCount = await query.CountAsync();
 
@@ -59,7 +59,7 @@ namespace LightNap.Core.ClassInfos.Services
             return ApiResponseDto<ClassInfoDto>.CreateSuccess(item.ToDto());
         }
 
-        public async Task<ApiResponseDto<ClassInfoDto>> UpdateClassInfoAsync(int id, UpdateClassInfoDto dto)
+        public async Task<ApiResponseDto<ClassInfoDto>> UpdateClassInfoAsync(string id, UpdateClassInfoDto dto)
         {
             var item = await db.ClassInfos.FindAsync(id);
             if (item is null) { return ApiResponseDto<ClassInfoDto>.CreateError("The specified ClassInfo was not found."); }
@@ -68,7 +68,7 @@ namespace LightNap.Core.ClassInfos.Services
             return ApiResponseDto<ClassInfoDto>.CreateSuccess(item.ToDto());
         }
 
-        public async Task<ApiResponseDto<bool>> DeleteClassInfoAsync(int id)
+        public async Task<ApiResponseDto<bool>> DeleteClassInfoAsync(string id)
         {
             var item = await db.ClassInfos.FindAsync(id);
             if (item is null) { return ApiResponseDto<bool>.CreateError("The specified ClassInfo was not found."); }

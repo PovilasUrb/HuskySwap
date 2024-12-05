@@ -20,7 +20,7 @@ namespace LightNap.WebApi.Controllers
     {
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponseDto<ClassInfoDto>), 200)]
-        public async Task<ActionResult<ApiResponseDto<ClassInfoDto>>> GetClassInfo(int id)
+        public async Task<ActionResult<ApiResponseDto<ClassInfoDto>>> GetClassInfo(string id)
         {
             return await classInfosService.GetClassInfoAsync(id);
         }
@@ -43,7 +43,7 @@ namespace LightNap.WebApi.Controllers
         [Authorize(Policy = Policies.RequireAdministratorRole)]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ApiResponseDto<ClassInfoDto>), 200)]
-        public async Task<ActionResult<ApiResponseDto<ClassInfoDto>>> UpdateClassInfo(int id, [FromBody] UpdateClassInfoDto dto)
+        public async Task<ActionResult<ApiResponseDto<ClassInfoDto>>> UpdateClassInfo(string id, [FromBody] UpdateClassInfoDto dto)
         {
             return await classInfosService.UpdateClassInfoAsync(id, dto);
         }
@@ -51,7 +51,7 @@ namespace LightNap.WebApi.Controllers
         [Authorize(Policy = Policies.RequireAdministratorRole)]
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponseDto<bool>), 200)]
-        public async Task<ActionResult<ApiResponseDto<bool>>> DeleteClassInfo(int id)
+        public async Task<ActionResult<ApiResponseDto<bool>>> DeleteClassInfo(string id)
         {
             return await classInfosService.DeleteClassInfoAsync(id);
         }

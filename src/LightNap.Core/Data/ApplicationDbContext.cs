@@ -22,6 +22,11 @@ namespace LightNap.Core.Data
         public DbSet<ClassInfo> ClassInfos { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets the class time DbSet.
+        /// </summary>
+        public DbSet<ClassTime> ClassTimes { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets the trade requests DbSet.
         /// </summary>
         public DbSet<TradeRequest> TradeRequests { get; set; } = null!;
@@ -81,6 +86,10 @@ namespace LightNap.Core.Data
                 .WithMany(u => u.RefreshTokens)
                 .HasForeignKey(rt => rt.UserId)
                 .IsRequired();
+
+            builder.Entity<ClassInfo>()
+                .Navigation(classInfo => classInfo.ClassTimes)
+                .AutoInclude();
         }
 
         /// <inheritdoc />
@@ -93,14 +102,14 @@ namespace LightNap.Core.Data
             configurationBuilder.Properties<BrowserSettingsDto>().HaveConversion(typeof(BrowserSettingsConverter));
         }
 
-        public async Task<ClassUser?> GetUserInActiveClassAsync(int classId, string userId)
+        public async Task<ClassUser?> GetUserInActiveClassAsync(string classId, string userId)
         {
-            return await this.ClassUsers.FirstOrDefaultAsync((classUser) => classUser.UserId == userId && classUser.ClassId == classId && classUser.IsActive);
+            return await this.ClassUsers.FirstOrDefaultAsync((classUser) => classUser.UserId == userId && classUser.ClassInfoId == classId && classUser.IsActive);
         }
 
-        public async Task<ClassDesire?> GetClassOnActiveUserWishlistAsync(int classId, string userId)
+        public async Task<ClassDesire?> GetClassOnActiveUserWishlistAsync(string classId, string userId)
         {
-            return await this.ClassDesires.FirstOrDefaultAsync((classDesire) => classDesire.UserId == userId && classDesire.ClassId == classId && classDesire.IsActive);
+            return await this.ClassDesires.FirstOrDefaultAsync((classDesire) => classDesire.UserId == userId && classDesire.ClassInfoId == classId && classDesire.IsActive);
         }
     }
 }

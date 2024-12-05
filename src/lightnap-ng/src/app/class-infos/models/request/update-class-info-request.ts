@@ -4,6 +4,5 @@ export interface UpdateClassInfoRequest {
 	title: string;
 	description: string;
 	instructor: string;
-	classCode: string;
 	notes: string;
 }

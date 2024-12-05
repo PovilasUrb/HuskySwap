@@ -12,8 +12,8 @@ namespace LightNap.Core.ClassUsers.Interfaces
         Task<ApiResponseDto<PagedResponse<ClassUserDto>>> SearchClassUsersAsync(SearchClassUsersDto dto);
         Task<ApiResponseDto<ClassUserDto>> CreateClassUserAsync(CreateClassUserDto dto);
         Task<ApiResponseDto<IList<ClassUserDto>>> GetMyClassesAsync();
-        Task<ApiResponseDto<ClassUserDto>> AddMeToClassAsync(int classId);
-        Task<ApiResponseDto<bool>> RemoveMeFromClassAsync(int classId);
+        Task<ApiResponseDto<ClassUserDto>> AddMeToClassAsync(string classId);
+        Task<ApiResponseDto<bool>> RemoveMeFromClassAsync(string classId);
         Task<ApiResponseDto<ClassUserDto>> UpdateClassUserAsync(int id, UpdateClassUserDto dto);
         Task<ApiResponseDto<bool>> DeleteClassUserAsync(int id);
     }

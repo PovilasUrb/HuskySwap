@@ -2,7 +2,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, input, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { RouterLink } from "@angular/router";
 import { ApiResponse, ErrorListComponent, SuccessApiResponse } from "@core";
 import { RouteAliasService } from "@routing";
 import { ButtonModule } from "primeng/button";
@@ -12,13 +12,12 @@ import { CheckboxModule } from "primeng/checkbox";
 import { InputNumberModule } from "primeng/inputnumber";
 import { InputTextModule } from "primeng/inputtext";
 import { forkJoin, map, Observable } from "rxjs";
+import { ClassUserInfo } from "src/app/class-infos/models/class-user-info";
 import { ClassInfoService } from "src/app/class-infos/services/class-info.service";
-import { ClassUserInfo } from "src/app/class-users/models/class-user-info";
-import { ClassUserService } from "src/app/class-users/services/class-user.service";
 import { CreateTradeRequestRequest } from "src/app/trade-requests/models/request/create-trade-request-request";
 import { TradeRequestService } from "src/app/trade-requests/services/trade-request.service";
-import { ApiResponseComponent } from "../../../../core/components/controls/api-response/api-response.component";
 import { ClassInfoComponent } from "../../../../class-infos/components/controls/class-info/class-info.component";
+import { ApiResponseComponent } from "../../../../core/components/controls/api-response/api-response.component";
 
 @Component({
   standalone: true,
@@ -40,7 +39,7 @@ import { ClassInfoComponent } from "../../../../class-infos/components/controls/
 })
 export class OfferSwapComponent implements OnInit {
   #tradeRequestService = inject(TradeRequestService);
-  #classUserService = inject(ClassUserService);
+  #classInfoService = inject(ClassInfoService);
   #routeAliasService = inject(RouteAliasService);
   #fb = inject(FormBuilder);
   readonly requestingClassUserId = input<number>(undefined);
@@ -72,7 +71,7 @@ export class OfferSwapComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.classUserInfos$ = forkJoin([this.#classUserService.getClassUserInfo(this.requestingClassUserId()), this.#classUserService.getClassUserInfo(this.targetClassUserId())]).pipe(
+    this.classUserInfos$ = forkJoin([this.#classInfoService.getClassUserInfo(this.requestingClassUserId()), this.#classInfoService.getClassUserInfo(this.targetClassUserId())]).pipe(
       map(([requestingClassUser, targetClassUser]) => 
         {
           if (!requestingClassUser.result) return requestingClassUser as any as ApiResponse<{requestingClassUser: ClassUserInfo, targetClassUser: ClassUserInfo}>;
