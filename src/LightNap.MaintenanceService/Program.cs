@@ -21,6 +21,9 @@ var host = Host.CreateDefaultBuilder(args)
             case "SqlServer":
                 services.AddLightNapSqlServer(context.Configuration);
                 break;
+            case "InMemory":
+                services.AddLightNapInMemoryDatabase();
+                break;
             default: throw new ArgumentException($"Unsupported 'DatabaseProvider' setting: '{databaseProvider}'");
         }
 

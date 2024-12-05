@@ -46,14 +46,14 @@ namespace LightNap.WebApi.Controllers
 
         [HttpDelete("my-classes/{classId}")]
         [ProducesResponseType(typeof(ApiResponseDto<bool>), 200)]
-        public async Task<ActionResult<ApiResponseDto<bool>>> RemoveMeFromClass(int classId)
+        public async Task<ActionResult<ApiResponseDto<bool>>> RemoveMeFromClass(string classId)
         {
             return await classDesiresService.RemoveMeFromClassAsync(classId);
         }
 
         [HttpPost("my-classes/{classId}")]
         [ProducesResponseType(typeof(ApiResponseDto<ClassDesireDto>), 200)]
-        public async Task<ActionResult<ApiResponseDto<ClassDesireDto>>> AddMeToClass(int classId)
+        public async Task<ActionResult<ApiResponseDto<ClassDesireDto>>> AddMeToClass(string classId)
         {
             return await classDesiresService.AddMeToClassAsync(classId);
         }

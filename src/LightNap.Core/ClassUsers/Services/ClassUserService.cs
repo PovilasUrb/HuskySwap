@@ -28,9 +28,9 @@ namespace LightNap.Core.ClassUsers.Services
             var query = db.ClassUsers.AsQueryable();
 
             // Add filters and sorting
-            if (dto.ClassId is not null)
+            if (dto.ClassInfoId is not null)
             {
-                query = query.Where((classUser) => classUser.ClassId == dto.ClassId);
+                query = query.Where((classUser) => classUser.ClassInfoId == dto.ClassInfoId);
             }
             if (dto.UserId is not null)
             {
@@ -60,7 +60,7 @@ namespace LightNap.Core.ClassUsers.Services
             return ApiResponseDto<IList<ClassUserDto>>.CreateSuccess(items);
         }
 
-        public async Task<ApiResponseDto<bool>> RemoveMeFromClassAsync(int classId)
+        public async Task<ApiResponseDto<bool>> RemoveMeFromClassAsync(string classId)
         {
             var item = await db.GetUserInActiveClassAsync(classId, userContext.GetUserId());
             if (item is null) { return ApiResponseDto<bool>.CreateError("You are not in this class."); }
@@ -71,7 +71,7 @@ namespace LightNap.Core.ClassUsers.Services
 
         public async Task<ApiResponseDto<ClassUserDto>> CreateClassUserAsync(CreateClassUserDto dto)
         {
-            var item = await db.GetUserInActiveClassAsync(dto.ClassId, dto.UserId);
+            var item = await db.GetUserInActiveClassAsync(dto.ClassInfoId, dto.UserId);
             if (item is not null) { return ApiResponseDto<ClassUserDto>.CreateError("User is already in this class."); }
             item = dto.ToCreate();
             db.ClassUsers.Add(item);
@@ -79,11 +79,11 @@ namespace LightNap.Core.ClassUsers.Services
             return ApiResponseDto<ClassUserDto>.CreateSuccess(item.ToDto());
         }
 
-        public async Task<ApiResponseDto<ClassUserDto>> AddMeToClassAsync(int classId)
+        public async Task<ApiResponseDto<ClassUserDto>> AddMeToClassAsync(string classId)
         {
             var item = await db.GetUserInActiveClassAsync(classId, userContext.GetUserId());
             if (item is not null) { return ApiResponseDto<ClassUserDto>.CreateError("You are already in this class."); }
-            var createClass = await this.CreateClassUserAsync(new CreateClassUserDto() { ClassId = classId, UserId = userContext.GetUserId() });
+            var createClass = await this.CreateClassUserAsync(new CreateClassUserDto() { ClassInfoId = classId, UserId = userContext.GetUserId() });
             if (createClass is null) { return ApiResponseDto<ClassUserDto>.CreateError("Failed to create class."); }
             var classDesire = await db.GetClassOnActiveUserWishlistAsync(classId, userContext.GetUserId());
             if (classDesire is not null) { await classDesireService.RemoveMeFromClassAsync(classId); }

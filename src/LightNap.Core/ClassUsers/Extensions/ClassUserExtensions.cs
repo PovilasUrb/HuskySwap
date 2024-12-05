@@ -12,7 +12,7 @@ namespace LightNap.Core.ClassUsers.Extensions
             // TODO: Update these fields to match the DTO.
             var item = new ClassUser
             {
-                ClassId = dto.ClassId,
+                ClassInfoId = dto.ClassInfoId,
                 UserId = dto.UserId,
                 IsActive = true
             };
@@ -24,7 +24,7 @@ namespace LightNap.Core.ClassUsers.Extensions
             // TODO: Update these fields to match the DTO.
             var dto = new ClassUserDto();
             dto.Id = item.Id;
-            dto.ClassId = item.ClassId;
+            dto.ClassInfoId = item.ClassInfoId;
             dto.UserId = item.UserId;
             dto.IsActive = item.IsActive;
             return dto;

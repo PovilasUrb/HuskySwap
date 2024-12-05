@@ -1,5 +1,7 @@
 
 
+using LightNap.Core.Data.Entities;
+
 namespace LightNap.Core.ClassInfos.Request.Dto
 {
     public class UpdateClassInfoDto
@@ -8,7 +10,6 @@ namespace LightNap.Core.ClassInfos.Request.Dto
         public required string Title { get; set; }
         public required string Description { get; set; }
         public required string Instructor { get; set; }
-        public required string ClassCode { get; set; }
         public required string Notes { get; set; }
     }
 }

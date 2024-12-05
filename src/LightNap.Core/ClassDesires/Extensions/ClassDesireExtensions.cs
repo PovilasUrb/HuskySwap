@@ -11,7 +11,7 @@ namespace LightNap.Core.ClassDesires.Extensions
             // TODO: Update these fields to match the DTO.
             var item = new ClassDesire
             {
-                ClassId = dto.ClassId,
+                ClassInfoId = dto.ClassInfoId,
                 UserId = dto.UserId,
                 IsActive = true
             };
@@ -23,7 +23,7 @@ namespace LightNap.Core.ClassDesires.Extensions
             // TODO: Update these fields to match the DTO.
             var dto = new ClassDesireDto();
             dto.Id = item.Id;
-            dto.ClassId = item.ClassId;
+            dto.ClassInfoId = item.ClassInfoId;
 			dto.UserId = item.UserId;
 			dto.IsActive = item.IsActive;
             return dto;

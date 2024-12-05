@@ -1,4 +1,4 @@
-import { ClassUserInfo } from "src/app/class-users/models/class-user-info";
+import { ClassUserInfo } from "src/app/class-infos/models/class-user-info";
 
 export interface TradeClassUserInfos {
   // TODO: Update these fields to match the server's TradeRequestDto.

@@ -12,11 +12,12 @@ namespace LightNap.Core.ClassInfos.Extensions
             // TODO: Update these fields to match the DTO.
             var item = new ClassInfo
             {
+                Id = dto.Id,
                 Title = dto.Title,
                 Description = dto.Description,
                 Instructor = dto.Instructor,
-                ClassCode = dto.ClassCode,
-                Notes = dto.Notes
+                Notes = dto.Notes,
+                ClassTimes = []
             };
             return item;
         }
@@ -30,8 +31,8 @@ namespace LightNap.Core.ClassInfos.Extensions
                 Title = item.Title,
                 Description = item.Description,
                 Instructor = item.Instructor,
-                ClassCode = item.ClassCode,
-                Notes = item.Notes
+                Notes = item.Notes,
+                ClassTimes = item.ClassTimes.Select(classTime => classTime.ToDto()).ToArray()
             };
             return dto;
         }
@@ -42,7 +43,6 @@ namespace LightNap.Core.ClassInfos.Extensions
             item.Title = dto.Title;
             item.Description = dto.Description;
             item.Instructor = dto.Instructor;
-            item.ClassCode = dto.ClassCode;
             item.Notes = dto.Notes;
         }
     }

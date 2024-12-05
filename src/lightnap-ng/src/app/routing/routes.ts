@@ -7,10 +7,10 @@ import { AppLayoutComponent } from "../layout/components/layouts/app-layout/app-
 import { Routes as ProfileRoutes } from "../profile/components/pages/routes";
 import { Routes as PublicRoutes } from "../public/components/pages/routes";
 import { Routes as UserRoutes } from "../user/components/pages/routes";
-import { Routes as ClassInfoRoutes } from "../class-infos/components/pages/routes";
+import { Routes as ClassInfoRoutes } from "../class-infos/components/pages/class-infos/routes";
 import { Routes as TradeRequestRoutes } from "../trade-requests/components/pages/routes";
-import { Routes as ClassUserRoutes } from "../class-users/components/pages/routes";
-import { Routes as ClassDesireRoutes } from "../class-desires/components/pages/routes";
+import { Routes as ClassUserRoutes } from "../class-infos/components/pages/class-users/routes";
+import { Routes as ClassDesireRoutes } from "../class-infos/components/pages/class-desires/routes";
 import { AppRoute } from "./models/app-route";
 
 export const Routes: AppRoute[] = [

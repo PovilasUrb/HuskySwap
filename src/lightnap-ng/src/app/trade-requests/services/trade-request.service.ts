@@ -1,20 +1,20 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiResponse, catchApiError, SuccessApiResponse, throwIfApiError } from "@core";
 import { forkJoin, map, Observable, of, switchMap } from "rxjs";
-import { ClassUserService } from "src/app/class-users/services/class-user.service";
+import { ClassInfoService } from "src/app/class-infos/services/class-info.service";
 import { CreateTradeRequestRequest } from "../models/request/create-trade-request-request";
 import { SearchTradeRequestsRequest } from "../models/request/search-trade-requests-request";
 import { UpdateTradeRequestRequest } from "../models/request/update-trade-request-request";
+import { TradeRequest } from "../models/response/trade-request";
 import { TradeClassUserInfos } from "../models/trade-class-user-infos";
 import { DataService } from "./data.service";
-import { TradeRequest } from "../models/response/trade-request";
 
 @Injectable({
   providedIn: "root",
 })
 export class TradeRequestService {
   #dataService = inject(DataService);
-  #classUserService = inject(ClassUserService);
+  #classInfoService = inject(ClassInfoService);
 
   getTradeRequest(id: number) {
     return this.#dataService.getTradeRequest(id);
@@ -42,8 +42,8 @@ export class TradeRequestService {
 
   getTradeClassUserInfos(tradeRequest: TradeRequest): Observable<ApiResponse<TradeClassUserInfos>> {
     return forkJoin([
-      this.#classUserService.getClassUserInfo(tradeRequest.requestingClassUserId),
-      this.#classUserService.getClassUserInfo(tradeRequest.targetClassUserId),
+      this.#classInfoService.getClassUserInfo(tradeRequest.requestingClassUserId),
+      this.#classInfoService.getClassUserInfo(tradeRequest.targetClassUserId),
     ]).pipe(
       map(([requestingClassUser, targetClassUser]) => {
         if (!requestingClassUser.result) return requestingClassUser as any as ApiResponse<TradeClassUserInfos>;
