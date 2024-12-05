@@ -26,6 +26,7 @@ var host = Host.CreateDefaultBuilder(args)
 
         services.AddTransient<IMaintenanceTask, CountUsersMaintenanceTask>();
         services.AddTransient<IMaintenanceTask, PurgeExpiredRefreshTokensMaintenanceTask>();
+        services.AddTransient<IMaintenanceTask, SyncClassesTask>();
 
         services.AddTransient<MainService>();
     })

@@ -67,6 +67,10 @@ export class TradeRequestService {
     return this.#dataService.rejectMyTradeRequest(id);
   }
 
+  cancelMyTradeRequest(id: number) {
+    return this.#dataService.cancelMyTradeRequest(id);
+  }
+
   getMyTradeRequestsSent() {
     return this.#dataService.getMyTradeRequestsSent().pipe(
       throwIfApiError(),
