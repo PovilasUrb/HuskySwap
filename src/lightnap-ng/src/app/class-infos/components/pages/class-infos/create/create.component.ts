@@ -42,7 +42,7 @@ export class CreateComponent {
 	title: this.#fb.control("string", [Validators.required]),
 	description: this.#fb.control("string", [Validators.required]),
 	instructor: this.#fb.control("string", [Validators.required]),
-	classCode: this.#fb.control("string", [Validators.required]),
+	id: this.#fb.control("string", [Validators.required]),
 	notes: this.#fb.control("string", [Validators.required]),
   });
 
