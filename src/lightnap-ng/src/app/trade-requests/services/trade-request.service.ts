@@ -1,5 +1,4 @@
 import { inject, Injectable } from "@angular/core";
-import { ApiResponse, catchApiError, SuccessApiResponse, throwIfApiError } from "@core";
 import { forkJoin, map, Observable, of, switchMap } from "rxjs";
 import { ClassInfoService } from "src/app/class-infos/services/class-info.service";
 import { CreateTradeRequestRequest } from "../models/request/create-trade-request-request";
@@ -40,21 +39,21 @@ export class TradeRequestService {
     return this.#dataService.deleteTradeRequest(id);
   }
 
-  getTradeClassUserInfos(tradeRequest: TradeRequest): Observable<ApiResponse<TradeClassUserInfos>> {
+  getTradeClassUserInfos(tradeRequest: TradeRequest): Observable<TradeClassUserInfos> {
     return forkJoin([
       this.#classInfoService.getClassUserInfo(tradeRequest.requestingClassUserId),
       this.#classInfoService.getClassUserInfo(tradeRequest.targetClassUserId),
     ]).pipe(
       map(([requestingClassUser, targetClassUser]) => {
-        if (!requestingClassUser.result) return requestingClassUser as any as ApiResponse<TradeClassUserInfos>;
-        if (!targetClassUser.result) return targetClassUser as any as ApiResponse<TradeClassUserInfos>;
-        return new SuccessApiResponse<TradeClassUserInfos>({
+        if (!requestingClassUser) return requestingClassUser as any as TradeClassUserInfos;
+        if (!targetClassUser) return targetClassUser as any as TradeClassUserInfos;
+        return <TradeClassUserInfos>{
           id: tradeRequest.id,
           notes: tradeRequest.notes,
           status: tradeRequest.status,
-          requestingClassUser: requestingClassUser.result,
-          targetClassUser: targetClassUser.result,
-        });
+          requestingClassUser: requestingClassUser,
+          targetClassUser: targetClassUser,
+        };
       })
     );
   }
@@ -72,41 +71,21 @@ export class TradeRequestService {
   }
 
   getMyTradeRequestsSent() {
-    return this.#dataService.getMyTradeRequestsSent().pipe(
-      throwIfApiError(),
-      switchMap(response => this.getMyTradeRequestInfosArray(response)),
-      catchApiError()
-    );
+    return this.#dataService.getMyTradeRequestsSent().pipe(switchMap(tradeRequests => this.getMyTradeRequestInfosArray(tradeRequests)));
   }
 
   getMyTradeRequestsReceived() {
-    return this.#dataService.getMyTradeRequestsReceived().pipe(
-      throwIfApiError(),
-      switchMap(response => this.getMyTradeRequestInfosArray(response)),
-      catchApiError()
-    );
+    return this.#dataService.getMyTradeRequestsReceived().pipe(switchMap(tradeRequests => this.getMyTradeRequestInfosArray(tradeRequests)));
   }
 
   getMyTradeClassUserInfo(id: number) {
-    return this.#dataService.getTradeRequest(id).pipe(
-        throwIfApiError(),
-        switchMap(tradeRequest => this.getTradeClassUserInfos(tradeRequest.result)),
-        catchApiError()
-    )
+    return this.#dataService.getTradeRequest(id).pipe(switchMap(this.getTradeClassUserInfos));
   }
 
-  getMyTradeRequestInfosArray(response: ApiResponse<TradeRequest[]>): Observable<ApiResponse<TradeClassUserInfos[]>> {
-    if (response.result.length === 0) {
-        return of(new SuccessApiResponse<TradeClassUserInfos[]>([]));
+  getMyTradeRequestInfosArray(tradeRequests: TradeRequest[]): Observable<TradeClassUserInfos[]> {
+    if (tradeRequests.length === 0) {
+      return of(<TradeClassUserInfos[]>[]);
     }
-    return forkJoin(response.result.map(tradeRequest => this.getTradeClassUserInfos(tradeRequest))).pipe(
-      map(responses => {
-        const errorResponse = responses.find(response => !response.result);
-        if (errorResponse) {
-          return errorResponse as any as ApiResponse<TradeClassUserInfos[]>;
-        }
-        return new SuccessApiResponse<TradeClassUserInfos[]>(responses.map(response => response.result));
-      })
-    );
+    return forkJoin(tradeRequests.map(tradeRequest => this.getTradeClassUserInfos(tradeRequest)));
   }
 }

@@ -2,9 +2,8 @@ import { inject, Injectable } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { IdentityService } from "@identity";
 import { ApplicationSettings, ChangePasswordRequest, StyleSettings, UpdateProfileRequest } from "@profile";
-import { filter, of, switchMap, tap } from "rxjs";
+import { filter, map, of, switchMap, tap } from "rxjs";
 import { DataService } from "./data.service";
-import { ApiResponse, SuccessApiResponse } from "@core";
 
 @Injectable({
   providedIn: "root",
@@ -27,7 +26,7 @@ export class ProfileService {
       inputStyle: "outlined",
       menuMode: "static",
       colorScheme: "light",
-      theme: "saga-purple",
+      theme: "lara-light-indigo",
       scale: 14,
     },
     extended: {},
@@ -55,7 +54,7 @@ export class ProfileService {
   /**
    * @method getProfile
    * @description Fetches the user profile.
-   * @returns {Observable<ApiResponse<Profile>>} An observable containing the user profile.
+   * @returns {Observable<Profile>} An observable containing the user profile.
    */
   getProfile() {
     return this.#dataService.getProfile();
@@ -65,7 +64,7 @@ export class ProfileService {
    * @method updateProfile
    * @description Updates the user profile.
    * @param {UpdateProfileRequest} updateProfileRequest - The request object containing profile update information.
-   * @returns {Observable<ApiResponse<Profile>>} An observable containing the updated profile.
+   * @returns {Observable<Profile>} An observable containing the updated profile.
    */
   updateProfile(updateProfileRequest: UpdateProfileRequest) {
     return this.#dataService.updateProfile(updateProfileRequest);
@@ -84,7 +83,7 @@ export class ProfileService {
    * @method revokeDevice
    * @description Revokes a device by its ID.
    * @param {string} deviceId - The ID of the device to revoke.
-   * @returns {Observable<ApiResponse<boolean>>} An observable containing true if successful.
+   * @returns {Observable<boolean>} An observable containing true if successful.
    */
   revokeDevice(deviceId: string) {
     return this.#dataService.revokeDevice(deviceId);
@@ -94,7 +93,7 @@ export class ProfileService {
    * @method changePassword
    * @description Changes the user's password.
    * @param {ChangePasswordRequest} changePasswordRequest - The request object containing password change information.
-   * @returns {Observable<ApiResponse<boolean>>} An observable containing true if successful.
+   * @returns {Observable<boolean>} An observable containing true if successful.
    */
   changePassword(changePasswordRequest: ChangePasswordRequest) {
     return this.#dataService.changePassword(changePasswordRequest);
@@ -103,14 +102,14 @@ export class ProfileService {
   /**
    * @method getSettings
    * @description Fetches the application settings. If settings are already loaded, returns them from memory.
-   * @returns {Observable<ApiResponse<ApplicationSettings>>} An observable containing the application settings.
+   * @returns {Observable<ApplicationSettings>} An observable containing the application settings.
    */
   getSettings() {
-    if (this.#settings) return of(new SuccessApiResponse(this.#settings) as ApiResponse<ApplicationSettings>);
+    if (this.#settings) return of(this.#settings);
 
     return this.#dataService.getSettings().pipe(
-      tap(response => {
-        this.#settings = JSON.parse(JSON.stringify(response));
+      tap(settings => {
+        this.#settings = JSON.parse(JSON.stringify(settings));
       })
     );
   }
@@ -119,26 +118,26 @@ export class ProfileService {
    * @method updateSettings
    * @description Updates the application settings.
    * @param {ApplicationSettings} browserSettings - The new application settings to be updated.
-   * @returns {Observable<ApiResponse<boolean>>} An observable containing true if successful.
+   * @returns {Observable<ApplicationSettings>} An observable containing the latest ApplicationSettings if successful.
    */
   updateSettings(browserSettings: ApplicationSettings) {
     if (this.#settings) {
       this.#settings = browserSettings;
     }
-    return this.#dataService.updateSettings(browserSettings);
+    return this.#dataService.updateSettings(browserSettings).pipe(map(success => browserSettings));
   }
 
   /**
    * @method updateStyleSettings
    * @description Updates the style settings of the application.
    * @param {StyleSettings} styleSettings - The new style settings to be updated.
-   * @returns {Observable<ApiResponse<boolean>>} An observable containing true if successful.
+   * @returns {Observable<boolean>} An observable containing true if successful.
    */
   updateStyleSettings(styleSettings: StyleSettings) {
     return this.getSettings().pipe(
-      switchMap(response => {
-        if (!response.result || JSON.stringify(response.result.style) === JSON.stringify(styleSettings)) return of(response);
-        return this.updateSettings({ ...response.result, style: styleSettings });
+      switchMap(applicationSettings => {
+        if (!applicationSettings || JSON.stringify(applicationSettings.style) === JSON.stringify(styleSettings)) return of(applicationSettings);
+        return this.updateSettings({ ...applicationSettings, style: styleSettings });
       })
     );
   }

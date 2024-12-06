@@ -24,23 +24,15 @@ export class DevicesComponent {
 
   revokeDevice(event: any, deviceId: string) {
     this.#confirmationService.confirm({
-        header: "Confirm Revoke",
-        message: `Are you sure that you want to revoke this device?`,
-        target: event.target,
-        key: deviceId,
-        accept: () => {
-            this.#profileService.revokeDevice(deviceId).subscribe({
-                next: response => {
-                  this.errors = response.errorMessages;
-
-                  if (!response.result) {
-                    return;
-                  }
-
-                  this.devices$ = this.#profileService.getDevices();
-                },
-              });
-        },
-      });
+      header: "Confirm Revoke",
+      message: `Are you sure that you want to revoke this device?`,
+      target: event.target,
+      key: deviceId,
+      accept: () =>
+        this.#profileService.revokeDevice(deviceId).subscribe({
+          next: success => (this.devices$ = this.#profileService.getDevices()),
+          error: response => (this.errors = response.errorMessages),
+        }),
+    });
   }
 }

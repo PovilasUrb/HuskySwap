@@ -32,8 +32,8 @@ export class AccessDeniedComponent {
 
   logOut() {
     this.#identityService.logOut().subscribe({
-      next: response => {
-        if (response.result) {
+      next: success => {
+        if (success) {
           this.#routeAlias.navigate("login");
         }
       },

@@ -19,7 +19,7 @@ export class GetComponent implements OnInit {
   errors = new Array<string>();
 
   readonly id = input<number>(undefined);
-  tradeRequest$?: Observable<ApiResponse<TradeRequest>>;
+  tradeRequest$?: Observable<TradeRequest>;
 
   ngOnInit() {
     this.tradeRequest$ = this.#tradeRequestService.getTradeRequest(this.id());

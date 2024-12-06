@@ -1,6 +1,6 @@
 import { HashLocationStrategy, LocationStrategy } from "@angular/common";
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
-import { NgModule } from "@angular/core";
+import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
@@ -13,19 +13,29 @@ import { BlockUIModule } from "primeng/blockui";
 import { ToastModule } from "primeng/toast";
 import { environment } from "src/environments/environment";
 import { AppComponent } from "./app.component";
+import { InitializationService } from "@core/services/initialization.service";
+
+export function initializeApp(initializationService: InitializationService) {
+  return () => initializationService.initialize();
+}
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [
-    RouterModule.forRoot(Routes, RouteConfig),
-    BrowserModule, ToastModule, BlockUIModule],
+  imports: [RouterModule.forRoot(Routes, RouteConfig), BrowserModule, ToastModule, BlockUIModule],
   providers: [
+    InitializationService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [InitializationService],
+      multi: true,
+    },
     provideAnimations(),
     { provide: API_URL_ROOT, useValue: environment.apiUrlRoot },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     provideHttpClient(withInterceptors([tokenInterceptor, apiResponseInterceptor])),
     MessageService,
-    ConfirmationService
+    ConfirmationService,
   ],
   bootstrap: [AppComponent],
 })

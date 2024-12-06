@@ -1,4 +1,3 @@
-
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -38,9 +37,9 @@ export class CreateComponent {
   errors = new Array<string>();
 
   form = this.#fb.group({
-	// TODO: Update these fields to match the right parameters.
-	classId: this.#fb.control("", [Validators.required]),
-	isActive: this.#fb.control(false, [Validators.required]),
+    // TODO: Update these fields to match the right parameters.
+    classId: this.#fb.control("", [Validators.required]),
+    isActive: this.#fb.control(false, [Validators.required]),
   });
 
   createClicked() {
@@ -48,13 +47,9 @@ export class CreateComponent {
 
     const request = <CreateClassUserRequest>this.form.value;
 
-    this.#classInfoService.createClassUser(request).subscribe(response => {
-      if (!response.result) {
-        this.errors = response.errorMessages;
-        return;
-      }
-
-      this.#router.navigate([response.result.id], { relativeTo: this.#activeRoute.parent });
+    this.#classInfoService.createClassUser(request).subscribe({
+      next: classUser => this.#router.navigate([classUser.id], { relativeTo: this.#activeRoute.parent }),
+      error: response => (this.errors = response.errorMessages),
     });
   }
 }

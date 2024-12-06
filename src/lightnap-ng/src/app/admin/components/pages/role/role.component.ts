@@ -1,17 +1,17 @@
+import { RoleWithAdminUsers } from "@admin/models/role-with-admin-users";
 import { AdminService } from "@admin/services/admin.service";
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, OnInit } from "@angular/core";
+import { Component, inject, input, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { ApiResponse, ConfirmPopupComponent, SuccessApiResponse } from "@core";
+import { ConfirmPopupComponent } from "@core";
 import { ApiResponseComponent } from "@core/components/controls/api-response/api-response.component";
 import { ErrorListComponent } from "@core/components/controls/error-list/error-list.component";
+import { RoutePipe } from "@routing";
 import { ConfirmationService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { TableModule } from "primeng/table";
-import { combineLatest, map, Observable } from "rxjs";
-import { RoleViewModel } from "./role-view-model";
-import { RoutePipe } from "@routing";
+import { Observable, tap } from "rxjs";
 
 @Component({
   standalone: true,
@@ -29,34 +29,26 @@ import { RoutePipe } from "@routing";
   ],
 })
 export class RoleComponent implements OnInit {
-  #adminService = inject(AdminService);
-  #confirmationService = inject(ConfirmationService);
+  readonly #adminService = inject(AdminService);
+  readonly #confirmationService = inject(ConfirmationService);
 
-  @Input() role!: string;
+  readonly role = input.required<string>();
 
   header = "Loading role...";
   subHeader = "";
   errors: string[] = [];
 
-  viewModel$ = new Observable<ApiResponse<RoleViewModel>>();
+  roleWithUsers$ = new Observable<RoleWithAdminUsers>();
 
   ngOnInit() {
     this.#refreshRole();
   }
 
   #refreshRole() {
-    this.viewModel$ = combineLatest([this.#adminService.getRole(this.role), this.#adminService.getUsersInRole(this.role)]).pipe(
-      map(([roleResponse, usersResponse]) => {
-        if (!roleResponse.result) return roleResponse as any as ApiResponse<RoleViewModel>;
-        if (!usersResponse.result) return usersResponse as any as ApiResponse<RoleViewModel>;
-
-        this.header = `Manage Users In Role: ${roleResponse.result.displayName}`;
-        this.subHeader = roleResponse.result.description;
-
-        return new SuccessApiResponse<RoleViewModel>({
-          role: roleResponse.result,
-          users: usersResponse.result,
-        });
+    this.roleWithUsers$ = this.#adminService.getRoleWithUsers(this.role()).pipe(
+      tap(roleWithAdminUsers => {
+        this.header = `Manage Users In Role: ${roleWithAdminUsers.role.displayName}`;
+        this.subHeader = roleWithAdminUsers.role.description;
       })
     );
   }
@@ -65,20 +57,14 @@ export class RoleComponent implements OnInit {
     this.errors = [];
 
     this.#confirmationService.confirm({
-        header: "Confirm Role Removal",
+      header: "Confirm Role Removal",
       message: `Are you sure that you want to remove this role membership?`,
       target: event.target,
       key: userId,
       accept: () => {
-        this.#adminService.removeUserFromRole(userId, this.role).subscribe({
-          next: response => {
-            if (!response.result) {
-              this.errors = response.errorMessages;
-              return;
-            }
-
-            this.#refreshRole();
-          },
+        this.#adminService.removeUserFromRole(userId, this.role()).subscribe({
+          next: () => this.#refreshRole(),
+          error: response => (this.errors = response.errorMessages),
         });
       },
     });

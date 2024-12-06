@@ -24,9 +24,13 @@ export class CreateComponent {
 
   form = this.#fb.group({
     json: this.#fb.control(
-      JSON.stringify(<CreateClassDesireRequest>{
-        // TODO: Initialize this with some default values for testing.
-      }, undefined, 4),
+      JSON.stringify(
+        <CreateClassDesireRequest>{
+          // TODO: Initialize this with some default values for testing.
+        },
+        undefined,
+        4
+      ),
       [Validators.required]
     ),
   });
@@ -42,13 +46,9 @@ export class CreateComponent {
       return;
     }
 
-    this.#classInfoService.createClassDesire(request).subscribe(response => {
-      if (!response.result) {
-        this.errors = response.errorMessages;
-        return;
-      }
-
-      this.#router.navigate([response.result.id], { relativeTo: this.#activeRoute.parent });
+    this.#classInfoService.createClassDesire(request).subscribe({
+      next: classDesire => this.#router.navigate([classDesire.id], { relativeTo: this.#activeRoute.parent }),
+      error: response => (this.errors = response.errorMessages),
     });
   }
 }

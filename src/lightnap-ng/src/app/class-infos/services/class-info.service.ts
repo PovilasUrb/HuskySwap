@@ -1,19 +1,18 @@
 import { inject, Injectable } from "@angular/core";
-import { CreateClassInfoRequest } from "../models/request/create-class-info-request";
-import { SearchClassInfosRequest } from "../models/request/search-class-infos-request";
-import { UpdateClassInfoRequest } from "../models/request/update-class-info-request";
-import { DataService } from "./data.service";
-import { ClassInfo } from "../models/response/class-info";
-import { ApiResponse, catchApiError, SuccessApiResponse, throwIfApiError } from "@core";
 import { forkJoin, map, Observable, of, switchMap, tap } from "rxjs";
-import { SearchClassDesiresRequest } from "../models/request/search-class-desires-request";
-import { CreateClassDesireRequest } from "../models/request/create-class-desire-request";
-import { UserClasses } from "../models/user-classes";
-import { UpdateClassDesireRequest } from "../models/request/update-class-desire-request";
 import { ClassUserInfo } from "src/app/class-infos/models/class-user-info";
 import { CreateClassUserRequest } from "src/app/class-infos/models/request/create-class-user-request";
 import { SearchClassUsersRequest } from "src/app/class-infos/models/request/search-class-users-request";
 import { UpdateClassUserRequest } from "src/app/class-infos/models/request/update-class-user-request";
+import { CreateClassDesireRequest } from "../models/request/create-class-desire-request";
+import { CreateClassInfoRequest } from "../models/request/create-class-info-request";
+import { SearchClassDesiresRequest } from "../models/request/search-class-desires-request";
+import { SearchClassInfosRequest } from "../models/request/search-class-infos-request";
+import { UpdateClassDesireRequest } from "../models/request/update-class-desire-request";
+import { UpdateClassInfoRequest } from "../models/request/update-class-info-request";
+import { ClassInfo } from "../models/response/class-info";
+import { UserClasses } from "../models/user-classes";
+import { DataService } from "./data.service";
 
 @Injectable({
   providedIn: "root",
@@ -22,34 +21,25 @@ export class ClassInfoService {
   #dataService = inject(DataService);
   #classInfos = new Map<string, ClassInfo>();
 
-  getClassInfo(id: string): Observable<ApiResponse<ClassInfo>> {
+  getClassInfo(id: string): Observable<ClassInfo> {
     const classInfo = this.#classInfos.get(id);
     if (classInfo) {
-      return of(new SuccessApiResponse(classInfo));
+      return of(classInfo);
     }
     return this.#dataService.getClassInfo(id).pipe(
-      tap(response => {
-        if (response.result) {
-          this.#classInfos.set(id, response.result);
+      tap(classInfo => {
+        if (classInfo) {
+          this.#classInfos.set(id, classInfo);
         }
       })
     );
   }
 
-  getClassInfos(ids: string[]): Observable<ApiResponse<ClassInfo[]>> {
+  getClassInfos(ids: string[]): Observable<ClassInfo[]> {
     if (!ids.length) {
-      return of(new SuccessApiResponse(new Array<ClassInfo>()));
+      return of([]);
     }
-    return forkJoin(ids.map(id => this.getClassInfo(id))).pipe(
-      map(responses => {
-        const errorResponse = responses.find(response => !response.result);
-        if (errorResponse) {
-          return errorResponse as any as ApiResponse<ClassInfo[]>;
-        }
-        const classInfos = responses.map(response => response.result);
-        return new SuccessApiResponse(classInfos);
-      })
-    );
+    return forkJoin(ids.map(id => this.getClassInfo(id)));
   }
 
   searchClassInfos(request: SearchClassInfosRequest) {
@@ -82,54 +72,37 @@ export class ClassInfoService {
 
   getMyWishlist() {
     return this.#dataService.getMyClassDesires().pipe(
-      switchMap(response => {
-        if (!response.result) {
-          return of(response as any as ApiResponse<ClassInfo[]>);
-        }
-        const classIds = response.result.map(classUser => classUser.classInfoId);
+      switchMap(classDesires => {
+        const classIds = classDesires.map(classUser => classUser.classInfoId);
         return this.getClassInfos(classIds);
       })
     );
   }
 
-  getOffersForClass(classId: string): Observable<ApiResponse<UserClasses[]>> {
+  getOffersForClass(classId: string): Observable<UserClasses[]> {
     return this.searchClassDesires({ classInfoId: classId, isActive: true }).pipe(
-      switchMap(response => {
-        if (!response.result) {
-          return of(response as any as ApiResponse<UserClasses[]>);
-        }
-        const userIds = response.result.data.map(classDesire => classDesire.userId);
+      switchMap(results => {
+        const userIds = results.data.map(classDesire => classDesire.userId);
         if (!userIds.length) {
-          return of(new SuccessApiResponse<UserClasses[]>([]));
+          return of([]);
         }
-        return forkJoin(userIds.map(userId => this.getUserClasses(userId))).pipe(
-          map(responses => {
-            const errorResponse = responses.find(response => !response.result);
-            if (errorResponse) {
-              return errorResponse as any as ApiResponse<UserClasses[]>;
-            }
-            return new SuccessApiResponse<UserClasses[]>(responses.map(response => response.result));
-          })
-        );
+        return forkJoin(userIds.map(userId => this.getUserClasses(userId)));
       })
     );
   }
 
-  getUserClasses(userId: string): Observable<ApiResponse<UserClasses>> {
+  getUserClasses(userId: string): Observable<UserClasses> {
     // Only working with top 50, but that's fine for now
     return this.#dataService.searchClassUsers({ userId, isActive: true }).pipe(
-      throwIfApiError(),
-      switchMap(response => {
-        const classUserIds = response.result.data.map(classUser => classUser.id);
+      switchMap(results => {
+        const classUserIds = results.data.map(classUser => classUser.id);
         // search for all class users with this class
         return this.getClassUserInfos(classUserIds).pipe(
-          throwIfApiError(),
-          map(response => {
-            return new SuccessApiResponse(<UserClasses>{ userId, classUserInfos: response.result });
+          map(classUserInfos => {
+            return <UserClasses>{ userId, classUserInfos: classUserInfos };
           })
         );
-      }),
-      catchApiError()
+      })
     );
   }
 
@@ -153,37 +126,25 @@ export class ClassInfoService {
     return this.#dataService.getClassUser(id);
   }
 
-  getClassUserInfos(ids: number[]): Observable<ApiResponse<ClassUserInfo[]>> {
+  getClassUserInfos(ids: number[]): Observable<ClassUserInfo[]> {
     if (!ids.length) {
-      return of(new SuccessApiResponse(new Array<ClassUserInfo>()));
+      return of([]);
     }
-    return forkJoin(ids.map(id => this.getClassUserInfo(id))).pipe(
-      map(responses => {
-        const errorResponse = responses.find(response => !response.result);
-        if (errorResponse) {
-          return errorResponse as any as ApiResponse<ClassUserInfo[]>;
-        }
-        const classUserInfos = responses.map(response => response.result);
-        return new SuccessApiResponse(classUserInfos);
-      })
-    );
+    return forkJoin(ids.map(id => this.getClassUserInfo(id)));
   }
 
   getClassUserInfo(id: number) {
     return this.#dataService.getClassUser(id).pipe(
-      throwIfApiError(),
-      switchMap(response => {
-        return this.getClassInfo(response.result.classInfoId).pipe(
-          throwIfApiError(),
-          map(classInfoResponse => {
-            return new SuccessApiResponse(<ClassUserInfo>{
-              classUser: response.result,
-              classInfo: classInfoResponse.result,
-            });
+      switchMap(classUser => {
+        return this.getClassInfo(classUser.classInfoId).pipe(
+          map(classInfo => {
+            return <ClassUserInfo>{
+              classUser,
+              classInfo,
+            };
           })
         );
-      }),
-      catchApiError()
+      })
     );
   }
 
@@ -201,11 +162,8 @@ export class ClassInfoService {
 
   getMyClasses() {
     return this.#dataService.getMyClasses().pipe(
-      switchMap(response => {
-        if (!response.result) {
-          return of(response as any as ApiResponse<ClassUserInfo[]>);
-        }
-        const classUserIds = response.result.map(classUser => classUser.id);
+      switchMap(classUsers => {
+        const classUserIds = classUsers.map(classUser => classUser.id);
         return this.getClassUserInfos(classUserIds);
       })
     );

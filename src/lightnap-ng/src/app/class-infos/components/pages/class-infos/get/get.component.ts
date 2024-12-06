@@ -1,4 +1,3 @@
-
 import { CommonModule } from "@angular/common";
 import { Component, inject, input, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
@@ -24,8 +23,8 @@ export class GetComponent implements OnInit {
   errors = new Array<string>();
 
   readonly id = input<string>(undefined);
-  classInfo$?: Observable<ApiResponse<ClassInfo>>;
-  classOffers$?: Observable<ApiResponse<UserClasses[]>>;
+  classInfo$?: Observable<ClassInfo>;
+  classOffers$?: Observable<UserClasses[]>;
   inClass$?: Observable<boolean>;
   wishingClass$?: Observable<boolean>;
   myClassUserId?: number;
@@ -38,75 +37,51 @@ export class GetComponent implements OnInit {
 
   #refreshClassStatus() {
     this.inClass$ = this.#classInfoService.getMyClasses().pipe(
-      map(response => {
-        if (!response.result) {
-          this.errors = response.errorMessages;
-          return false;
-        }
-        this.myClassUserId = response.result.find(classUser => classUser.classInfo.id == this.id())?.classUser.id;
+      map(classUserInfos => {
+        this.myClassUserId = classUserInfos.find(classUser => classUser.classInfo.id == this.id())?.classUser.id;
         return this.myClassUserId != null;
       })
     );
-    this.wishingClass$ = this.#classInfoService.getMyWishlist().pipe(
-      map(response => {
-        if (!response.result) {
-          this.errors = response.errorMessages;
-          return false;
-        }
-        return response.result.some(classInfo => classInfo.id == this.id());
-      })
-    );
+    this.wishingClass$ = this.#classInfoService.getMyWishlist().pipe(map(classInfos => classInfos.some(classInfo => classInfo.id == this.id())));
   }
 
   addClassForMe() {
     this.#classInfoService.addMeToClass(this.id()).subscribe({
-      next: (response) => {
-        if (!response.result) {
-          this.errors = response.errorMessages;
-          return;
-        }
+      next: classUser => {
         this.#toast.success("Class added successfully to My Classes.");
         this.#refreshClassStatus();
       },
+      error: response => (this.errors = response.errorMessages),
     });
   }
 
   removeClassForMe() {
     this.#classInfoService.removeMeFromClass(this.id()).subscribe({
-      next: (response) => {
-        if (!response.result) {
-          this.errors = response.errorMessages;
-          return;
-        }
+      next: success => {
         this.#toast.success("Class removed successfully from My Classes.");
         this.#refreshClassStatus();
       },
+      error: response => (this.errors = response.errorMessages),
     });
   }
 
   addClassToWishlist() {
     this.#classInfoService.addClassToWishlist(this.id()).subscribe({
-      next: (response) => {
-        if (!response.result) {
-          this.errors = response.errorMessages;
-          return;
-        }
+      next: classDesire => {
         this.#toast.success("Class added successfully to My Wishlist.");
         this.#refreshClassStatus();
       },
+      error: response => (this.errors = response.errorMessages),
     });
   }
 
   removeClassFromWishlist() {
     this.#classInfoService.removeClassFromWishlist(this.id()).subscribe({
-      next: (response) => {
-        if (!response.result) {
-          this.errors = response.errorMessages;
-          return;
-        }
+      next: success => {
         this.#toast.success("Class removed successfully from My Wishlist.");
         this.#refreshClassStatus();
       },
+      error: response => (this.errors = response.errorMessages),
     });
   }
 }

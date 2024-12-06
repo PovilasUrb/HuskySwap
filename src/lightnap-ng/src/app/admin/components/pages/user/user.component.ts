@@ -1,19 +1,19 @@
 import { AdminUserWithRoles } from "@admin/models";
 import { AdminService } from "@admin/services/admin.service";
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, OnInit } from "@angular/core";
+import { Component, inject, input, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { RouterLink } from "@angular/router";
-import { ApiResponse, ConfirmPopupComponent, ToastService } from "@core";
+import { ConfirmPopupComponent, ToastService } from "@core";
 import { ApiResponseComponent } from "@core/components/controls/api-response/api-response.component";
 import { ErrorListComponent } from "@core/components/controls/error-list/error-list.component";
-import { TagModule } from "primeng/tag";
 import { RouteAliasService, RoutePipe } from "@routing";
 import { ConfirmationService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { DropdownModule } from "primeng/dropdown";
 import { TableModule } from "primeng/table";
+import { TagModule } from "primeng/tag";
 import { Observable } from "rxjs";
 
 @Component({
@@ -41,7 +41,7 @@ export class UserComponent implements OnInit {
   #routeAlias = inject(RouteAliasService);
   #fb = inject(FormBuilder);
 
-  @Input() userId!: string;
+  userId = input.required<string>();
 
   errors: string[] = [];
 
@@ -49,7 +49,7 @@ export class UserComponent implements OnInit {
     role: this.#fb.control("", [Validators.required]),
   });
 
-  userWithRoles$ = new Observable<ApiResponse<AdminUserWithRoles>>();
+  userWithRoles$ = new Observable<AdminUserWithRoles>();
 
   roles$ = this.#adminService.getRoles();
 
@@ -58,7 +58,7 @@ export class UserComponent implements OnInit {
   }
 
   #refreshUser() {
-    this.userWithRoles$ = this.#adminService.getUserWithRoles(this.userId);
+    this.userWithRoles$ = this.#adminService.getUserWithRoles(this.userId());
   }
 
   removeUserFromRole(event: any, role: string) {
@@ -70,16 +70,12 @@ export class UserComponent implements OnInit {
       target: event.target,
       key: role,
       accept: () => {
-        this.#adminService.removeUserFromRole(this.userId, role).subscribe({
-          next: response => {
-            if (!response.result) {
-              this.errors = response.errorMessages;
-              return;
-            }
-
-            this.#refreshUser();
-          },
-        });
+        this.#adminService
+          .removeUserFromRole(this.userId(), role)
+          .subscribe({
+            next: () => this.#refreshUser(),
+            error: response => (this.errors = response.errorMessages),
+          });
       },
     });
   }
@@ -87,16 +83,12 @@ export class UserComponent implements OnInit {
   addUserToRole() {
     this.errors = [];
 
-    this.#adminService.addUserToRole(this.userId, this.addUserToRoleForm.value.role).subscribe({
-      next: response => {
-        if (!response.result) {
-          this.errors = response.errorMessages;
-          return;
-        }
-
-        this.#refreshUser();
-      },
-    });
+    this.#adminService
+      .addUserToRole(this.userId(), this.addUserToRoleForm.value.role)
+      .subscribe({
+        next: () => this.#refreshUser(),
+        error: response => (this.errors = response.errorMessages),
+      });
   }
 
   lockUserAccount(event: any) {
@@ -108,16 +100,12 @@ export class UserComponent implements OnInit {
       target: event.target,
       key: "lock",
       accept: () => {
-        this.#adminService.lockUserAccount(this.userId).subscribe({
-          next: response => {
-            if (!response.result) {
-              this.errors = response.errorMessages;
-              return;
-            }
-
-            this.#refreshUser();
-          },
-        });
+        this.#adminService
+          .lockUserAccount(this.userId())
+          .subscribe({
+            next: () => this.#refreshUser(),
+            error: response => (this.errors = response.errorMessages),
+          });
       },
     });
   }
@@ -131,15 +119,9 @@ export class UserComponent implements OnInit {
       target: event.target,
       key: "unlock",
       accept: () => {
-        this.#adminService.unlockUserAccount(this.userId).subscribe({
-          next: response => {
-            if (!response.result) {
-              this.errors = response.errorMessages;
-              return;
-            }
-
-            this.#refreshUser();
-          },
+        this.#adminService.unlockUserAccount(this.userId()).subscribe({
+          next: () => this.#refreshUser(),
+          error: response => (this.errors = response.errorMessages),
         });
       },
     });
@@ -154,16 +136,12 @@ export class UserComponent implements OnInit {
       target: event.target,
       key: "delete",
       accept: () => {
-        this.#adminService.deleteUser(this.userId).subscribe({
-          next: response => {
-            if (!response.result) {
-              this.errors = response.errorMessages;
-              return;
-            }
-
+        this.#adminService.deleteUser(this.userId()).subscribe({
+          next: () => {
             this.#toast.success("User deleted successfully.");
             this.#routeAlias.navigate("admin-users");
           },
+          error: response => (this.errors = response.errorMessages),
         });
       },
     });

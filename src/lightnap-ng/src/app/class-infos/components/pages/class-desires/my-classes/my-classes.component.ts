@@ -11,15 +11,7 @@ import { ClassInfoService } from "src/app/class-infos/services/class-info.servic
 @Component({
   standalone: true,
   templateUrl: "./my-classes.component.html",
-  imports: [
-    CommonModule,
-    CardModule,
-    ApiResponseComponent,
-    ButtonModule,
-    TableModule,
-    ErrorListComponent,
-    ClassInfoComponent
-  ],
+  imports: [CommonModule, CardModule, ApiResponseComponent, ButtonModule, TableModule, ErrorListComponent, ClassInfoComponent],
 })
 export class MyClassesComponent {
   #classInfoService = inject(ClassInfoService);
@@ -42,14 +34,11 @@ export class MyClassesComponent {
       key: classId as any,
       accept: () => {
         this.#classInfoService.removeClassFromWishlist(classId).subscribe({
-          next: response => {
-            if (!response.result) {
-              this.errors = response.errorMessages;
-              return;
-            }
+          next: success => {
             this.#toast.success("Class removed successfully.");
             this.#loadClasses();
           },
+          error: response => (this.errors = response.errorMessages),
         });
       },
     });
