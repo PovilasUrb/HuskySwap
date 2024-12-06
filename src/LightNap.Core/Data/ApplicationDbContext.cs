@@ -32,6 +32,11 @@ namespace LightNap.Core.Data
         public DbSet<TradeRequest> TradeRequests { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets the chat messages DbSet.
+        /// </summary>
+        public DbSet<ChatMessage> ChatMessages { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets the class users DbSet.
         /// </summary>
         public DbSet<ClassUser> ClassUsers { get; set; } = null!;

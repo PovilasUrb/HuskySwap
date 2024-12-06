@@ -27,6 +27,7 @@ export type RouteAlias =
     | 'outgoing-swaps'
     | 'respond'
     | 'completed-swaps'
+    | 'view-sent'
 
     // Wishlist
     | 'wishlist'

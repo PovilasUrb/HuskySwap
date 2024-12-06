@@ -18,7 +18,8 @@ export const Routes: AppRoute[] = [
   { path: "outgoing-swaps", data: {alias: "outgoing-swaps"}, loadComponent: () => import("./outgoing-swaps/outgoing-swaps.component").then(m => m.OutgoingSwapsComponent) },
   { path: "completed-swaps", data: {alias: "completed-swaps"}, loadComponent: () => import("./completed-swaps/completed-swaps.component").then(m => m.CompletedSwapsComponent) },
   { path: "offer-swap/:requestingClassUserId/:targetClassUserId", data: {alias: 'offer-swap'}, loadComponent: () => import("./offer-swap/offer-swap.component").then(m => m.OfferSwapComponent) },
-  { path: ":id/respond", data: {alias: "respond"}, loadComponent: () => import("./respond/respond.component").then(m => m.RespondComponent) },
+  { path: ":id/respond", data: {alias: "respond"}, loadComponent: () => import("./view-incoming-swap/view-incoming-swap.component").then(m => m.RespondComponent) },
+  { path: ":id/view-sent", data: {alias: "view-sent"}, loadComponent: () => import("./view-outgoing-swap/view-outgoing-swap.component").then(m => m.ViewOutgoingSwapComponent) },
   { path: ":id", loadComponent: () => import("./get/get.component").then(m => m.GetComponent) },
   { path: ":id/edit", loadComponent: () => import("./edit/edit.component").then(m => m.EditComponent) },
 ];

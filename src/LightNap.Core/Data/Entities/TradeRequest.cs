@@ -8,6 +8,7 @@ namespace LightNap.Core.Data.Entities
         public ClassUser? TargetClassUser { get; set; }
         public int TargetClassUserId { get; set; }
         public required TradeRequestStatus Status { get; set; }
+        public ICollection<ChatMessage>? ChatMessages { get; set; }
         public required string Notes { get; set; }
     }
 }

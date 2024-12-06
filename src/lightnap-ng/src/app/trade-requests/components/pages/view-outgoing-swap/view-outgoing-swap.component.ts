@@ -9,13 +9,15 @@ import { Observable } from "rxjs";
 import { TradeClassUserInfos } from "src/app/trade-requests/models/trade-class-user-infos";
 import { TradeRequestService } from "src/app/trade-requests/services/trade-request.service";
 import { ClassInfoComponent } from "../../../../class-infos/components/controls/class-info/class-info.component";
+import { TradeRequestChatComponent } from "../../controls/trade-request-chat/trade-request-chat.component";
+import { ConfirmPopupComponent } from "../../../../core/components/controls/confirm-popup/confirm-popup.component";
 
 @Component({
   standalone: true,
-  templateUrl: "./respond.component.html",
-  imports: [CommonModule, CardModule, ApiResponseComponent, ButtonModule, TableModule, ClassInfoComponent],
+  templateUrl: "./view-outgoing-swap.component.html",
+  imports: [CommonModule, CardModule, ApiResponseComponent, ButtonModule, TableModule, ClassInfoComponent, TradeRequestChatComponent, ConfirmPopupComponent],
 })
-export class RespondComponent implements OnInit {
+export class ViewOutgoingSwapComponent implements OnInit {
   #tradeRequestService = inject(TradeRequestService);
   #toast = inject(ToastService);
   errors = new Array<string>();
@@ -27,23 +29,18 @@ export class RespondComponent implements OnInit {
     this.tradeClassUserInfos$ = this.#tradeRequestService.getMyTradeClassUserInfo(this.id());
   }
 
-  reject() {
-    this.#tradeRequestService.rejectMyTradeRequest(this.id()).subscribe({
-      next: success => {
-        this.#toast.success("Trade request rejected successfully.");
-        this.refresh();
+  cancel() {
+    this.#confirmationService.confirm({
+      header: "Confirm Cancel Trade Request",
+      message: `Are you sure that you want to cancel this trade request?`,
+      target: event.target,
+      key: "cancel",
+      accept: () => {
+        this.#tradeRequestService.cancelMyTradeRequest(this.id()).subscribe({
+          next: success => this.refresh(),
+          error: response => (this.errors = response.errorMessages),
+        });
       },
-      error: response => (this.errors = response.errorMessages),
-    });
-  }
-
-  accept() {
-    this.#tradeRequestService.acceptMyTradeRequest(this.id()).subscribe({
-      next: success => {
-        this.#toast.success("Trade request accepted successfully.");
-        this.refresh();
-      },
-      error: response => (this.errors = response.errorMessages),
     });
   }
 

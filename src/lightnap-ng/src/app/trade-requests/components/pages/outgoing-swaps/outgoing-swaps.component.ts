@@ -1,6 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
-import { ApiResponse, ApiResponseComponent, ErrorListComponent, SuccessApiResponse } from "@core";
+import { RouterLink } from "@angular/router";
+import { ApiResponseComponent, ErrorListComponent } from "@core";
+import { RoutePipe } from "@routing";
 import { ConfirmationService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
@@ -8,7 +10,6 @@ import { TableModule } from "primeng/table";
 import { map, Observable } from "rxjs";
 import { TradeClassUserInfosDisplay } from "src/app/trade-requests/models/trade-class-user-infos-display";
 import { TradeRequestService } from "src/app/trade-requests/services/trade-request.service";
-import { ConfirmPopupComponent } from "../../../../core/components/controls/confirm-popup/confirm-popup.component";
 import { TradeClassUserInfosDisplayComponent } from "../../controls/trade-class-user-infos-display/trade-class-user-infos-display.component";
 
 @Component({
@@ -21,12 +22,12 @@ import { TradeClassUserInfosDisplayComponent } from "../../controls/trade-class-
     ButtonModule,
     TableModule,
     ErrorListComponent,
-    ConfirmPopupComponent,
     TradeClassUserInfosDisplayComponent,
+    RoutePipe,
+    RouterLink
   ],
 })
 export class OutgoingSwapsComponent implements OnInit {
-  #confirmationService = inject(ConfirmationService);
   #tradeRequestService = inject(TradeRequestService);
   tradeClassUserInfos$: Observable<TradeClassUserInfosDisplay[]>;
 
@@ -40,21 +41,6 @@ export class OutgoingSwapsComponent implements OnInit {
           .map(tradeRequest => <TradeClassUserInfosDisplay>{ tradeClassUserInfos: tradeRequest, flip: false });
       })
     );
-  }
-
-  cancelRequest(id: number) {
-    this.#confirmationService.confirm({
-      header: "Confirm Delete Item",
-      message: `Are you sure that you want to delete this item?`,
-      target: event.target,
-      key: "delete",
-      accept: () => {
-        this.#tradeRequestService.cancelMyTradeRequest(id).subscribe({
-          next: success => this.refresh(),
-          error: response => (this.errors = response.errorMessages),
-        });
-      },
-    });
   }
 
   ngOnInit() {
