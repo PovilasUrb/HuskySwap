@@ -158,7 +158,7 @@ namespace LightNap.Core.TradeRequests.Services
                 tradeRequest.Status = TradeRequestStatus.Accepted;
                 await db.SaveChangesAsync();
                 await emailService.SendEmailAsync(new System.Net.Mail.MailMessage(
-                    "placeholder@email.com", 
+                    "placeholder@email.com",
                     $"{requestingClassUser.User!.Email!},{targetClassUser.User!.Email!}",
                     "HuskySwap Trade Request Response",
                     "Hey! You guys just completed a successful trade request!"));
@@ -197,6 +197,31 @@ namespace LightNap.Core.TradeRequests.Services
             db.TradeRequests.Remove(item);
             await db.SaveChangesAsync();
             return ApiResponseDto<bool>.CreateSuccess(true);
+        }
+
+        public async Task<ApiResponseDto<ChatMessageDto>> CreateChatMessageAsync(CreateChatMessageDto dto, int tradeRequestId)
+        {
+            string userId = userContext.GetUserId();
+            var tradeRequest = await db.TradeRequests.FirstOrDefaultAsync((tradeRequest) => tradeRequestId == tradeRequest.Id && (userId == tradeRequest.RequestingClassUser!.UserId || userId == tradeRequest.TargetClassUser!.UserId));
+            if (tradeRequest is null)
+            {
+                return ApiResponseDto<ChatMessageDto>.CreateError("The specified TradeRequest was not found.");
+            }
+            ChatMessage item = dto.ToCreate(userId, tradeRequestId);
+            db.ChatMessages.Add(item);
+            await db.SaveChangesAsync();
+            return ApiResponseDto<ChatMessageDto>.CreateSuccess(item.ToDto());
+        }
+
+        public async Task<ApiResponseDto<IList<ChatMessageDto>>> GetChatMessagesAsync(int tradeRequestId, int sinceMessageId)
+        {
+            string userId = userContext.GetUserId();
+            var tradeRequest = await db.TradeRequests.Include(tradeRequest => tradeRequest.ChatMessages).FirstOrDefaultAsync((tradeRequest) => tradeRequestId == tradeRequest.Id && (userId == tradeRequest.RequestingClassUser!.UserId || userId == tradeRequest.TargetClassUser!.UserId));
+            if (tradeRequest is null)
+            {
+                return ApiResponseDto<IList<ChatMessageDto>>.CreateError("The specified TradeRequest was not found.");
+            }
+            return ApiResponseDto<IList<ChatMessageDto>>.CreateSuccess(tradeRequest.ChatMessages!.Where(chatMessage => chatMessage.Id > sinceMessageId).Select(chatMessage => chatMessage.ToDto()).ToList());
         }
     }
 }

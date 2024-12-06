@@ -161,9 +161,9 @@ export class IdentityService {
       const helper = new JwtHelperService();
       const decodedToken = helper.decodeToken(this.#token);
       this.#expires = decodedToken.exp * 1000;
-      this.#userId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-      this.#userName = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-      this.#email = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"];
+      this.#userId = decodedToken["nameid"];
+      this.#userName = decodedToken["sub"];
+      this.#email = decodedToken["email"];
       this.#roles = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? [];
       if (!Array.isArray(this.#roles)) {
         this.#roles = [this.#roles];

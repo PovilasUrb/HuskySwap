@@ -1,22 +1,23 @@
-<p-card header="Respond">
+<p-card header="View Request">
   <api-response [apiResponse]="tradeClassUserInfos$" errorMessage="Error loading" loadingMessage="Loading...">
     <ng-template #success let-tradeClassUserInfos>
       <div class="flex gap-4 mb-4">
         <div class="flex flex-column">
           <h4 class="font-semibold">You Give</h4>
-          <class-info [classInfo]="tradeClassUserInfos.targetClassUser.classInfo"/>
+          <class-info [classInfo]="tradeClassUserInfos.requestingClassUser.classInfo"/>
         </div>
         <div class="flex flex-column">
           <h4 class="font-semibold">You Get</h4>
-          <class-info [classInfo]="tradeClassUserInfos.requestingClassUser.classInfo"/>
+          <class-info [classInfo]="tradeClassUserInfos.targetClassUser.classInfo"/>
         </div>
       </div>
       <div class="flex flex-wrap gap-3">
         @if (tradeClassUserInfos.status === 'Pending') {
-          <p-button severity="danger" (onClick)="reject()">Reject</p-button>
-          <p-button severity="success" (onClick)="accept()">Accept</p-button>
+          <p-button severity="danger" (onClick)="cancel()">Cancel</p-button>
+          <confirm-popup key="cancel" confirmSeverity="danger" confirmIcon="pi pi-trash" />
         }
       </div>
+      <trade-request-chat class="m-3" [tradeRequestId]="id()"></trade-request-chat>
     </ng-template>
   </api-response>
 </p-card>

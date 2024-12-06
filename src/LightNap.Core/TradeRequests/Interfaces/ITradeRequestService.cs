@@ -19,5 +19,7 @@ namespace LightNap.Core.TradeRequests.Interfaces
         Task<ApiResponseDto<bool>> RespondToMyTradeRequestAsync(int id, bool accept);
         Task<ApiResponseDto<bool>> RespondToTradeRequestAsync(int id, bool accept);
         Task<ApiResponseDto<bool>> DeleteTradeRequestAsync(int id);
+        Task<ApiResponseDto<ChatMessageDto>> CreateChatMessageAsync(CreateChatMessageDto dto, int tradeRequestId);
+        Task<ApiResponseDto<IList<ChatMessageDto>>> GetChatMessagesAsync(int tradeRequestId, int sinceMessageId);
     }
 }

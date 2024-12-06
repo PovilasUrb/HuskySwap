@@ -7,6 +7,7 @@ import { UpdateTradeRequestRequest } from "../models/request/update-trade-reques
 import { TradeRequest } from "../models/response/trade-request";
 import { TradeClassUserInfos } from "../models/trade-class-user-infos";
 import { DataService } from "./data.service";
+import { CreateChatMessageRequest } from "../models/request/create-chat-message-request";
 
 @Injectable({
   providedIn: "root",
@@ -79,7 +80,7 @@ export class TradeRequestService {
   }
 
   getMyTradeClassUserInfo(id: number) {
-    return this.#dataService.getTradeRequest(id).pipe(switchMap(this.getTradeClassUserInfos));
+    return this.#dataService.getTradeRequest(id).pipe(switchMap(tradeRequest => this.getTradeClassUserInfos(tradeRequest)));
   }
 
   getMyTradeRequestInfosArray(tradeRequests: TradeRequest[]): Observable<TradeClassUserInfos[]> {
@@ -87,5 +88,13 @@ export class TradeRequestService {
       return of(<TradeClassUserInfos[]>[]);
     }
     return forkJoin(tradeRequests.map(tradeRequest => this.getTradeClassUserInfos(tradeRequest)));
+  }
+
+  createChatMessage(id: number, request: CreateChatMessageRequest) {
+    return this.#dataService.createChatMessage(id, request);
+  }
+
+  getChatMessages(id: number, sinceMessageId: number) {
+    return this.#dataService.getChatMessages(id, sinceMessageId);
   }
 }

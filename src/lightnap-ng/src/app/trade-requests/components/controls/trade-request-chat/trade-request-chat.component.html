@@ -1,0 +1,32 @@
+<div class="flex flex-column gap-2 w-full">
+  @for(chatMessage of chatMessages; track chatMessage.id) {
+    <div class="flex" [ngClass]="{
+      'justify-content-end':chatMessage.sendingUserId === userId
+      }">
+      <div class="flex flex-column" [ngClass]="{
+        'justify-content-end':chatMessage.sendingUserId === userId,
+        }">
+        <p class="m-0 p-2 border-round text-white" [ngClass]="{
+          'bg-blue-400':chatMessage.sendingUserId === userId,
+          'bg-gray-500':chatMessage.sendingUserId !== userId
+          }">{{chatMessage.content}}</p>
+        <p class="text-sm text-gray-500" [ngClass]="{
+          'text-right':chatMessage.sendingUserId === userId,
+        }">{{chatMessage.timestamp| date: 'short'}}</p>
+      </div>
+    </div>
+  } @empty {
+  <p>No messages yet.</p>
+  }
+</div>
+
+<div class="flex justify-content-end">
+  <form [formGroup]="form" (ngSubmit)="sendMessage()" autocomplete="off">
+    <div class="w-30rem flex flex-column gap-4 justify-content-end">
+    <p-inputGroup>
+      <textarea pInputTextarea placeholder="Enter message..." formControlName="content" rows="5" class="w-full"></textarea>
+      <p-button type="submit" pButton icon="pi pi-send" class="p-button-primary" [disabled]="!form.valid"></p-button>
+    </p-inputGroup>
+    </div>
+  </form>
+</div>

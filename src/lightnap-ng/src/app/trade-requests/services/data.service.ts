@@ -7,6 +7,9 @@ import { CreateTradeRequestRequest } from "../models/request/create-trade-reques
 import { SearchTradeRequestsRequest } from "../models/request/search-trade-requests-request";
 import { UpdateTradeRequestRequest } from "../models/request/update-trade-request-request";
 import { TradeRequest } from "../models/response/trade-request";
+import { ChatMessage } from "../models/response/chat-message";
+import { CreateChatMessageRequest } from "../models/request/create-chat-message-request";
+import { ChatMessageHelper } from "../helpers/chat-message.helper";
 
 @Injectable({
   providedIn: "root",
@@ -69,5 +72,19 @@ export class DataService {
 
   getMyTradeRequestsReceived() {
     return this.#http.get<TradeRequest[]>(`${this.#apiUrlRoot}received`);
+  }
+
+  createChatMessage(id: number, request: CreateChatMessageRequest) {
+    return this.#http.post<ChatMessage>(`${this.#apiUrlRoot}${id}/chat`, request);
+  }
+
+  getChatMessages(id: number, sinceMessageId: number) {
+    return this.#http.get<ChatMessage[]>(`${this.#apiUrlRoot}${id}/chat/${sinceMessageId}`).pipe(
+      tap(results => {
+        if (results) {
+          results.forEach(ChatMessageHelper.rehydrate);
+        }
+      })
+    );
   }
 }

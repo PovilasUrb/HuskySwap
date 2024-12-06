@@ -3,9 +3,9 @@
     <ng-template #success let-tradeClassUserInfos>
       <div class="flex flex-wrap gap-3">
         @for(tradeClassUserInfo of tradeClassUserInfos; track $index) {
-          <trade-class-user-infos-display [tradeClassUserInfosDisplay]="tradeClassUserInfo" />
-          <p-button (onClick)="cancelRequest(tradeClassUserInfo.tradeClassUserInfos.id)" icon="pi pi-trash" severity="danger" class="p-2"/>
-          <confirm-popup key="delete" confirmSeverity="danger" confirmIcon="pi pi-trash" />
+          <a [routerLink]="'view-sent' | route : [tradeClassUserInfo.tradeClassUserInfos.id]">
+            <trade-class-user-infos-display [tradeClassUserInfosDisplay]="tradeClassUserInfo" />
+          </a>
         } @empty {
         <p>You don't have any outgoing swaps!</p>
         }

@@ -95,5 +95,19 @@ namespace LightNap.WebApi.Controllers
         {
             return await tradeRequestsService.DeleteTradeRequestAsync(id);
         }
+
+        [HttpPost("{id}/chat")]
+        [ProducesResponseType(typeof(ApiResponseDto<ChatMessageDto>), 200)]
+        public async Task<ActionResult<ApiResponseDto<ChatMessageDto>>> CreateChatMessage(CreateChatMessageDto dto, int id)
+        {
+            return await tradeRequestsService.CreateChatMessageAsync(dto, id);
+        }
+
+        [HttpGet("{id}/chat/{sinceMessageId?}")]
+        [ProducesResponseType(typeof(ApiResponseDto<IList<ChatMessageDto>>), 200)]
+        public async Task<ActionResult<ApiResponseDto<IList<ChatMessageDto>>>> GetChatMessages(int id, int sinceMessageId = 0)
+        {
+            return await tradeRequestsService.GetChatMessagesAsync(id, sinceMessageId);
+        }
     }
 }
