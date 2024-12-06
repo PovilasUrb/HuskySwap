@@ -1,8 +1,7 @@
-
 import { CommonModule } from "@angular/common";
 import { Component, inject, input, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { ApiResponse, ApiResponseComponent } from "@core";
+import { ApiResponseComponent } from "@core";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { Observable } from "rxjs";
@@ -19,7 +18,7 @@ export class GetComponent implements OnInit {
   errors = new Array<string>();
 
   readonly id = input<number>(undefined);
-  classUser$?: Observable<ApiResponse<ClassUser>>;
+  classUser$?: Observable<ClassUser>;
 
   ngOnInit() {
     this.classUser$ = this.#classInfoService.getClassUser(this.id());

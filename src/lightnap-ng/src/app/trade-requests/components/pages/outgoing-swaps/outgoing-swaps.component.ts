@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
-import { ApiResponse, ApiResponseComponent, catchApiError, ErrorListComponent, SuccessApiResponse, throwIfApiError } from "@core";
+import { ApiResponse, ApiResponseComponent, ErrorListComponent, SuccessApiResponse } from "@core";
 import { ConfirmationService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
@@ -28,19 +28,17 @@ import { TradeClassUserInfosDisplayComponent } from "../../controls/trade-class-
 export class OutgoingSwapsComponent implements OnInit {
   #confirmationService = inject(ConfirmationService);
   #tradeRequestService = inject(TradeRequestService);
-  tradeClassUserInfos$: Observable<ApiResponse<TradeClassUserInfosDisplay[]>>;
-  
+  tradeClassUserInfos$: Observable<TradeClassUserInfosDisplay[]>;
+
   errors = new Array<string>();
 
   refresh() {
     this.tradeClassUserInfos$ = this.#tradeRequestService.getMyTradeRequestsSent().pipe(
-      throwIfApiError(),
-      map(response => {
-        return new SuccessApiResponse(response.result
-        .filter(tradeRequest => tradeRequest.status === "Pending")
-        .map(tradeRequest => <TradeClassUserInfosDisplay>{ tradeClassUserInfos: tradeRequest, flip: false }))
-      }),
-      catchApiError()
+      map(tradeClassUserInfos => {
+        return tradeClassUserInfos
+          .filter(tradeRequest => tradeRequest.status === "Pending")
+          .map(tradeRequest => <TradeClassUserInfosDisplay>{ tradeClassUserInfos: tradeRequest, flip: false });
+      })
     );
   }
 
@@ -52,13 +50,8 @@ export class OutgoingSwapsComponent implements OnInit {
       key: "delete",
       accept: () => {
         this.#tradeRequestService.cancelMyTradeRequest(id).subscribe({
-          next: (response) => {
-            if (!response.result) {
-              this.errors = response.errorMessages;
-              return;
-            }
-            this.refresh();
-          },
+          next: success => this.refresh(),
+          error: response => (this.errors = response.errorMessages),
         });
       },
     });

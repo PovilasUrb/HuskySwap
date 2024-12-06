@@ -1,30 +1,20 @@
-import { Component, Input, inject } from "@angular/core";
+import { Component, inject, input } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { BlockUiService, ErrorListComponent } from "@core";
+import { FocusContentLayout } from "@layout/components/layouts/focus-content-layout/focus-content-layout.component";
 import { RouteAliasService, RoutePipe } from "@routing";
 import { ButtonModule } from "primeng/button";
 import { CheckboxModule } from "primeng/checkbox";
 import { InputTextModule } from "primeng/inputtext";
+import { finalize } from "rxjs";
 import { IdentityService } from "src/app/identity/services/identity.service";
-import { AppConfigComponent } from "src/app/layout/components/controls/app-config/app-config.component";
-import { FocusContentLayout } from "src/app/layout/components/layouts/focus-content-layout/focus-content-layout.component";
 import { LayoutService } from "src/app/layout/services/layout.service";
 
 @Component({
   standalone: true,
   templateUrl: "./verify-code.component.html",
-  imports: [
-    ReactiveFormsModule,
-    AppConfigComponent,
-    RouterModule,
-    ButtonModule,
-    InputTextModule,
-    CheckboxModule,
-    RoutePipe,
-    FocusContentLayout,
-    ErrorListComponent,
-  ],
+  imports: [ReactiveFormsModule, RouterModule, ButtonModule, InputTextModule, CheckboxModule, RoutePipe, ErrorListComponent, FocusContentLayout],
 })
 export class VerifyCodeComponent {
   #identityService = inject(IdentityService);
@@ -33,7 +23,7 @@ export class VerifyCodeComponent {
   #routeAlias = inject(RouteAliasService);
   layoutService = inject(LayoutService);
 
-  @Input() email = "";
+  readonly email = input("");
 
   form = this.#fb.group({
     code1: this.#fb.control("", [Validators.required]),
@@ -99,25 +89,14 @@ export class VerifyCodeComponent {
     this.#identityService
       .verifyCode({
         code,
-        email: this.email,
+        email: this.email(),
         deviceDetails: navigator.userAgent,
         rememberMe: value.rememberMe,
       })
+      .pipe(finalize(() => this.#blockUi.hide()))
       .subscribe({
-        next: response => {
-          if (!response?.result) {
-            if (response?.errorMessages?.length) {
-              this.errors = response.errorMessages;
-            } else {
-              this.errors = ["An unexpected error occurred."];
-            }
-            this.form.reset();
-            return;
-          }
-
-          this.#routeAlias.navigate("user-home");
-        },
-        complete: () => this.#blockUi.hide(),
+        next: () => this.#routeAlias.navigate("user-home"),
+        error: response => (this.errors = response.errorMessages),
       });
   }
 }

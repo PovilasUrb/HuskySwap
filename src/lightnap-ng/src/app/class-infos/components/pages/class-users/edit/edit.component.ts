@@ -1,9 +1,8 @@
-
 import { CommonModule } from "@angular/common";
 import { Component, inject, input, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { ApiResponse, ApiResponseComponent, ConfirmPopupComponent, ErrorListComponent, ToastService } from "@core";
+import { ApiResponseComponent, ConfirmPopupComponent, ErrorListComponent, ToastService } from "@core";
 import { ConfirmationService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { CalendarModule } from "primeng/calendar";
@@ -45,19 +44,19 @@ export class EditComponent implements OnInit {
   errors = new Array<string>();
 
   form = this.#fb.group({
-	// TODO: Update these fields to match the right parameters.
-	classId: this.#fb.control("", [Validators.required]),
-	isActive: this.#fb.control(false, [Validators.required]),
+    // TODO: Update these fields to match the right parameters.
+    classId: this.#fb.control("", [Validators.required]),
+    isActive: this.#fb.control(false, [Validators.required]),
   });
 
   readonly id = input<number>(undefined);
-  classUser$ = new Observable<ApiResponse<ClassUser>>();
+  classUser$ = new Observable<ClassUser>();
 
   ngOnInit() {
     this.classUser$ = this.#classInfoService.getClassUser(this.id()).pipe(
-      tap(response => {
-        if (response.result) {
-          this.form.patchValue(response.result);
+      tap(classUser => {
+        if (classUser) {
+          this.form.patchValue(classUser);
         }
       })
     );
@@ -68,13 +67,9 @@ export class EditComponent implements OnInit {
 
     const request = <UpdateClassUserRequest>this.form.value;
 
-    this.#classInfoService.updateClassUser(this.id(), request).subscribe(response => {
-      if (!response.result) {
-        this.errors = response.errorMessages;
-        return;
-      }
-
-      this.#toast.success("Updated successfully");
+    this.#classInfoService.updateClassUser(this.id(), request).subscribe({
+      next: classUser => this.#toast.success("Updated successfully"),
+      error: response => (this.errors = response.errorMessages),
     });
   }
 
@@ -87,14 +82,12 @@ export class EditComponent implements OnInit {
       target: event.target,
       key: "delete",
       accept: () => {
-        this.#classInfoService.deleteClassUser(this.id()).subscribe(response => {
-          if (!response.result) {
-            this.errors = response.errorMessages;
-            return;
-          }
-
-          this.#toast.success("Deleted successfully");
-          this.#router.navigate(["."], { relativeTo: this.#activeRoute.parent });
+        this.#classInfoService.deleteClassUser(this.id()).subscribe({
+          next: response => {
+            this.#toast.success("Deleted successfully");
+            this.#router.navigate(["."], { relativeTo: this.#activeRoute.parent });
+          },
+          error: response => (this.errors = response.errorMessages),
         });
       },
     });

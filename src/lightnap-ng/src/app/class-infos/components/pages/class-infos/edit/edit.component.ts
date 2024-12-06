@@ -1,4 +1,3 @@
-
 import { CommonModule } from "@angular/common";
 import { Component, inject, input, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -31,7 +30,7 @@ import { ClassInfoService } from "src/app/class-infos/services/class-info.servic
     InputTextModule,
     InputNumberModule,
     CheckboxModule,
-    ErrorListComponent
+    ErrorListComponent,
   ],
 })
 export class EditComponent implements OnInit {
@@ -45,22 +44,22 @@ export class EditComponent implements OnInit {
   errors = new Array<string>();
 
   form = this.#fb.group({
-	// TODO: Update these fields to match the right parameters.
-  id: this.#fb.control("", [Validators.required]),
-	title: this.#fb.control("string", [Validators.required]),
-	description: this.#fb.control("string", [Validators.required]),
-	instructor: this.#fb.control("string", [Validators.required]),
-	notes: this.#fb.control("string", [Validators.required]),
+    // TODO: Update these fields to match the right parameters.
+    id: this.#fb.control("", [Validators.required]),
+    title: this.#fb.control("string", [Validators.required]),
+    description: this.#fb.control("string", [Validators.required]),
+    instructor: this.#fb.control("string", [Validators.required]),
+    notes: this.#fb.control("string", [Validators.required]),
   });
 
   readonly id = input<string>(undefined);
-  classInfo$ = new Observable<ApiResponse<ClassInfo>>();
+  classInfo$ = new Observable<ClassInfo>();
 
   ngOnInit() {
     this.classInfo$ = this.#classInfoService.getClassInfo(this.id()).pipe(
-      tap(response => {
-        if (response.result) {
-          this.form.patchValue(response.result);
+      tap(classInfo => {
+        if (classInfo) {
+          this.form.patchValue(classInfo);
         }
       })
     );
@@ -71,13 +70,9 @@ export class EditComponent implements OnInit {
 
     const request = <UpdateClassInfoRequest>this.form.value;
 
-    this.#classInfoService.updateClassInfo(this.id(), request).subscribe(response => {
-      if (!response.result) {
-        this.errors = response.errorMessages;
-        return;
-      }
-
-      this.#toast.success("Updated successfully");
+    this.#classInfoService.updateClassInfo(this.id(), request).subscribe({
+      next: classInfo => this.#toast.success("Updated successfully"),
+      error: response => (this.errors = response.errorMessages),
     });
   }
 
@@ -90,14 +85,12 @@ export class EditComponent implements OnInit {
       target: event.target,
       key: "delete",
       accept: () => {
-        this.#classInfoService.deleteClassInfo(this.id()).subscribe(response => {
-          if (!response.result) {
-            this.errors = response.errorMessages;
-            return;
-          }
-
-          this.#toast.success("Deleted successfully");
-          this.#router.navigate(["."], { relativeTo: this.#activeRoute.parent });
+        this.#classInfoService.deleteClassInfo(this.id()).subscribe({
+          next: success => {
+            this.#toast.success("Deleted successfully");
+            this.#router.navigate(["."], { relativeTo: this.#activeRoute.parent });
+          },
+          error: response => (this.errors = response.errorMessages),
         });
       },
     });

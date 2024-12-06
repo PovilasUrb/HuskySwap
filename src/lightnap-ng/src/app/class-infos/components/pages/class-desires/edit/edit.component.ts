@@ -11,7 +11,6 @@ import { UpdateClassDesireRequest } from "src/app/class-infos/models/request/upd
 import { ClassDesire } from "src/app/class-infos/models/response/class-desire";
 import { ClassInfoService } from "src/app/class-infos/services/class-info.service";
 
-
 @Component({
   standalone: true,
   templateUrl: "./edit.component.html",
@@ -32,13 +31,13 @@ export class EditComponent implements OnInit {
   errors = new Array<string>();
 
   @Input() id: number;
-  classDesire$ = new Observable<ApiResponse<ClassDesire>>();
+  classDesire$ = new Observable<ClassDesire>();
 
   ngOnInit() {
     this.classDesire$ = this.#classInfoService.getClassDesire(this.id).pipe(
-      tap(response => {
-        if (response.result) {
-          this.form.setValue({ json: JSON.stringify(response.result, undefined, 4) });
+      tap(classDesire => {
+        if (classDesire) {
+          this.form.setValue({ json: JSON.stringify(classDesire, undefined, 4) });
         }
       })
     );
@@ -55,14 +54,9 @@ export class EditComponent implements OnInit {
       return;
     }
 
-    this.#classInfoService.updateClassDesire(this.id, request).subscribe(response => {
-      if (!response.result) {
-        this.errors = response.errorMessages;
-        return;
-      }
-
-      this.#toast.success("Updated successfully");
-    });
+    this.#classInfoService
+      .updateClassDesire(this.id, request)
+      .subscribe({ next: classDesire => this.#toast.success("Updated successfully"), error: response => (this.errors = response.errorMessages) });
   }
 
   deleteClicked(event: any) {
@@ -74,14 +68,12 @@ export class EditComponent implements OnInit {
       target: event.target,
       key: "delete",
       accept: () => {
-        this.#classInfoService.deleteClassDesire(this.id).subscribe(response => {
-          if (!response.result) {
-            this.errors = response.errorMessages;
-            return;
-          }
-
-          this.#toast.success("Deleted successfully");
-          this.#router.navigate(["."], { relativeTo: this.#activeRoute.parent });
+        this.#classInfoService.deleteClassDesire(this.id).subscribe({
+          next: success => {
+            this.#toast.success("Deleted successfully");
+            this.#router.navigate(["."], { relativeTo: this.#activeRoute.parent });
+          },
+          error: response => (this.errors = response.errorMessages),
         });
       },
     });

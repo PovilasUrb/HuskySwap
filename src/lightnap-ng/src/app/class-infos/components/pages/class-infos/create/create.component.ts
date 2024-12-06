@@ -1,4 +1,3 @@
-
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -38,12 +37,12 @@ export class CreateComponent {
   errors = new Array<string>();
 
   form = this.#fb.group({
-	// TODO: Update these fields to match the right parameters.
-	title: this.#fb.control("string", [Validators.required]),
-	description: this.#fb.control("string", [Validators.required]),
-	instructor: this.#fb.control("string", [Validators.required]),
-	id: this.#fb.control("string", [Validators.required]),
-	notes: this.#fb.control("string", [Validators.required]),
+    // TODO: Update these fields to match the right parameters.
+    title: this.#fb.control("string", [Validators.required]),
+    description: this.#fb.control("string", [Validators.required]),
+    instructor: this.#fb.control("string", [Validators.required]),
+    id: this.#fb.control("string", [Validators.required]),
+    notes: this.#fb.control("string", [Validators.required]),
   });
 
   createClicked() {
@@ -51,13 +50,9 @@ export class CreateComponent {
 
     const request = <CreateClassInfoRequest>this.form.value;
 
-    this.#classInfoService.createClassInfo(request).subscribe(response => {
-      if (!response.result) {
-        this.errors = response.errorMessages;
-        return;
-      }
-
-      this.#router.navigate([response.result.id], { relativeTo: this.#activeRoute.parent });
+    this.#classInfoService.createClassInfo(request).subscribe({
+      next: classInfo => this.#router.navigate([classInfo.id], { relativeTo: this.#activeRoute.parent }),
+      error: response => (this.errors = response.errorMessages),
     });
   }
 }

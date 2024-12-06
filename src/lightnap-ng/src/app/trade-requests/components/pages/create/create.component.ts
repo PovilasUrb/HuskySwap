@@ -1,4 +1,3 @@
-
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -38,11 +37,11 @@ export class CreateComponent {
   errors = new Array<string>();
 
   form = this.#fb.group({
-	// TODO: Update these fields to match the right parameters.
-	requestingClassUserId: this.#fb.control(0, [Validators.required]),
-	targetClassUserId: this.#fb.control(0, [Validators.required]),
-	status: this.#fb.control("string", [Validators.required]),
-	notes: this.#fb.control("string", [Validators.required]),
+    // TODO: Update these fields to match the right parameters.
+    requestingClassUserId: this.#fb.control(0, [Validators.required]),
+    targetClassUserId: this.#fb.control(0, [Validators.required]),
+    status: this.#fb.control("string", [Validators.required]),
+    notes: this.#fb.control("string", [Validators.required]),
   });
 
   createClicked() {
@@ -50,13 +49,9 @@ export class CreateComponent {
 
     const request = <CreateTradeRequestRequest>this.form.value;
 
-    this.#tradeRequestService.createTradeRequest(request).subscribe(response => {
-      if (!response.result) {
-        this.errors = response.errorMessages;
-        return;
-      }
-
-      this.#router.navigate([response.result.id], { relativeTo: this.#activeRoute.parent });
+    this.#tradeRequestService.createTradeRequest(request).subscribe({
+      next: tradeRequest => this.#router.navigate([tradeRequest.id], { relativeTo: this.#activeRoute.parent }),
+      error: response => (this.errors = response.errorMessages),
     });
   }
 }

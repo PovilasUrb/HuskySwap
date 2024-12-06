@@ -1,8 +1,7 @@
-
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { ApiResponseComponent, ConfirmPopupComponent, ErrorListComponent, ToastService } from "@core";
+import { ApiResponseComponent, ErrorListComponent, ToastService } from "@core";
 import { RoutePipe } from "@routing";
 import { ConfirmationService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
@@ -14,7 +13,7 @@ import { ClassInfoComponent } from "../../../controls/class-info/class-info.comp
 @Component({
   standalone: true,
   templateUrl: "./my-classes.component.html",
-  imports: [CommonModule, CardModule, RouterLink, ApiResponseComponent, ButtonModule, TableModule, RoutePipe, ErrorListComponent, ConfirmPopupComponent, ClassInfoComponent],
+  imports: [CommonModule, CardModule, RouterLink, ApiResponseComponent, ButtonModule, TableModule, RoutePipe, ErrorListComponent, ClassInfoComponent],
 })
 export class MyClassesComponent {
   #classInfoService = inject(ClassInfoService);
@@ -31,23 +30,19 @@ export class MyClassesComponent {
     this.errors = [];
 
     this.#confirmationService.confirm({
-        header: "Confirm Role Removal",
+      header: "Confirm Role Removal",
       message: `Are you sure that you want to remove this class?`,
       target: event.target,
       key: classId as any,
       accept: () => {
         this.#classInfoService.removeMeFromClass(classId).subscribe({
-          next: (response) => {
-            if (!response.result) {
-              this.errors = response.errorMessages;
-              return;
-            }
+          next: success => {
             this.#toast.success("Class removed successfully.");
             this.#loadClasses();
           },
+          error: response => (this.errors = response.errorMessages),
         });
       },
     });
-    
   }
 }

@@ -1,4 +1,3 @@
-
 import { CommonModule } from "@angular/common";
 import { Component, inject, input, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -26,7 +25,6 @@ import { ApiResponseComponent } from "../../../../core/components/controls/api-r
     CommonModule,
     CardModule,
     ReactiveFormsModule,
-    RouterLink,
     CalendarModule,
     ButtonModule,
     InputTextModule,
@@ -34,8 +32,8 @@ import { ApiResponseComponent } from "../../../../core/components/controls/api-r
     CheckboxModule,
     ErrorListComponent,
     ApiResponseComponent,
-    ClassInfoComponent
-],
+    ClassInfoComponent,
+  ],
 })
 export class OfferSwapComponent implements OnInit {
   #tradeRequestService = inject(TradeRequestService);
@@ -44,44 +42,40 @@ export class OfferSwapComponent implements OnInit {
   #fb = inject(FormBuilder);
   readonly requestingClassUserId = input<number>(undefined);
   readonly targetClassUserId = input<number>(undefined);
-  classUserInfos$?: Observable<ApiResponse<{requestingClassUser: ClassUserInfo, targetClassUser: ClassUserInfo}>>;
+  classUserInfos$?: Observable<{ requestingClassUser: ClassUserInfo; targetClassUser: ClassUserInfo }>;
   errors = new Array<string>();
 
   form = this.#fb.group({
     // TODO: Update these fields to match the right parameters.
     notes: this.#fb.control("string", [Validators.required]),
   });
-  
+
   createClicked() {
     this.errors = [];
 
     const request = <CreateTradeRequestRequest>this.form.value;
 
-    this.#tradeRequestService.makeATradeRequest({
-      requestingClassUserId: this.requestingClassUserId(),
-      targetClassUserId: this.targetClassUserId(),
-      notes: this.form.value.notes
-    }).subscribe(response => {
-      if (!response.result) {
-        this.errors = response.errorMessages;
-        return;
-      }
-      this.#routeAliasService.navigate('my-classes');
-    });
+    this.#tradeRequestService
+      .makeATradeRequest({
+        requestingClassUserId: this.requestingClassUserId(),
+        targetClassUserId: this.targetClassUserId(),
+        notes: this.form.value.notes,
+      })
+      .subscribe({
+        next: tradeRequest => this.#routeAliasService.navigate("my-classes"),
+        error: response => (this.errors = response.errorMessages),
+      });
   }
 
   ngOnInit(): void {
-    this.classUserInfos$ = forkJoin([this.#classInfoService.getClassUserInfo(this.requestingClassUserId()), this.#classInfoService.getClassUserInfo(this.targetClassUserId())]).pipe(
-      map(([requestingClassUser, targetClassUser]) => 
-        {
-          if (!requestingClassUser.result) return requestingClassUser as any as ApiResponse<{requestingClassUser: ClassUserInfo, targetClassUser: ClassUserInfo}>;
-          if (!targetClassUser.result) return targetClassUser as any as ApiResponse<{requestingClassUser: ClassUserInfo, targetClassUser: ClassUserInfo}>;
-          return new SuccessApiResponse({
-            requestingClassUser: requestingClassUser.result,
-            targetClassUser: targetClassUser.result
-          });
-        }
-    ),      
+    this.classUserInfos$ = forkJoin([
+      this.#classInfoService.getClassUserInfo(this.requestingClassUserId()),
+      this.#classInfoService.getClassUserInfo(this.targetClassUserId()),
+    ]).pipe(
+      map(([requestingClassUser, targetClassUser]) => ({
+        requestingClassUser,
+        targetClassUser,
+      }))
     );
   }
 }

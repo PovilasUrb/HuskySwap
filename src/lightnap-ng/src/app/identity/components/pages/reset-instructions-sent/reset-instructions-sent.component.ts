@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { RouterModule } from "@angular/router";
+import { FocusContentLayout } from "@layout/components/layouts/focus-content-layout/focus-content-layout.component";
 import { RoutePipe } from "@routing";
-import { FocusContentLayout } from "src/app/layout/components/layouts/focus-content-layout/focus-content-layout.component";
 
 @Component({
   standalone: true,

@@ -26,110 +26,110 @@ export class DataService {
   #apiUrlRoot = `${inject(API_URL_ROOT)}`;
 
   getClassInfo(id: string) {
-    return this.#http.get<ApiResponse<ClassInfo>>(`${this.#apiUrlRoot}ClassInfos/${id}`).pipe(
-      tap(response => {
-        if (response.result) {
-          ClassInfoHelper.rehydrate(response.result);
+    return this.#http.get<ClassInfo>(`${this.#apiUrlRoot}ClassInfos/${id}`).pipe(
+      tap(classInfo => {
+        if (classInfo) {
+          ClassInfoHelper.rehydrate(classInfo);
         }
       })
     );
   }
 
   searchClassInfos(request: SearchClassInfosRequest) {
-    return this.#http.post<ApiResponse<PagedResponse<ClassInfo>>>(`${this.#apiUrlRoot}ClassInfos/search`, request).pipe(
-      tap(response => {
-        if (response.result) {
-          response.result.data.forEach(ClassInfoHelper.rehydrate);
+    return this.#http.post<PagedResponse<ClassInfo>>(`${this.#apiUrlRoot}ClassInfos/search`, request).pipe(
+      tap(results => {
+        if (results) {
+          results.data.forEach(ClassInfoHelper.rehydrate);
         }
       })
     );
   }
 
   createClassInfo(request: CreateClassInfoRequest) {
-    return this.#http.post<ApiResponse<ClassInfo>>(`${this.#apiUrlRoot}ClassInfos/`, request);
+    return this.#http.post<ClassInfo>(`${this.#apiUrlRoot}ClassInfos/`, request);
   }
 
   updateClassInfo(id: string, request: UpdateClassInfoRequest) {
-    return this.#http.put<ApiResponse<ClassInfo>>(`${this.#apiUrlRoot}ClassInfos/${id}`, request);
+    return this.#http.put<ClassInfo>(`${this.#apiUrlRoot}ClassInfos/${id}`, request);
   }
 
   deleteClassInfo(id: string) {
-    return this.#http.delete<ApiResponse<boolean>>(`${this.#apiUrlRoot}ClassInfos/${id}`);
+    return this.#http.delete<boolean>(`${this.#apiUrlRoot}ClassInfos/${id}`);
   }
 
   getClassDesire(id: number) {
-    return this.#http.get<ApiResponse<ClassDesire>>(`${this.#apiUrlRoot}ClassDesires/${id}`);
+    return this.#http.get<ClassDesire>(`${this.#apiUrlRoot}ClassDesires/${id}`);
   }
 
   searchClassDesires(request: SearchClassDesiresRequest) {
-    return this.#http.post<ApiResponse<PagedResponse<ClassDesire>>>(`${this.#apiUrlRoot}ClassDesires/search`, request);
+    return this.#http.post<PagedResponse<ClassDesire>>(`${this.#apiUrlRoot}ClassDesires/search`, request);
   }
 
   createClassDesire(request: CreateClassDesireRequest) {
-    return this.#http.post<ApiResponse<ClassDesire>>(`${this.#apiUrlRoot}ClassDesires/`, request);
+    return this.#http.post<ClassDesire>(`${this.#apiUrlRoot}ClassDesires/`, request);
   }
 
   updateClassDesire(id: number, request: UpdateClassDesireRequest) {
-    return this.#http.put<ApiResponse<ClassDesire>>(`${this.#apiUrlRoot}ClassDesires/${id}`, request);
+    return this.#http.put<ClassDesire>(`${this.#apiUrlRoot}ClassDesires/${id}`, request);
   }
 
   getMyClassDesires() {
-    return this.#http.get<ApiResponse<ClassDesire[]>>(`${this.#apiUrlRoot}ClassDesires/my-classes`);
+    return this.#http.get<ClassDesire[]>(`${this.#apiUrlRoot}ClassDesires/my-classes`);
   }
 
   addClassToMyWishlist(classId: string) {
-    return this.#http.post<ApiResponse<ClassDesire>>(`${this.#apiUrlRoot}ClassDesires/my-classes/${classId}`, undefined);
+    return this.#http.post<ClassDesire>(`${this.#apiUrlRoot}ClassDesires/my-classes/${classId}`, undefined);
   }
 
   removeClassFromMyWishlist(classId: string) {
-    return this.#http.delete<ApiResponse<boolean>>(`${this.#apiUrlRoot}ClassDesires/my-classes/${classId}`);
+    return this.#http.delete<boolean>(`${this.#apiUrlRoot}ClassDesires/my-classes/${classId}`);
   }
 
   deleteClassDesire(id: number) {
-    return this.#http.delete<ApiResponse<boolean>>(`${this.#apiUrlRoot}ClassDesires/${id}`);
+    return this.#http.delete<boolean>(`${this.#apiUrlRoot}ClassDesires/${id}`);
   }
 
   getClassUser(id: number) {
-    return this.#http.get<ApiResponse<ClassUser>>(`${this.#apiUrlRoot}ClassUsers/${id}`).pipe(
-      tap(response => {
-        if (response.result) {
-          ClassUserHelper.rehydrate(response.result);
+    return this.#http.get<ClassUser>(`${this.#apiUrlRoot}ClassUsers/${id}`).pipe(
+      tap(classUser => {
+        if (classUser) {
+          ClassUserHelper.rehydrate(classUser);
         }
       })
     );
   }
 
   searchClassUsers(request: SearchClassUsersRequest) {
-    return this.#http.post<ApiResponse<PagedResponse<ClassUser>>>(`${this.#apiUrlRoot}ClassUsers/search`, request).pipe(
-      tap(response => {
-        if (response.result) {
-          response.result.data.forEach(ClassUserHelper.rehydrate);
+    return this.#http.post<PagedResponse<ClassUser>>(`${this.#apiUrlRoot}ClassUsers/search`, request).pipe(
+      tap(results => {
+        if (results) {
+          results.data.forEach(ClassUserHelper.rehydrate);
         }
       })
     );
   }
 
   createClassUser(request: CreateClassUserRequest) {
-    return this.#http.post<ApiResponse<ClassUser>>(`${this.#apiUrlRoot}ClassUsers/`, request);
+    return this.#http.post<ClassUser>(`${this.#apiUrlRoot}ClassUsers/`, request);
   }
 
   getMyClasses() {
-    return this.#http.get<ApiResponse<ClassUser[]>>(`${this.#apiUrlRoot}ClassUsers/my-classes`);
+    return this.#http.get<ClassUser[]>(`${this.#apiUrlRoot}ClassUsers/my-classes`);
   }
 
   addMeToClass(classId: string) {
-    return this.#http.post<ApiResponse<ClassUser>>(`${this.#apiUrlRoot}ClassUsers/my-classes/${classId}`, undefined);
+    return this.#http.post<ClassUser>(`${this.#apiUrlRoot}ClassUsers/my-classes/${classId}`, undefined);
   }
 
   removeMeFromClass(classId: string) {
-    return this.#http.delete<ApiResponse<boolean>>(`${this.#apiUrlRoot}ClassUsers/my-classes/${classId}`);
+    return this.#http.delete<boolean>(`${this.#apiUrlRoot}ClassUsers/my-classes/${classId}`);
   }
 
   updateClassUser(id: number, request: UpdateClassUserRequest) {
-    return this.#http.put<ApiResponse<ClassUser>>(`${this.#apiUrlRoot}ClassUsers/${id}`, request);
+    return this.#http.put<ClassUser>(`${this.#apiUrlRoot}ClassUsers/${id}`, request);
   }
 
   deleteClassUser(id: number) {
-    return this.#http.delete<ApiResponse<boolean>>(`${this.#apiUrlRoot}ClassUsers/${id}`);
+    return this.#http.delete<boolean>(`${this.#apiUrlRoot}ClassUsers/${id}`);
   }
 }

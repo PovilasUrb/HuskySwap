@@ -1,9 +1,8 @@
-
 import { CommonModule } from "@angular/common";
 import { Component, inject, input, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { ApiResponse, ApiResponseComponent, ConfirmPopupComponent, ErrorListComponent, ToastService } from "@core";
+import { ApiResponseComponent, ConfirmPopupComponent, ErrorListComponent, ToastService } from "@core";
 import { ConfirmationService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { CalendarModule } from "primeng/calendar";
@@ -45,21 +44,21 @@ export class EditComponent implements OnInit {
   errors = new Array<string>();
 
   form = this.#fb.group({
-	// TODO: Update these fields to match the right parameters.
-	requestingClassUserId: this.#fb.control(0, [Validators.required]),
-	targetClassUserId: this.#fb.control(0, [Validators.required]),
-	status: this.#fb.control("string", [Validators.required]),
-	notes: this.#fb.control("string", [Validators.required]),
+    // TODO: Update these fields to match the right parameters.
+    requestingClassUserId: this.#fb.control(0, [Validators.required]),
+    targetClassUserId: this.#fb.control(0, [Validators.required]),
+    status: this.#fb.control("string", [Validators.required]),
+    notes: this.#fb.control("string", [Validators.required]),
   });
 
   readonly id = input<number>(undefined);
-  tradeRequest$ = new Observable<ApiResponse<TradeRequest>>();
+  tradeRequest$ = new Observable<TradeRequest>();
 
   ngOnInit() {
     this.tradeRequest$ = this.#tradeRequestService.getTradeRequest(this.id()).pipe(
-      tap(response => {
-        if (response.result) {
-          this.form.patchValue(response.result);
+      tap(tradeRequest => {
+        if (tradeRequest) {
+          this.form.patchValue(tradeRequest);
         }
       })
     );
@@ -70,13 +69,9 @@ export class EditComponent implements OnInit {
 
     const request = <UpdateTradeRequestRequest>this.form.value;
 
-    this.#tradeRequestService.updateTradeRequest(this.id(), request).subscribe(response => {
-      if (!response.result) {
-        this.errors = response.errorMessages;
-        return;
-      }
-
-      this.#toast.success("Updated successfully");
+    this.#tradeRequestService.updateTradeRequest(this.id(), request).subscribe({
+      next: success => this.#toast.success("Updated successfully"),
+      error: response => (this.errors = response.errorMessages),
     });
   }
 
@@ -89,14 +84,12 @@ export class EditComponent implements OnInit {
       target: event.target,
       key: "delete",
       accept: () => {
-        this.#tradeRequestService.deleteTradeRequest(this.id()).subscribe(response => {
-          if (!response.result) {
-            this.errors = response.errorMessages;
-            return;
-          }
-
-          this.#toast.success("Deleted successfully");
-          this.#router.navigate(["."], { relativeTo: this.#activeRoute.parent });
+        this.#tradeRequestService.deleteTradeRequest(this.id()).subscribe({
+          next: success => {
+            this.#toast.success("Deleted successfully");
+            this.#router.navigate(["."], { relativeTo: this.#activeRoute.parent });
+          },
+          error: response => (this.errors = response.errorMessages),
         });
       },
     });

@@ -8,22 +8,14 @@ import { RouteAliasService } from "@routing";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { PasswordModule } from "primeng/password";
-import { tap } from "rxjs";
+import { finalize, tap } from "rxjs";
 import { IdentityService } from "src/app/identity/services/identity.service";
 import { confirmPasswordValidator } from "@core/helpers/form-helpers";
 
 @Component({
   standalone: true,
   templateUrl: "./index.component.html",
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ButtonModule,
-    CardModule,
-    ApiResponseComponent,
-    ErrorListComponent,
-    PasswordModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule, CardModule, ApiResponseComponent, ErrorListComponent, PasswordModule],
 })
 export class IndexComponent {
   #identityService = inject(IdentityService);
@@ -36,8 +28,8 @@ export class IndexComponent {
   profileForm = this.#fb.group({});
   profileErrors = new Array<string>();
   profile$ = this.#profileService.getProfile().pipe(
-    tap(response => {
-      if (!response.result) return;
+    tap(profile => {
+      if (!profile) return;
     })
   );
 
@@ -53,48 +45,41 @@ export class IndexComponent {
 
   updateProfile() {
     this.#blockUi.show({ message: "Updating profile..." });
-    this.#profileService.updateProfile({}).subscribe({
-      next: response => {
-        if (!response.result) {
-          this.profileErrors = response.errorMessages;
-          return;
-        }
-        this.#toast.success("Profile updated successfully.");
-      },
-      complete: () => this.#blockUi.hide(),
-    });
+    this.#profileService
+      .updateProfile({})
+      .pipe(finalize(() => this.#blockUi.hide()))
+      .subscribe({
+        next: profile => this.#toast.success("Profile updated successfully."),
+        error: response => (this.profileErrors = response.errorMessages),
+      });
   }
 
   logOut() {
     this.#blockUi.show({ message: "Logging out..." });
-    this.#identityService.logOut().subscribe({
-      next: response => {
-        if (!response.result) {
-          this.profileErrors = response.errorMessages;
-          return;
-        }
-        this.#routeAlias.navigate("landing");
-      },
-      complete: () => this.#blockUi.hide(),
-    });
+    this.#identityService
+      .logOut()
+      .pipe(finalize(() => this.#blockUi.hide()))
+      .subscribe({
+        next: success => this.#routeAlias.navigate("landing"),
+        error: response => this.#toast.error(response.errorMessages.join(", ")),
+      });
   }
 
   changePassword() {
     this.#blockUi.show({ message: "Changing password..." });
-    this.#profileService.changePassword({
-      confirmNewPassword: this.changePasswordForm.value.confirmNewPassword,
-      currentPassword: this.changePasswordForm.value.currentPassword,
-      newPassword: this.changePasswordForm.value.newPassword,
-    }).subscribe({
-      next: response => {
-        if (!response.result) {
-          this.changePasswordErrors = response.errorMessages;
-          return;
-        }
-        this.#toast.success("Password changed successfully.");
-        this.changePasswordForm.reset();
-      },
-      complete: () => this.#blockUi.hide(),
-    });
+    this.#profileService
+      .changePassword({
+        confirmNewPassword: this.changePasswordForm.value.confirmNewPassword,
+        currentPassword: this.changePasswordForm.value.currentPassword,
+        newPassword: this.changePasswordForm.value.newPassword,
+      })
+      .pipe(finalize(() => this.#blockUi.hide()))
+      .subscribe({
+        next: success => {
+          this.#toast.success("Password changed successfully.");
+          this.changePasswordForm.reset();
+        },
+        error: response => (this.changePasswordErrors = response.errorMessages),
+      });
   }
 }

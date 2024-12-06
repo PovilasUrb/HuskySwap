@@ -7,12 +7,12 @@ import { ErrorListComponent } from "@core/components/controls/error-list/error-l
 import { confirmPasswordValidator } from "@core/helpers/form-helpers";
 import { ToastService } from "@core/services/toast.service";
 import { ProfileService } from "@profile/services/profile.service";
-import { RoutePipe } from "@routing";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { MessagesModule } from "primeng/messages";
 import { PasswordModule } from "primeng/password";
 import { TableModule } from "primeng/table";
+import { finalize } from "rxjs";
 
 @Component({
   standalone: true,
@@ -25,7 +25,6 @@ import { TableModule } from "primeng/table";
     PasswordModule,
     ReactiveFormsModule,
     RouterModule,
-    RoutePipe,
     MessagesModule,
     CardModule,
   ],
@@ -55,17 +54,13 @@ export class ChangePasswordComponent {
         currentPassword: this.form.value.currentPassword,
         newPassword: this.form.value.newPassword,
       })
+      .pipe(finalize(() => this.#blockUi.hide()))
       .subscribe({
-        next: response => {
-          if (!response.result) {
-            this.errors = response.errorMessages;
-            return;
-          }
-
+        next: success => {
           this.#toast.success("Password changed successfully.");
           this.form.reset();
         },
-        complete: () => this.#blockUi.hide(),
+        error: response => (this.errors = response.errorMessages),
       });
   }
 }
