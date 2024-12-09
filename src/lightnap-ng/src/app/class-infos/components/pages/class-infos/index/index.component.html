@@ -1,7 +1,12 @@
-
 <p-card header="All">
   <div class="flex gap-1 mb-1">
     <p-button showByRoles roles="Administrator" [routerLink]="['create']" severity="success" icon="pi pi-plus" label="Create" />
+    <p-inputGroup [formGroup]="form" class="w-20rem">
+      <input pInputText id="title" formControlName="title" placeholder="CSE 121" />
+      <p-inputGroupAddon>
+        <i class="pi pi-search"></i>
+      </p-inputGroupAddon>
+    </p-inputGroup>
   </div>
 
   <api-response [apiResponse]="searchResults$" errorMessage="Error loading items" loadingMessage="Loading items...">
@@ -29,11 +34,11 @@
             <td>
               <p-button [routerLink]="[classInfo.id]" icon="pi pi-eye" />
             </td>
-            <td style="font-weight: bold;">{{classInfo.title}}</td>
-            <td>{{classInfo.description}}</td>
-            <td>{{classInfo.instructor}}</td>
-            <td>{{classInfo.id}}</td>
-            <td>{{classInfo.notes}}</td>
+            <td style="font-weight: bold">{{ classInfo.title }}</td>
+            <td>{{ classInfo.description }}</td>
+            <td>{{ classInfo.instructor }}</td>
+            <td>{{ classInfo.id }}</td>
+            <td>{{ classInfo.notes }}</td>
           </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
