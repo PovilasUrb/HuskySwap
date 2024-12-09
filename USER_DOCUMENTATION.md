@@ -31,11 +31,16 @@ HuskySwap aims to eliminate the uncertainty and inefficiency of the current cour
    - If you want to make that swap offer, click the **Offer Swap** button and click **Create**.
 5. From the **My Wishlist** page, you can see all classes you aren't currently enrolled in but would like to be.
 6. From the **Incoming Swaps** page, you can see active swaps that others have offered to you.
-7. From the **Outgoing Swaps** page, you can see all swaps that you have offered to others.
-   - If you and the other person notice the swap, the chat system is available to coordinate the swap schedule.
-   - If both of you agrees to make a swap and the one who received the offer click the Accept button, the swap is made.
-8. From the **Completed Swaps** page, you can see all the successful swaps you've done.
-9. Additional features include the profile section, where you can edit your username, email, and password.
+   - Click the space between cards to move into the offer swap section. You will see a **chat system**, **reject** button, and **accept** button.
+   - Talk with each other to coordinate the swap schedule and make swap decisions.
+   - Click **Accept** to finalize the swap and accept it; Click **reject** to deny.
+8. From the **Outgoing Swaps** page, you can see all swaps that you have offered to others.
+   - Click the space between cards to move into the offer swap section. You will see a **chat system** and **cancel** button.
+   - If you no longer want this exchange, click **cancel** button to cancel the swap offer.
+   - Talk with each other to coordinate the swap schedule and make swap decisions.
+9. If the offer is made, an email will be sent to notify the successful swap!
+10. From the **Completed Swaps** page, you can see all the successful swaps you've done.
+11. Additional features include the profile section, where you can edit your username, email, and password.
 
 ### 3.1 Use Policies
 - Account and Authentication Policies:
