@@ -2,102 +2,66 @@
   <p-card>
     <div class="text-900 font-bold text-6xl mb-4 text-center">HuskySwap</div>
     <div class="text-700 text-xl text-center line-height-3">We'll get you that class</div>
-    <div class="text-800 font-bold text-4xl line-height-3" style="margin-left: 240px;" >How it Works:</div>
-    <p-card header="All Classes:"
-    [style]="{ 
-      width: '70%',
-      margin: 'auto', 
-      display: 'block' 
-    }">
+  </p-card>
+  <div style="width: 70%" class="flex flex-column m-auto gap-3">
+    <div class="text-800 font-bold text-4xl line-height-3 text-white">How it Works:</div>
+    <p-card header="All Classes:">
       <p>
-        The All Classes page serves as a catalog of all classes available in the system. Each class 
-        includes details such as its title, description, schedule, and availability. From this page, 
-        users can:
+        The All Classes page serves as a catalog of all classes available in the system. Each class includes details such as its title, description,
+        schedule, and availability. From this page, users can:
       </p>
       <ul>
         <li><strong>Add to Current Classes:</strong> Enroll in a class to include it in their active course list.</li>
-        <li><strong>Add to Wishlist:</strong> Save a class to their wishlist for future consideration or potential swaps, without committing to enrollment.</li>
+        <li>
+          <strong>Add to Wishlist:</strong> Save a class to their wishlist for future consideration or potential swaps, without committing to
+          enrollment.
+        </li>
       </ul>
-      <p-button [routerLink]="items[0].routerLink" icon="{{items[0].icon}}" label="{{items[0].label}}"></p-button>
+      <p-button [routerLink]="items[0].routerLink" icon="{{ items[0].icon }}" label="{{ items[0].label }}"></p-button>
     </p-card>
-    <br>
-    <p-card header="My Classes:"
-    [style]="{ 
-      width: '70%',
-      margin: 'auto', 
-      display: 'block' 
-    }">
+    <p-card header="My Classes:">
       <p>
-        The My Classes page is your personal dashboard for managing the courses you are currently enrolled in. This page
-        keeps track of your active courses and offers the following options:
+        The My Classes page is your personal dashboard for managing the courses you are currently enrolled in. This page keeps track of your active
+        courses and offers the following options:
       </p>
       <ul>
         <li><strong>Remove a Class:</strong> If you no longer wish to remain enrolled in a course, you can drop it from your current classes.</li>
-        <li><strong>Offer a Class for Trade:</strong> Select a class from your enrolled list and propose a trade for a class listed on your wishlist.</li>
+        <li>
+          <strong>Offer a Class for Trade:</strong> Select a class from your enrolled list and propose a trade for a class listed on your wishlist.
+        </li>
       </ul>
-      <p-button [routerLink]="items[1].routerLink" icon="{{items[1].icon}}" label="{{items[1].label}}"></p-button>
+      <p-button [routerLink]="items[1].routerLink" icon="{{ items[1].icon }}" label="{{ items[1].label }}"></p-button>
     </p-card>
-    <br>
-    <p-card header="My Wishlist:"
-    [style]="{ 
-      width: '70%',
-      margin: 'auto', 
-      display: 'block' 
-    }">
-      <p>
-        The My Wishlist page is a list of courses you’re interested in but are not currently enrolled in. From here you can:
-      </p>
+    <p-card header="My Wishlist:">
+      <p>The My Wishlist page is a list of courses you’re interested in but are not currently enrolled in. From here you can:</p>
       <ul>
         <li><strong>View Classes:</strong> These are classes you've saved from All Classes</li>
         <li>These classes become options for you to propose swaps via the My Classes page.</li>
       </ul>
-      <p-button [routerLink]="items[2].routerLink" icon="{{items[2].icon}}" label="{{items[2].label}}"></p-button>
+      <p-button [routerLink]="items[2].routerLink" icon="{{ items[2].icon }}" label="{{ items[2].label }}"></p-button>
     </p-card>
-    <br>
-    <p-card header="Incoming Swaps:"
-    [style]="{ 
-      width: '70%',
-      margin: 'auto', 
-      display: 'block' 
-    }">
+    <p-card header="Incoming Swaps:">
       <p>
-        The Incoming Swaps page lists all active trade proposals made by other users. Here, you can view details of 
-        proposed swaps, including the class being offered and the class requested in return. From here you can:
+        The Incoming Swaps page lists all active trade proposals made by other users. Here, you can view details of proposed swaps, including the
+        class being offered and the class requested in return. From here you can:
       </p>
       <ul>
         <li><strong>Accept Swap:</strong> Agree to the swap, finalizing the exchange of courses.</li>
         <li><strong>Deny Swap:</strong> Decline the offer if the swap doesn't align with your preferences or schedule.</li>
       </ul>
-      <p-button [routerLink]="items[3].routerLink" icon="{{items[3].icon}}" label="{{items[3].label}}"></p-button>
+      <p-button [routerLink]="items[3].routerLink" icon="{{ items[3].icon }}" label="{{ items[3].label }}"></p-button>
     </p-card>
-    <br>
-    <p-card header="Outgoing Swaps:"
-    [style]="{ 
-      width: '70%',
-      margin: 'auto', 
-      display: 'block' 
-    }">
-      <p>
-        The Outgoing Swaps page tracks all trade proposals you’ve created. For each swap you can:
-      </p>
+    <p-card header="Outgoing Swaps:">
+      <p>The Outgoing Swaps page tracks all trade proposals you’ve created. For each swap you can:</p>
       <ul>
         <li><strong>View Swap Status:</strong>View the current state of the swap (e.g., pending, accepted, denied).</li>
         <li><strong>Cancel Swap:</strong>If you no longer want to swap, you can cancel any outgoing swaps you've created</li>
       </ul>
-      <p-button [routerLink]="items[4].routerLink" icon="{{items[4].icon}}" label="{{items[4].label}}"></p-button>
+      <p-button [routerLink]="items[4].routerLink" icon="{{ items[4].icon }}" label="{{ items[4].label }}"></p-button>
     </p-card>
-    <br>
-    <p-card header="Completed Swaps:"
-    [style]="{ 
-      width: '70%',
-      margin: 'auto', 
-      display: 'block' 
-    }">
-      <p>
-        Here you can see all the successful swaps you've done. 
-      </p>
-      <p-button [routerLink]="items[5].routerLink" icon="{{items[5].icon}}" label="{{items[5].label}}"></p-button>
+    <p-card header="Completed Swaps:">
+      <p>Here you can see all the successful swaps you've done.</p>
+      <p-button [routerLink]="items[5].routerLink" icon="{{ items[5].icon }}" label="{{ items[5].label }}"></p-button>
     </p-card>
-  </p-card>
+  </div>
 </div>
-

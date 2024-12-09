@@ -1,6 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
+import { RouterLink } from "@angular/router";
 import { ApiResponseComponent, ErrorListComponent, ToastService } from "@core";
+import { RoutePipe } from "@routing";
 import { ConfirmationService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
@@ -11,7 +13,7 @@ import { ClassInfoService } from "src/app/class-infos/services/class-info.servic
 @Component({
   standalone: true,
   templateUrl: "./my-classes.component.html",
-  imports: [CommonModule, CardModule, ApiResponseComponent, ButtonModule, TableModule, ErrorListComponent, ClassInfoComponent],
+  imports: [CommonModule, CardModule, ApiResponseComponent, ButtonModule, TableModule, ErrorListComponent, ClassInfoComponent, RouterLink, RoutePipe],
 })
 export class MyClassesComponent {
   #classInfoService = inject(ClassInfoService);

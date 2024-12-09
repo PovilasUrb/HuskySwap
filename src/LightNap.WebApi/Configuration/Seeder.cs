@@ -5,8 +5,10 @@ using LightNap.Core.ClassInfos.Request.Dto;
 using LightNap.Core.ClassUsers.Interfaces;
 using LightNap.Core.ClassUsers.Request.Dto;
 using LightNap.Core.Configuration;
+using LightNap.Core.Data;
 using LightNap.Core.Data.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Data;
 
@@ -35,20 +37,23 @@ namespace LightNap.WebApi.Configuration
             var classService = services.GetRequiredService<IClassInfoService>();
             var classUserService = services.GetRequiredService<IClassUserService>();
             var classDesireService = services.GetRequiredService<IClassDesireService>();
+            var db = services.GetRequiredService<ApplicationDbContext>();
 
             var user1 = await Seeder.GetOrCreateUserAsync(userManager, "jdkaim", "jdkaim+test1@uw.edu", "P@ssw0rd", false, logger);
             var user2 = await Seeder.GetOrCreateUserAsync(userManager, "otherJDKaim", "jdkaim@hotmail.com", "P@ssw0rd", false, logger);
             var user3 = await Seeder.GetOrCreateUserAsync(userManager, "user3", "jdkaim+test3@uw.edu", "P@ssw0rd", false, logger);
             var user4 = await Seeder.GetOrCreateUserAsync(userManager, "user4", "jdkaim+test4@uw.edu", "P@ssw0rd", false, logger);
-            var class403 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { Id = "13477", Title = "CSE 403", Description = "Software Engineering", Instructor = "Michael Ernst", Notes = "brick by brick" });
-            var class473 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { Id = "13563", Title = "CSE 473", Description = "Introduction to Artificial Intelligence", Instructor = "Steve Tanimoto", Notes = "very ai!" });
-            var class333 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { Id = "13400", Title = "CSE 333", Description = "Systems Programming", Instructor = "Hannah C. Tang", Notes = "C-tier class" });
-            var class442 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { Id = "13500", Title = "CSE 442", Description = "Data Visualization", Instructor = "Jeffrey Heer", Notes = "asd" });
-            var user1class403 = await classUserService.CreateClassUserAsync(new CreateClassUserDto() { ClassInfoId = class403.Id, UserId = user1.Id });
-            var user2class473 = await classUserService.CreateClassUserAsync(new CreateClassUserDto() { ClassInfoId = class473.Id, UserId = user2.Id });
-            await classDesireService.CreateClassDesireAsync(new CreateClassDesireDto() { ClassInfoId = class473.Id, UserId = user1.Id });
-            await classDesireService.CreateClassDesireAsync(new CreateClassDesireDto() { ClassInfoId = class403.Id, UserId = user2.Id });
-
+            if (!await db.ClassInfos.AnyAsync())
+            {
+                var class403 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { Id = "13477", Title = "CSE 403", Description = "Software Engineering", Instructor = "Michael Ernst", Notes = "brick by brick" });
+                var class473 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { Id = "13563", Title = "CSE 473", Description = "Introduction to Artificial Intelligence", Instructor = "Steve Tanimoto", Notes = "very ai!" });
+                var class333 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { Id = "13400", Title = "CSE 333", Description = "Systems Programming", Instructor = "Hannah C. Tang", Notes = "C-tier class" });
+                var class442 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { Id = "13500", Title = "CSE 442", Description = "Data Visualization", Instructor = "Jeffrey Heer", Notes = "asd" });
+                var user1class403 = await classUserService.CreateClassUserAsync(new CreateClassUserDto() { ClassInfoId = class403.Id, UserId = user1.Id });
+                var user2class473 = await classUserService.CreateClassUserAsync(new CreateClassUserDto() { ClassInfoId = class473.Id, UserId = user2.Id });
+                await classDesireService.CreateClassDesireAsync(new CreateClassDesireDto() { ClassInfoId = class473.Id, UserId = user1.Id });
+                await classDesireService.CreateClassDesireAsync(new CreateClassDesireDto() { ClassInfoId = class403.Id, UserId = user2.Id });
+            }
         }
 
         /// <summary>

@@ -78,8 +78,8 @@ namespace LightNap.MaintenanceService.Tasks
                             professorName = $"{firstName} {lastName}";
                         }
                     }
-                    var classInfo = new ClassInfo { Id = slnCode, Description = courseDescription, Instructor = professorName, Title = name, Notes = "", ClassTimes = [] };
-                    classInfo.ClassTimes = [];
+                    var classInfo = new ClassInfo { Id = slnCode, Description = courseDescription, Instructor = professorName, Title = name, Notes = "" };
+                    // classInfo.ClassTimes = [];
                     classInfos.Add(classInfo);
                     Console.WriteLine(slnCode + " " + name + ": " + courseDescription + " | " + professorName);
                     waitingForA = false;
