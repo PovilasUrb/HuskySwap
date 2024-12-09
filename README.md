@@ -96,3 +96,17 @@ Tests can be added in lightnap-ng in the same folders as the code that they inte
 ## **Building**
 
 When a commit is merged to the main branch, it will automatically kick off a completely automated CI/CD pipeline that will build the project and deploy it to https://husky-swap.azurewebsites.net.
+
+-----------------------------------------------------------------------------------
+
+### **Addressed Peer Review**:
+
+1. Awkward Setting Button and Sidebar Toggle Button location
+   - Did not get around to fixing as was focusing on other issues
+2. Having trouble logging in as Admin
+   - Wrong Admin Account Email and Password was sent; Fixed by sending the correct issues.
+3. Need to download a specific version of dotnet in order to run everything
+   - Updated in developer documentation
+4. Unable to create an account
+   - Fixed, noted in developer docs, build the backend twice and the issue should clear up. 
+
