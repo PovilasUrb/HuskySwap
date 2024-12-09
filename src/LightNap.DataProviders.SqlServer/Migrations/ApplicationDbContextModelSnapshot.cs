@@ -22,7 +22,7 @@ namespace LightNap.DataProviders.SqlServer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("LightNap.Core.Identity.ApplicationRole", b =>
+            modelBuilder.Entity("LightNap.Core.Data.Entities.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -57,7 +57,7 @@ namespace LightNap.DataProviders.SqlServer.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("LightNap.Core.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("LightNap.Core.Data.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -132,7 +132,148 @@ namespace LightNap.DataProviders.SqlServer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("LightNap.Core.Identity.RefreshToken", b =>
+            modelBuilder.Entity("LightNap.Core.Data.Entities.ChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SendingUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTimeOffset>("Timestamp")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("TradeRequestId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SendingUserId");
+
+                    b.HasIndex("TradeRequestId");
+
+                    b.ToTable("ChatMessages");
+                });
+
+            modelBuilder.Entity("LightNap.Core.Data.Entities.ClassDesire", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClassInfoId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassInfoId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ClassDesires");
+                });
+
+            modelBuilder.Entity("LightNap.Core.Data.Entities.ClassInfo", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Instructor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClassInfos");
+                });
+
+            modelBuilder.Entity("LightNap.Core.Data.Entities.ClassTime", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClassInfoId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Day")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EndTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StartTime")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassInfoId");
+
+                    b.ToTable("ClassTimes");
+                });
+
+            modelBuilder.Entity("LightNap.Core.Data.Entities.ClassUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClassInfoId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassInfoId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ClassUsers");
+                });
+
+            modelBuilder.Entity("LightNap.Core.Data.Entities.RefreshToken", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -167,6 +308,36 @@ namespace LightNap.DataProviders.SqlServer.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
+                });
+
+            modelBuilder.Entity("LightNap.Core.Data.Entities.TradeRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RequestingClassUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetClassUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestingClassUserId");
+
+                    b.HasIndex("TargetClassUserId");
+
+                    b.ToTable("TradeRequests");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -275,9 +446,77 @@ namespace LightNap.DataProviders.SqlServer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("LightNap.Core.Identity.RefreshToken", b =>
+            modelBuilder.Entity("LightNap.Core.Data.Entities.ChatMessage", b =>
                 {
-                    b.HasOne("LightNap.Core.Identity.ApplicationUser", "User")
+                    b.HasOne("LightNap.Core.Data.Entities.ApplicationUser", "SendingUser")
+                        .WithMany()
+                        .HasForeignKey("SendingUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LightNap.Core.Data.Entities.TradeRequest", "TradeRequest")
+                        .WithMany("ChatMessages")
+                        .HasForeignKey("TradeRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SendingUser");
+
+                    b.Navigation("TradeRequest");
+                });
+
+            modelBuilder.Entity("LightNap.Core.Data.Entities.ClassDesire", b =>
+                {
+                    b.HasOne("LightNap.Core.Data.Entities.ClassInfo", "ClassInfo")
+                        .WithMany()
+                        .HasForeignKey("ClassInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LightNap.Core.Data.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClassInfo");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LightNap.Core.Data.Entities.ClassTime", b =>
+                {
+                    b.HasOne("LightNap.Core.Data.Entities.ClassInfo", "ClassInfo")
+                        .WithMany()
+                        .HasForeignKey("ClassInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClassInfo");
+                });
+
+            modelBuilder.Entity("LightNap.Core.Data.Entities.ClassUser", b =>
+                {
+                    b.HasOne("LightNap.Core.Data.Entities.ClassInfo", "ClassInfo")
+                        .WithMany()
+                        .HasForeignKey("ClassInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LightNap.Core.Data.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClassInfo");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LightNap.Core.Data.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("LightNap.Core.Data.Entities.ApplicationUser", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -286,9 +525,28 @@ namespace LightNap.DataProviders.SqlServer.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("LightNap.Core.Data.Entities.TradeRequest", b =>
+                {
+                    b.HasOne("LightNap.Core.Data.Entities.ClassUser", "RequestingClassUser")
+                        .WithMany()
+                        .HasForeignKey("RequestingClassUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LightNap.Core.Data.Entities.ClassUser", "TargetClassUser")
+                        .WithMany()
+                        .HasForeignKey("TargetClassUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RequestingClassUser");
+
+                    b.Navigation("TargetClassUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("LightNap.Core.Identity.ApplicationRole", null)
+                    b.HasOne("LightNap.Core.Data.Entities.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -297,7 +555,7 @@ namespace LightNap.DataProviders.SqlServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("LightNap.Core.Identity.ApplicationUser", null)
+                    b.HasOne("LightNap.Core.Data.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -306,7 +564,7 @@ namespace LightNap.DataProviders.SqlServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("LightNap.Core.Identity.ApplicationUser", null)
+                    b.HasOne("LightNap.Core.Data.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -315,13 +573,13 @@ namespace LightNap.DataProviders.SqlServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("LightNap.Core.Identity.ApplicationRole", null)
+                    b.HasOne("LightNap.Core.Data.Entities.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LightNap.Core.Identity.ApplicationUser", null)
+                    b.HasOne("LightNap.Core.Data.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -330,16 +588,21 @@ namespace LightNap.DataProviders.SqlServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("LightNap.Core.Identity.ApplicationUser", null)
+                    b.HasOne("LightNap.Core.Data.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LightNap.Core.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("LightNap.Core.Data.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("LightNap.Core.Data.Entities.TradeRequest", b =>
+                {
+                    b.Navigation("ChatMessages");
                 });
 #pragma warning restore 612, 618
         }

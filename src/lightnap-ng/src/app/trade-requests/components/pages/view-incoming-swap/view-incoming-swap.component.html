@@ -4,21 +4,36 @@
       <div class="flex gap-4 mb-4">
         <div class="flex flex-column">
           <h4 class="font-semibold">You Give</h4>
-          <class-info [classInfo]="tradeClassUserInfos.targetClassUser.classInfo"/>
+          <a [routerLink]="'class-info' | route : tradeClassUserInfos.targetClassUser.classInfo.id">
+            <class-info [classInfo]="tradeClassUserInfos.targetClassUser.classInfo" />
+          </a>
         </div>
         <div class="flex flex-column">
           <h4 class="font-semibold">You Get</h4>
-          <class-info [classInfo]="tradeClassUserInfos.requestingClassUser.classInfo"/>
+          <a [routerLink]="'class-info' | route : tradeClassUserInfos.requestingClassUser.classInfo.id">
+            <class-info [classInfo]="tradeClassUserInfos.requestingClassUser.classInfo" />
+          </a>
         </div>
       </div>
       <div class="flex flex-wrap gap-3">
-        @if (tradeClassUserInfos.status === 'Pending') {
-          <p-button severity="danger" (onClick)="reject()">Reject</p-button>
-          <confirm-popup key="reject" confirmSeverity="danger" confirmIcon="pi pi-trash" />
-          <p-button severity="success" (onClick)="accept()">Accept</p-button>
-          <confirm-popup key="accept" confirmSeverity="success" confirmIcon="pi pi-check" />
+        @switch (tradeClassUserInfos.status) {
+          @case ("Pending") {
+            <p-button severity="danger" (onClick)="reject()">Reject</p-button>
+            <confirm-popup key="reject" confirmSeverity="danger" confirmIcon="pi pi-trash" />
+            <p-button severity="success" (onClick)="accept()">Accept</p-button>
+            <confirm-popup key="accept" confirmSeverity="success" confirmIcon="pi pi-check" />
+          }
+          @case ("Canceled") {
+            <p>This swap was canceled.</p>
+          }
+          @case ("Rejected") {
+            <p>You declined this swap.</p>
+          }
+          @case("Accepted") {
+            <p>You accepted this swap.</p>
+          }
         }
-      </div>
+        </div>
       <trade-request-chat class="m-3" [tradeRequestId]="id()"></trade-request-chat>
     </ng-template>
   </api-response>

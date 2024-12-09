@@ -8,6 +8,5 @@ namespace LightNap.Core.ClassInfos.Response.Dto
         public required string Description { get; set; }
         public required string Instructor { get; set; }
         public required string Notes { get; set; }
-        public required ICollection<ClassTimeDto>? ClassTimes { get; set; }
     }
 }

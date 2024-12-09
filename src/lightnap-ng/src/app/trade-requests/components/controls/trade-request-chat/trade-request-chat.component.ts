@@ -26,15 +26,19 @@ export class TradeRequestChatComponent implements OnChanges, OnInit {
   #sinceMessageId = 0;
   readonly tradeRequestId = input<number>(undefined);
   readonly userId = this.#identityService.userId;
+  chatEnabled = false;
   chatMessages: ChatMessage[] = [];
   form = this.#formBuilder.group({
     content: this.#formBuilder.control("", [Validators.required]),
   });
 
   ngOnInit(): void {
-    this.#timer.watchTimer$(10*1000).pipe(takeUntilDestroyed(this.#destroyRef)).subscribe({
-      next: () => this.refreshChat(),
-    });
+    this.#timer
+      .watchTimer$(10 * 1000)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe({
+        next: () => this.refreshChat(),
+      });
   }
 
   ngOnChanges() {
@@ -47,6 +51,19 @@ export class TradeRequestChatComponent implements OnChanges, OnInit {
         this.chatMessages.push(...chatMessages);
         if (chatMessages.length > 0) {
           this.#sinceMessageId = chatMessages[chatMessages.length - 1].id;
+        }
+      },
+    });
+    this.#tradeRequestService.getMyTradeClassUserInfo(this.tradeRequestId()).subscribe({
+      next: tradeClassUserInfos => {
+        switch (tradeClassUserInfos.status) {
+          case "Accepted":
+          case "Pending":
+            this.chatEnabled = true;
+            break;
+          default:
+            this.chatEnabled = false;
+            break;
         }
       },
     });

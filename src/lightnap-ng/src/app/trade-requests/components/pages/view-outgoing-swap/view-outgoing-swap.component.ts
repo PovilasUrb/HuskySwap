@@ -11,11 +11,13 @@ import { TradeRequestService } from "src/app/trade-requests/services/trade-reque
 import { ClassInfoComponent } from "../../../../class-infos/components/controls/class-info/class-info.component";
 import { TradeRequestChatComponent } from "../../controls/trade-request-chat/trade-request-chat.component";
 import { ConfirmPopupComponent } from "../../../../core/components/controls/confirm-popup/confirm-popup.component";
+import { RoutePipe } from "@routing";
+import { RouterLink } from "@angular/router";
 
 @Component({
   standalone: true,
   templateUrl: "./view-outgoing-swap.component.html",
-  imports: [CommonModule, CardModule, ApiResponseComponent, ButtonModule, TableModule, ClassInfoComponent, TradeRequestChatComponent, ConfirmPopupComponent],
+  imports: [CommonModule, CardModule, RouterLink, RoutePipe, ApiResponseComponent, ButtonModule, TableModule, ClassInfoComponent, TradeRequestChatComponent, ConfirmPopupComponent],
 })
 export class ViewOutgoingSwapComponent implements OnInit {
   #tradeRequestService = inject(TradeRequestService);

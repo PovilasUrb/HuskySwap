@@ -16,8 +16,7 @@ namespace LightNap.Core.ClassInfos.Extensions
                 Title = dto.Title,
                 Description = dto.Description,
                 Instructor = dto.Instructor,
-                Notes = dto.Notes,
-                ClassTimes = []
+                Notes = dto.Notes
             };
             return item;
         }
@@ -31,8 +30,7 @@ namespace LightNap.Core.ClassInfos.Extensions
                 Title = item.Title,
                 Description = item.Description,
                 Instructor = item.Instructor,
-                Notes = item.Notes,
-                ClassTimes = item.ClassTimes.Select(classTime => classTime.ToDto()).ToArray()
+                Notes = item.Notes
             };
             return dto;
         }

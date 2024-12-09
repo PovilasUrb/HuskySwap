@@ -92,9 +92,9 @@ namespace LightNap.Core.Data
                 .HasForeignKey(rt => rt.UserId)
                 .IsRequired();
 
-            builder.Entity<ClassInfo>()
-                .Navigation(classInfo => classInfo.ClassTimes)
-                .AutoInclude();
+            //builder.Entity<ClassInfo>()
+            //    .Navigation(classInfo => classInfo.ClassTimes)
+            //    .AutoInclude();
         }
 
         /// <inheritdoc />

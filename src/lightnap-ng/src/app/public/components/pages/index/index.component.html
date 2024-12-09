@@ -59,8 +59,19 @@
       </div>
     </div>
 
-    <p-card header="Welcome To The App">
-      <p>This is the public landing page accessible to anyone.</p>
-    </p-card>
+    <div style="width: 50rem">
+      <p-card>
+        <div class="text-900 font-bold text-6xl mb-4 text-center">Welcome to HuskySwap</div>
+        <div class="text-700 text-xl text-center line-height-3 mb-2">We'll get you that class</div>
+        <p>
+          HuskySwap is a platform designed to help college students swap courses with their peers. Whether you're looking to change your schedule or find a spot in a popular class, HuskySwap makes it easy to connect with other students and manage your course enrollments efficiently.
+        </p>
+        @if (loggedIn$ | async) {
+          <p>Check out <a [routerLink]="'user-home' | route">your swaps</a> now!</p>
+        } @else {
+          <p>Please <a [routerLink]="'login' | route">log in</a> or <a [routerLink]="'register' | route">register</a> to continue!</p>
+        }
+      </p-card>  
+    </div>
   </div>
 </div>

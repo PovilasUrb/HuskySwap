@@ -20,13 +20,15 @@
   }
 </div>
 
-<div class="flex justify-content-end">
-  <form [formGroup]="form" (ngSubmit)="sendMessage()" autocomplete="off">
-    <div class="w-30rem flex flex-column gap-4 justify-content-end">
-    <p-inputGroup>
-      <textarea pInputTextarea placeholder="Enter message..." formControlName="content" rows="5" class="w-full"></textarea>
-      <p-button type="submit" pButton icon="pi pi-send" class="p-button-primary" [disabled]="!form.valid"></p-button>
-    </p-inputGroup>
-    </div>
-  </form>
-</div>
+@if (chatEnabled) {
+  <div class="flex justify-content-end">
+    <form [formGroup]="form" (ngSubmit)="sendMessage()" autocomplete="off">
+      <div class="w-30rem flex flex-column gap-4 justify-content-end">
+      <p-inputGroup>
+        <textarea pInputTextarea placeholder="Enter message..." formControlName="content" rows="5" class="w-full"></textarea>
+        <p-button type="submit" pButton icon="pi pi-send" class="p-button-primary" [disabled]="!form.valid"></p-button>
+      </p-inputGroup>
+      </div>
+    </form>
+  </div>
+}

@@ -3,7 +3,9 @@
   <api-response [apiResponse]="classInfos$" errorMessage="Error loading" loadingMessage="Loading...">
     <ng-template #success let-classInfos>
       @for(classInfo of classInfos; track $index) {
-        <class-info [classInfo]="classInfo"></class-info>
+        <a [routerLink]="'class-info' | route : classInfo.id">
+          <class-info [classInfo]="classInfo" />
+        </a>
       }
       @empty {
         <p>No classes in your wishlist</p>
