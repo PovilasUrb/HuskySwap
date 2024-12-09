@@ -9,7 +9,6 @@ using LightNap.Core.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.Data;
-using System.Runtime.CompilerServices;
 
 namespace LightNap.WebApi.Configuration
 {
@@ -45,10 +44,10 @@ namespace LightNap.WebApi.Configuration
             var class473 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { Id = "13563", Title = "CSE 473", Description = "Introduction to Artificial Intelligence", Instructor = "Steve Tanimoto", Notes = "very ai!" });
             var class333 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { Id = "13400", Title = "CSE 333", Description = "Systems Programming", Instructor = "Hannah C. Tang", Notes = "C-tier class" });
             var class442 = await classService.CreateClassInfoAsync(new CreateClassInfoDto() { Id = "13500", Title = "CSE 442", Description = "Data Visualization", Instructor = "Jeffrey Heer", Notes = "asd" });
-            var user1class403 = await classUserService.CreateClassUserAsync(new CreateClassUserDto() { ClassInfoId = class403.Result!.Id, UserId = user1.Id });
-            var user2class473 = await classUserService.CreateClassUserAsync(new CreateClassUserDto() { ClassInfoId = class473.Result!.Id, UserId = user2.Id });
-            await classDesireService.CreateClassDesireAsync(new CreateClassDesireDto() { ClassInfoId = class473.Result!.Id, UserId = user1.Id });
-            await classDesireService.CreateClassDesireAsync(new CreateClassDesireDto() { ClassInfoId = class403.Result!.Id, UserId = user2.Id });
+            var user1class403 = await classUserService.CreateClassUserAsync(new CreateClassUserDto() { ClassInfoId = class403.Id, UserId = user1.Id });
+            var user2class473 = await classUserService.CreateClassUserAsync(new CreateClassUserDto() { ClassInfoId = class473.Id, UserId = user2.Id });
+            await classDesireService.CreateClassDesireAsync(new CreateClassDesireDto() { ClassInfoId = class473.Id, UserId = user1.Id });
+            await classDesireService.CreateClassDesireAsync(new CreateClassDesireDto() { ClassInfoId = class403.Id, UserId = user2.Id });
 
         }
 

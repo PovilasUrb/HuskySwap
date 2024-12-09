@@ -3,6 +3,7 @@ using LightNap.Core.Api;
 using LightNap.Core.ClassUsers.Interfaces;
 using LightNap.Core.ClassUsers.Request.Dto;
 using LightNap.Core.ClassUsers.Response.Dto;
+using LightNap.WebApi.Api;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LightNap.WebApi.Controllers
@@ -20,56 +21,58 @@ namespace LightNap.WebApi.Controllers
         [ProducesResponseType(typeof(ApiResponseDto<ClassUserDto>), 200)]
         public async Task<ActionResult<ApiResponseDto<ClassUserDto>>> GetClassUser(int id)
         {
-            return await classUsersService.GetClassUserAsync(id);
+            return new ApiResponseDto<ClassUserDto>(await classUsersService.GetClassUserAsync(id));
         }
 
         [HttpPost("search")]
         [ProducesResponseType(typeof(ApiResponseDto<PagedResponse<ClassUserDto>>), 200)]
         public async Task<ActionResult<ApiResponseDto<PagedResponse<ClassUserDto>>>> SearchClassUsers([FromBody] SearchClassUsersDto dto)
         {
-            return await classUsersService.SearchClassUsersAsync(dto);
+            return new ApiResponseDto<PagedResponse<ClassUserDto>>(await classUsersService.SearchClassUsersAsync(dto));
         }
 
         [HttpGet("my-classes")]
         [ProducesResponseType(typeof(ApiResponseDto<IList<ClassUserDto>>), 200)]
         public async Task<ActionResult<ApiResponseDto<IList<ClassUserDto>>>> GetMyClasses()
         {
-            return await classUsersService.GetMyClassesAsync();
+            return new ApiResponseDto<IList<ClassUserDto>>(await classUsersService.GetMyClassesAsync());
         }
 
         [HttpDelete("my-classes/{classId}")]
         [ProducesResponseType(typeof(ApiResponseDto<bool>), 200)]
         public async Task<ActionResult<ApiResponseDto<bool>>> RemoveMeFromClass(string classId)
         {
-            return await classUsersService.RemoveMeFromClassAsync(classId);
+            await classUsersService.RemoveMeFromClassAsync(classId);
+            return new ApiResponseDto<bool>(true);
         }
 
         [HttpPost("my-classes/{classId}")]
         [ProducesResponseType(typeof(ApiResponseDto<ClassUserDto>), 200)]
         public async Task<ActionResult<ApiResponseDto<ClassUserDto>>> AddMeToClass(string classId)
         {
-            return await classUsersService.AddMeToClassAsync(classId);
+            return new ApiResponseDto<ClassUserDto>(await classUsersService.AddMeToClassAsync(classId));
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponseDto<ClassUserDto>), 201)]
         public async Task<ActionResult<ApiResponseDto<ClassUserDto>>> CreateClassUser([FromBody] CreateClassUserDto dto)
         {
-            return await classUsersService.CreateClassUserAsync(dto);
+            return new ApiResponseDto<ClassUserDto>(await classUsersService.CreateClassUserAsync(dto));
         }
 
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ApiResponseDto<ClassUserDto>), 200)]
         public async Task<ActionResult<ApiResponseDto<ClassUserDto>>> UpdateClassUser(int id, [FromBody] UpdateClassUserDto dto)
         {
-            return await classUsersService.UpdateClassUserAsync(id, dto);
+            return new ApiResponseDto<ClassUserDto>(await classUsersService.UpdateClassUserAsync(id, dto));
         }
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponseDto<bool>), 200)]
         public async Task<ActionResult<ApiResponseDto<bool>>> DeleteClassUser(int id)
         {
-            return await classUsersService.DeleteClassUserAsync(id);
+            await classUsersService.DeleteClassUserAsync(id);
+            return new ApiResponseDto<bool>(true);
         }
     }
 }
