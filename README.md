@@ -10,6 +10,11 @@
 
 [User Documentation](https://github.com/JDKaim/HuskySwap/blob/main/USER_DOCUMENTATION.md)
 
+## **Project Description**
+
+HuskySwap is a public website where people can list and trade classes before and at the beginning of each quarter.
+The platform simplifies course management by allowing students to communicate and swap seats in a class, eliminating the uncertainty and inefficiency of the current course adjustment process by providing a platform for students to find and trade seats with others easily.
+
 ## **Setting Up and Running Source Code**
 
 The source code can be obtained by cloning the repository hosted at https://github.com/jdkaim/HuskySwap.
