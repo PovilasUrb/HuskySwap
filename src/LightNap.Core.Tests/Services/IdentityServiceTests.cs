@@ -1,3 +1,4 @@
+using LightNap.Core.Api;
 using LightNap.Core.Configuration;
 using LightNap.Core.Data;
 using LightNap.Core.Data.Entities;
@@ -104,16 +105,16 @@ namespace LightNap.Core.Tests
             var result = await this._identityService.LogInAsync(requestDto);
 
             // Assert
-            TestHelper.AssertSuccess(result);
-            Assert.IsFalse(result.Result!.TwoFactorRequired);
-            Assert.IsNotNull(result.Result.BearerToken);
+            Assert.IsFalse(result.TwoFactorRequired);
+            Assert.IsNotNull(result.BearerToken);
 
             var cookie = this._cookieManager.GetCookie(IdentityServiceTests._refreshTokenCookieName);
             Assert.IsNotNull(cookie);
         }
 
         [TestMethod]
-        public async Task LogInAsync_BadEmail_ReturnsError()
+        [ExpectedException(typeof(UserFriendlyApiException))]
+        public async Task LogInAsync_BadEmail_ThrowsError()
         {
             // Arrange
             var requestDto = new LoginRequestDto
@@ -125,17 +126,12 @@ namespace LightNap.Core.Tests
             };
 
             // Act
-            var result = await this._identityService.LogInAsync(requestDto);
-
-            // Assert
-            TestHelper.AssertError(result);
-
-            var cookie = this._cookieManager.GetCookie(IdentityServiceTests._refreshTokenCookieName);
-            Assert.IsNull(cookie);
+            await this._identityService.LogInAsync(requestDto);
         }
 
         [TestMethod]
-        public async Task LogInAsync_BadPassword_ReturnsError()
+        [ExpectedException(typeof(UserFriendlyApiException))]
+        public async Task LogInAsync_BadPassword_ThrowsError()
         {
             // Arrange
             var requestDto = new LoginRequestDto
@@ -150,13 +146,7 @@ namespace LightNap.Core.Tests
             await this._userManager.AddPasswordAsync(user, "GoodPassword123!");
 
             // Act
-            var result = await this._identityService.LogInAsync(requestDto);
-
-            // Assert
-            TestHelper.AssertError(result);
-
-            var cookie = this._cookieManager.GetCookie(IdentityServiceTests._refreshTokenCookieName);
-            Assert.IsNull(cookie);
+            await this._identityService.LogInAsync(requestDto);
         }
 
         [TestMethod]
@@ -174,27 +164,24 @@ namespace LightNap.Core.Tests
             await this._userManager.AddPasswordAsync(user, requestDto.Password);
             var loginResult = await this._identityService.LogInAsync(requestDto);
             var newToken = "new-token";
-            Assert.AreNotEqual(newToken, loginResult.Result!.BearerToken);
+            Assert.AreNotEqual(newToken, loginResult.BearerToken);
             this._tokenServiceMock.Setup(ts => ts.GenerateAccessTokenAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(newToken);
 
             // Act
             var accessTokenResult = await this._identityService.GetAccessTokenAsync();
 
             // Assert
-            TestHelper.AssertSuccess(accessTokenResult);
-            Assert.AreEqual(newToken, accessTokenResult.Result);
+            Assert.AreEqual(newToken, accessTokenResult);
         }
 
         [TestMethod]
-        public async Task GetAccessTokenAsync_NotLoggedIn_ReturnsError()
+        [ExpectedException(typeof(UserFriendlyApiException))]
+        public async Task GetAccessTokenAsync_NotLoggedIn_ThrowsError()
         {
             // Arrange
 
             // Act
-            var accessTokenResult = await this._identityService.GetAccessTokenAsync();
-
-            // Assert
-            TestHelper.AssertError(accessTokenResult);
+            await this._identityService.GetAccessTokenAsync();
         }
 
         [TestMethod]
@@ -214,12 +201,11 @@ namespace LightNap.Core.Tests
             this._emailServiceMock.Setup(ts => ts.SendRegistrationEmailAsync(It.IsAny<ApplicationUser>())).Returns(Task.CompletedTask);
 
             // Act
-            var result = await this._identityService.RegisterAsync(requestDto);
+            var registeredUser = await this._identityService.RegisterAsync(requestDto);
 
             // Assert
-            TestHelper.AssertSuccess(result);
-            Assert.IsFalse(result.Result!.TwoFactorRequired);
-            Assert.IsNotNull(result.Result.BearerToken);
+            Assert.IsFalse(registeredUser.TwoFactorRequired);
+            Assert.IsNotNull(registeredUser.BearerToken);
 
             var user = await this._userManager.FindByEmailAsync(requestDto.Email);
             Assert.IsNotNull(user);
@@ -248,11 +234,9 @@ namespace LightNap.Core.Tests
             Assert.IsNotNull(cookie);
 
             // Act
-            var result = await this._identityService.LogOutAsync();
+            await this._identityService.LogOutAsync();
 
             // Assert
-            TestHelper.AssertSuccess(result);
-
             cookie = this._cookieManager.GetCookie("refreshCookie");
             Assert.IsNull(cookie);
         }
@@ -276,11 +260,9 @@ namespace LightNap.Core.Tests
                 .Returns(Task.CompletedTask);
 
             // Act
-            var result = await this._identityService.ResetPasswordAsync(requestDto);
+            await this._identityService.ResetPasswordAsync(requestDto);
 
             // Assert
-            TestHelper.AssertSuccess(result);
-
             this._emailServiceMock.Verify(ts => ts.SendPasswordResetEmailAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()), Times.Once);
             Assert.IsFalse(string.IsNullOrEmpty(capturedPasswordResetUrl), "Password reset URL should be captured.");
         }
@@ -318,14 +300,12 @@ namespace LightNap.Core.Tests
             };
 
             // Act
-            var result = await this._identityService.NewPasswordAsync(newPasswordRequestDto);
-
-            // Assert
-            TestHelper.AssertSuccess(result);
+            await this._identityService.NewPasswordAsync(newPasswordRequestDto);
         }
 
         [TestMethod]
-        public async Task NewPasswordAsync_InvalidData_ReturnsError()
+        [ExpectedException(typeof(UserFriendlyApiException))]
+        public async Task NewPasswordAsync_InvalidData_ThrowsError()
         {
             // Arrange
             var newPasswordRequestDto = new NewPasswordRequestDto
@@ -338,10 +318,7 @@ namespace LightNap.Core.Tests
             };
 
             // Act
-            var result = await this._identityService.NewPasswordAsync(newPasswordRequestDto);
-
-            // Assert
-            TestHelper.AssertError(result);
+            await this._identityService.NewPasswordAsync(newPasswordRequestDto);
         }
 
     }

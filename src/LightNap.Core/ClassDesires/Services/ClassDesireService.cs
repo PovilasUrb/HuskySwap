@@ -1,26 +1,23 @@
 using LightNap.Core.Api;
-using LightNap.Core.Data;
-using LightNap.Core.Data.Entities;
 using LightNap.Core.ClassDesires.Extensions;
 using LightNap.Core.ClassDesires.Interfaces;
 using LightNap.Core.ClassDesires.Request.Dto;
 using LightNap.Core.ClassDesires.Response.Dto;
-using Microsoft.EntityFrameworkCore;
+using LightNap.Core.Data;
 using LightNap.Core.Interfaces;
-using LightNap.Core.ClassUsers.Services;
-using LightNap.Core.ClassUsers.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace LightNap.Core.ClassDesires.Services
 {
     public class ClassDesireService(ApplicationDbContext db, IUserContext userContext) : IClassDesireService
     {
-        public async Task<ApiResponseDto<ClassDesireDto>> GetClassDesireAsync(int id)
+        public async Task<ClassDesireDto?> GetClassDesireAsync(int id)
         {
             var item = await db.ClassDesires.FindAsync(id);
-            return ApiResponseDto<ClassDesireDto>.CreateSuccess(item?.ToDto());
+            return item?.ToDto();
         }
 
-        public async Task<ApiResponseDto<PagedResponse<ClassDesireDto>>> SearchClassDesiresAsync(SearchClassDesiresDto dto)
+        public async Task<PagedResponse<ClassDesireDto>> SearchClassDesiresAsync(SearchClassDesiresDto dto)
         {
             var query = db.ClassDesires.AsQueryable();
 
@@ -47,59 +44,56 @@ namespace LightNap.Core.ClassDesires.Services
 
             var items = await query.Take(dto.PageSize).Select(user => user.ToDto()).ToListAsync();
 
-            return ApiResponseDto<PagedResponse<ClassDesireDto>>.CreateSuccess(
-                new PagedResponse<ClassDesireDto>(items, dto.PageNumber, dto.PageSize, totalCount));
+            return new PagedResponse<ClassDesireDto>(items, dto.PageNumber, dto.PageSize, totalCount);
         }
 
-        public async Task<ApiResponseDto<IList<ClassDesireDto>>> GetMyClassesAsync()
+        public async Task<IList<ClassDesireDto>> GetMyClassesAsync()
         {
             var items = await db.ClassDesires.Where((classDesire) => classDesire.UserId == userContext.GetUserId() && classDesire.IsActive).Select(user => user.ToDto()).ToListAsync();
-            return ApiResponseDto<IList<ClassDesireDto>>.CreateSuccess(items);
+            return items;
         }
 
-        public async Task<ApiResponseDto<bool>> RemoveMeFromClassAsync(string classId)
+        public async Task RemoveMeFromClassAsync(string classId)
         {
             var item = await db.GetClassOnActiveUserWishlistAsync(classId, userContext.GetUserId());
-            if (item is null) { return ApiResponseDto<bool>.CreateError("You don't have this class on your wishlist."); }
+            if (item is null) { throw new UserFriendlyApiException("You don't have this class on your wishlist."); }
             item.IsActive = false;
             await db.SaveChangesAsync();
-            return ApiResponseDto<bool>.CreateSuccess(true);
         }
 
-        public async Task<ApiResponseDto<ClassDesireDto>> CreateClassDesireAsync(CreateClassDesireDto dto)
+        public async Task<ClassDesireDto> CreateClassDesireAsync(CreateClassDesireDto dto)
         {
             var item = await db.GetClassOnActiveUserWishlistAsync(dto.ClassInfoId, dto.UserId);
-            if (item is not null) { return ApiResponseDto<ClassDesireDto>.CreateError("User already has this class on their wishlist."); }
+            if (item is not null) { throw new UserFriendlyApiException("User already has this class on their wishlist."); }
             item = dto.ToCreate();
             db.ClassDesires.Add(item);
             await db.SaveChangesAsync();
-            return ApiResponseDto<ClassDesireDto>.CreateSuccess(item.ToDto());
+            return item.ToDto();
         }
-        public async Task<ApiResponseDto<ClassDesireDto>> AddMeToClassAsync(string classId)
+        public async Task<ClassDesireDto> AddMeToClassAsync(string classId)
         {
             var classUser = await db.GetUserInActiveClassAsync(classId, userContext.GetUserId());
-            if (classUser is not null) { return ApiResponseDto<ClassDesireDto>.CreateError("You are already in this class."); }
+            if (classUser is not null) { throw new UserFriendlyApiException("You are already in this class."); }
             var item = await db.GetClassOnActiveUserWishlistAsync(classId, userContext.GetUserId());
-            if (item is not null) { return ApiResponseDto<ClassDesireDto>.CreateError("You already have this class on your wishlist."); }
+            if (item is not null) { throw new UserFriendlyApiException("You already have this class on your wishlist."); }
             return await this.CreateClassDesireAsync(new CreateClassDesireDto() { ClassInfoId = classId, UserId = userContext.GetUserId() });
         }
 
-        public async Task<ApiResponseDto<ClassDesireDto>> UpdateClassDesireAsync(int id, UpdateClassDesireDto dto)
+        public async Task<ClassDesireDto> UpdateClassDesireAsync(int id, UpdateClassDesireDto dto)
         {
             var item = await db.ClassDesires.FindAsync(id);
-            if (item is null) { return ApiResponseDto<ClassDesireDto>.CreateError("The specified ClassDesire was not found."); }
+            if (item is null) { throw new UserFriendlyApiException("The specified ClassDesire was not found."); }
             item.UpdateFromDto(dto);
             await db.SaveChangesAsync();
-            return ApiResponseDto<ClassDesireDto>.CreateSuccess(item.ToDto());
+            return item.ToDto();
         }
 
-        public async Task<ApiResponseDto<bool>> DeleteClassDesireAsync(int id)
+        public async Task DeleteClassDesireAsync(int id)
         {
             var item = await db.ClassDesires.FindAsync(id);
-            if (item is null) { return ApiResponseDto<bool>.CreateError("The specified ClassDesire was not found."); }
+            if (item is null) { throw new UserFriendlyApiException("The specified ClassDesire was not found."); }
             db.ClassDesires.Remove(item);
             await db.SaveChangesAsync();
-            return ApiResponseDto<bool>.CreateSuccess(true);
         }
     }
 }

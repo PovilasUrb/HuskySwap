@@ -7,19 +7,19 @@ namespace LightNap.Core.TradeRequests.Interfaces
 {
     public interface ITradeRequestService
     {
-        Task<ApiResponseDto<TradeRequestDto>> GetTradeRequestAsync(int id);
-        Task<ApiResponseDto<PagedResponse<TradeRequestDto>>> SearchTradeRequestsAsync(SearchTradeRequestsDto dto);
-        Task<ApiResponseDto<TradeRequestDto>> CreateTradeRequestAsync(CreateTradeRequestDto dto);
-        Task<ApiResponseDto<TradeRequestDto>> MakeATradeRequestAsync(CreateTradeRequestDto dto);
-        Task<ApiResponseDto<TradeRequestDto>> UpdateTradeRequestAsync(int id, UpdateTradeRequestDto dto);
-        Task<ApiResponseDto<IList<TradeRequestDto>>> GetMyTradeRequestsSentAsync();
-        Task<ApiResponseDto<IList<TradeRequestDto>>> GetMyTradeRequestsReceivedAsync();
-        Task<ApiResponseDto<bool>> CancelMyTradeRequestAsync(int id);
-        Task<ApiResponseDto<bool>> CancelTradeRequestAsync(int id);
-        Task<ApiResponseDto<bool>> RespondToMyTradeRequestAsync(int id, bool accept);
-        Task<ApiResponseDto<bool>> RespondToTradeRequestAsync(int id, bool accept);
-        Task<ApiResponseDto<bool>> DeleteTradeRequestAsync(int id);
-        Task<ApiResponseDto<ChatMessageDto>> CreateChatMessageAsync(CreateChatMessageDto dto, int tradeRequestId);
-        Task<ApiResponseDto<IList<ChatMessageDto>>> GetChatMessagesAsync(int tradeRequestId, int sinceMessageId);
+        Task<TradeRequestDto?> GetTradeRequestAsync(int id);
+        Task<PagedResponse<TradeRequestDto>> SearchTradeRequestsAsync(SearchTradeRequestsDto dto);
+        Task<TradeRequestDto> CreateTradeRequestAsync(CreateTradeRequestDto dto);
+        Task<TradeRequestDto> MakeATradeRequestAsync(CreateTradeRequestDto dto);
+        Task<TradeRequestDto> UpdateTradeRequestAsync(int id, UpdateTradeRequestDto dto);
+        Task<IList<TradeRequestDto>> GetMyTradeRequestsSentAsync();
+        Task<IList<TradeRequestDto>> GetMyTradeRequestsReceivedAsync();
+        Task CancelMyTradeRequestAsync(int id);
+        Task CancelTradeRequestAsync(int id);
+        Task RespondToMyTradeRequestAsync(int id, bool accept);
+        Task RespondToTradeRequestAsync(int id, bool accept);
+        Task DeleteTradeRequestAsync(int id);
+        Task<ChatMessageDto> CreateChatMessageAsync(CreateChatMessageDto dto, int tradeRequestId);
+        Task<IList<ChatMessageDto>> GetChatMessagesAsync(int tradeRequestId, int sinceMessageId);
     }
 }
