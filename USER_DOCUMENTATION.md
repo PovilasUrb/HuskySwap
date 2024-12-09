@@ -19,18 +19,23 @@ HuskySwap aims to eliminate the uncertainty and inefficiency of the current cour
 [>> CLICK HERE TO MOVE TO HUSKYSWAP WEBSITE <<](https://husky-swap.azurewebsites.net/)
 
 
-## 3. HuskySwap: How to use? (All features currently WIP)
-1. First log in to your account with a valid UW email and password
-2. From here, you will see several options, such as All Classes, My Classes, etc.
-3. From the All Classes page, you can see all available classes, and you can add an available class to your current classes or to your wishlist. 
-4. From the My Classes page, you can see all your currently enrolled classes, and from here you have the option to either remove a class, or
-   offer up a class to trade for a class you currently have on your wishlist. 
-6. From the My Wishlist page, you can see all classes you aren't currently enrolled in but would like to be. These are the classes you
-   can offer swaps for in the My Classes page. 
-8. From the Incoming Swaps page, you can see active swaps that others have offered, and you can choose to accept or deny. 
-9. From the Outgoing Swaps page, you can see all swaps that you have created.
-10. From the Completed Swaps page, you can see all the successful swaps you've done.
-11. Additional features include the profile section, where you can edit your username, email, and password.
+## 3. HuskySwap: How to use?
+1. From the **login page**, you can log in to your account with a valid UW email and password.
+2. From the **main page**, which has the waygates to HuskySwap features with a brief explanation of what they do.
+3. From the **All Classes** page, you can see all available classes. By clicking the eye icon next to each course, you can:
+   - Add the class as your current class with the "Add this for me!" button.
+   - Add the class to your wishlist with the "Add this to my wishlist!" button. 
+4. From the **My Classes** page, you can see all your currently enrolled classes. Click each card to see the deatil of the course.
+   - If there is a swap available between your selected current course and a course from your wishlist, you will see a **Offer Swap** button pop up.
+       - EX) If your 'My Classes' has CSE 333 and your 'My WishList' has CSE 403, the Offer Swap will pop up when the exchange of [CSE 333 <-> CSE 403] is available.
+   - If you want to make that swap offer, click the **Offer Swap** button and click **Create**.
+5. From the **My Wishlist** page, you can see all classes you aren't currently enrolled in but would like to be.
+6. From the **Incoming Swaps** page, you can see active swaps that others have offered to you.
+7. From the **Outgoing Swaps** page, you can see all swaps that you have offered to others.
+   - If you and the other person notice the swap, the chat system is available to coordinate the swap schedule.
+   - If both of you agrees to make a swap and the one who received the offer click the Accept button, the swap is made.
+8. From the **Completed Swaps** page, you can see all the successful swaps you've done.
+9. Additional features include the profile section, where you can edit your username, email, and password.
 
 ### 3.1 Use Policies
 - Account and Authentication Policies:
