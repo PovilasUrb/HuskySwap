@@ -34,7 +34,7 @@ export class TradeRequestChatComponent implements OnChanges, OnInit {
 
   ngOnInit(): void {
     this.#timer
-      .watchTimer$(2 * 1000)
+      .watchTimer$(10 * 1000)
       .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe({
         next: () => this.refreshChat(),
