@@ -1,6 +1,6 @@
 # HuskySwap
 
-[CLICK HERE >> **HuskySwap Website** <<](https://husky-swap.azurewebsites.net/)
+[Live site taken down at request of UW >> ~~https://husky-swap.azurewebsites.net~~ <<]
 
 [**HuskySwap Living Document**](https://docs.google.com/document/d/1b-036ETsawjpZUHPB2AdQ41adTJuzHHXcQ2e1PDJsd4/edit?usp=sharing)
 
@@ -95,7 +95,7 @@ Tests can be added in lightnap-ng in the same folders as the code that they inte
 
 ## **Building**
 
-When a commit is merged to the main branch, it will automatically kick off a completely automated CI/CD pipeline that will build the project and deploy it to https://husky-swap.azurewebsites.net.
+When a commit is merged to the main branch, it will automatically kick off a completely automated CI/CD pipeline that will build the project.
 
 -----------------------------------------------------------------------------------
 
