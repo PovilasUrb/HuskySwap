@@ -16,7 +16,7 @@ HuskySwap aims to eliminate the uncertainty and inefficiency of the current cour
 ## 2. Does HuskySwap need setup?
 - Since HuskySwap is a website, no additional setup or installation of external software is necessary.
 
-[>> CLICK HERE TO MOVE TO HUSKYSWAP WEBSITE <<](https://husky-swap.azurewebsites.net/)
+[Live site taken down at request of UW >> ~~husky-swap.azurewebsites.net~~ <<]
 
 
 ## 3. HuskySwap: How to use?
