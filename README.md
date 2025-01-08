@@ -1,6 +1,6 @@
 # HuskySwap
 
-[Live site taken down at request of UW >> ~~https://husky-swap.azurewebsites.net~~ <<]
+[Live site taken down at request of UW >> ~~husky-swap.azurewebsites.net~~ <<]
 
 [**HuskySwap Living Document**](https://docs.google.com/document/d/1b-036ETsawjpZUHPB2AdQ41adTJuzHHXcQ2e1PDJsd4/edit?usp=sharing)
 
