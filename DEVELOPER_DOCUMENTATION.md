@@ -99,6 +99,6 @@ Tests can be added in lightnap-ng in the same folders as the code that they inte
 
 *Building*
 
-When a commit is merged to the main branch, it will automatically kick off a completely automated CI/CD pipeline that will build the project and deploy it to https://husky-swap.azurewebsites.net.
+When a commit is merged to the main branch, it will automatically kick off a completely automated CI/CD pipeline that will build the project.
 
 If the build does not pass CI, it will not automatically deploy and errors can be inspected in the GitHub Actions part of the HuskySwap repo.
